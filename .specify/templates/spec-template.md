@@ -95,6 +95,34 @@
 - **FR-006**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]
 - **FR-007**: System MUST retain user data for [NEEDS CLARIFICATION: retention period not specified]
 
+### Constitution Alignment *(mandatory)*
+
+<!--
+  For every group below, state concrete requirements and acceptance evidence, or mark
+  the group N/A with a reason. Do not defer applicable quality constraints to planning.
+-->
+
+- **Clean-Room Scope**: [originality boundaries and provenance for code, content,
+  names, and assets]
+- **Authoritative Simulation**: [headless commands, state, tick behavior, and the
+  presentation boundary]
+- **Determinism**: [seed, PRNG abstraction, ordered inputs/ticks, deterministic
+  outcomes, and wall-clock/frame-rate independence]
+- **Logical World and Transportation**: [world-space units, scenario-derived bounds,
+  routes, queues, capacity, travel time, transfers, and failed boarding as applicable]
+- **Hybrid Processing and People**: [continuous versus scheduled work, dormant entity
+  activation, lightweight occupant representation, and target population scale]
+- **State and Content Models**: [explicit state machines, testable transitions and
+  invariants, data definitions, composition, and stable IDs]
+- **Emergent Metrics**: [recorded trip or simulation measures and how player-facing
+  outcomes derive from them]
+- **Economy and Saves**: [auditable integer-minor-unit transactions; authoritative
+  balance derivation; save version, compatibility, migration, and safe failure]
+- **Browser and Deployment**: [current stable Chrome, Firefox, and Safari behavior;
+  static production assets; offline-capable core gameplay]
+- **Performance and Slice Scope**: [representative scale, measurable budgets, avoided
+  scalability traps, runnable milestone, and explicitly excluded speculative systems]
+
 ### Key Entities *(include if feature involves data)*
 
 - **[Entity 1]**: [What it represents, key attributes without implementation]

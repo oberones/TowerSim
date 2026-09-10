@@ -1,0 +1,29 @@
+{
+  "name": "towersim",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24.11.0 <25"
+  },
+  "scripts": {
+    "dev": "vite",
+    "preview": "vite preview",
+    "check:types": "tsc -p tsconfig.simulation.json && tsc -p tsconfig.browser.json && tsc -p tsconfig.tests.json",
+    "check:boundaries": "node scripts/check-boundaries.mjs",
+    "build": "npm run check:types && npm run check:boundaries && vite build",
+    "test": "vitest run",
+    "test:integration": "vitest run --project integration",
+    "bench": "node scripts/run-benchmarks.mjs",
+    "build:browser-test": "npm run check:types && npm run check:boundaries && vite build --config vite.browser.config.ts --mode production",
+    "preview:browser-test": "vite preview --config vite.browser.config.ts",
+    "check:browser-builds": "node scripts/check-browser-builds.mjs"
+  },
+  "devDependencies": {
+    "typescript": "7.0.2",
+    "vite": "8.2.2",
+    "vitest": "5.0.0",
+    "@types/node": "24.13.4",
+    "@babel/parser": "8.0.4"
+  }
+}

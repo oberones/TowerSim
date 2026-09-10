@@ -8,7 +8,14 @@ description: "Task list template for feature implementation"
 **Input**: Design documents from `/specs/[###-feature-name]/`
 **Prerequisites**: plan.md (required), spec.md (required for user stories), research.md, data-model.md, contracts/
 
-**Tests**: The examples below include test tasks. Tests are OPTIONAL - only include them if explicitly requested in the feature specification.
+**Tests**: Automated tests are REQUIRED for authoritative simulation changes,
+determinism, important state-machine transitions and invariants, transportation events,
+economy mutations, and save contracts. Other tests follow the feature specification.
+
+**Constitution evidence**: Include applicable clean-room provenance, deterministic
+fixtures, trip-metric traceability, browser/static-build checks, and measured
+performance tasks in the earliest phase that can prove the associated requirement.
+Mark genuinely non-applicable categories in the generated task notes with a reason.
 
 **Organization**: Tasks are grouped by user story to enable independent implementation and testing of each story.
 
@@ -62,12 +69,12 @@ description: "Task list template for feature implementation"
 
 Examples of foundational tasks (adjust based on your project):
 
-- [ ] T004 Setup database schema and migrations framework
-- [ ] T005 [P] Implement authentication/authorization framework
-- [ ] T006 [P] Setup API routing and middleware structure
-- [ ] T007 Create base models/entities that all stories depend on
-- [ ] T008 Configure error handling and logging infrastructure
-- [ ] T009 Setup environment configuration management
+- [ ] T004 Define headless authoritative simulation state, command, and tick interfaces
+- [ ] T005 [P] Implement seedable PRNG abstraction and deterministic fixture helpers
+- [ ] T006 [P] Define logical world/scenario configuration and stable content IDs
+- [ ] T007 Define shared state-machine transition and invariant conventions
+- [ ] T008 Establish simulation event scheduling and active/dormant entity processing
+- [ ] T009 Establish static build and current stable Chrome/Firefox/Safari test harness
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
@@ -79,12 +86,12 @@ Examples of foundational tasks (adjust based on your project):
 
 **Independent Test**: [How to verify this story works on its own]
 
-### Tests for User Story 1 (OPTIONAL - only if tests requested) ⚠️
+### Tests for User Story 1 ⚠️
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T010 [P] [US1] Contract test for [endpoint] in tests/contract/test_[name].py
-- [ ] T011 [P] [US1] Integration test for [user journey] in tests/integration/test_[name].py
+- [ ] T010 [P] [US1] Headless deterministic test for [commands/ticks/outcome] in [test path]
+- [ ] T011 [P] [US1] Integration test for [playable user journey] in [test path]
 
 ### Implementation for User Story 1
 
@@ -105,7 +112,7 @@ Examples of foundational tasks (adjust based on your project):
 
 **Independent Test**: [How to verify this story works on its own]
 
-### Tests for User Story 2 (OPTIONAL - only if tests requested) ⚠️
+### Tests for User Story 2 ⚠️
 
 - [ ] T018 [P] [US2] Contract test for [endpoint] in tests/contract/test_[name].py
 - [ ] T019 [P] [US2] Integration test for [user journey] in tests/integration/test_[name].py
@@ -127,7 +134,7 @@ Examples of foundational tasks (adjust based on your project):
 
 **Independent Test**: [How to verify this story works on its own]
 
-### Tests for User Story 3 (OPTIONAL - only if tests requested) ⚠️
+### Tests for User Story 3 ⚠️
 
 - [ ] T024 [P] [US3] Contract test for [endpoint] in tests/contract/test_[name].py
 - [ ] T025 [P] [US3] Integration test for [user journey] in tests/integration/test_[name].py
@@ -152,10 +159,14 @@ Examples of foundational tasks (adjust based on your project):
 
 - [ ] TXXX [P] Documentation updates in docs/
 - [ ] TXXX Code cleanup and refactoring
-- [ ] TXXX Performance optimization across all stories
-- [ ] TXXX [P] Additional unit tests (if requested) in tests/unit/
+- [ ] TXXX Performance optimization supported by earlier profiling evidence
+- [ ] TXXX [P] Additional unit tests in tests/unit/
 - [ ] TXXX Security hardening
 - [ ] TXXX Run quickstart.md validation
+
+Constitution-required correctness, provenance, browser, save, and performance evidence
+for an individual story MUST be owned in that story or an earlier phase, not postponed
+to this cross-cutting phase.
 
 ---
 
@@ -178,7 +189,7 @@ Examples of foundational tasks (adjust based on your project):
 
 ### Within Each User Story
 
-- Tests (if included) MUST be written and FAIL before implementation
+- Constitution-required tests MUST be written and FAIL before implementation
 - Models before services
 - Services before endpoints
 - Core implementation before integration
@@ -246,6 +257,6 @@ With multiple developers:
 - [Story] label maps task to specific user story for traceability
 - Each user story should be independently completable and testable
 - Verify tests fail before implementing
-- Commit after each task or logical group
+- Commit after each task or logical group when the active workflow requests commits
 - Stop at any checkpoint to validate story independently
 - Avoid: vague tasks, same file conflicts, cross-story dependencies that break independence

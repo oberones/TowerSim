@@ -23,6 +23,12 @@
 **Testing**: [e.g., pytest, XCTest, cargo test or NEEDS CLARIFICATION]  
 **Target Platform**: [e.g., Linux server, iOS 15+, WASM or NEEDS CLARIFICATION]
 **Project Type**: [e.g., library/cli/web-service/mobile-app/compiler/desktop-app or NEEDS CLARIFICATION]  
+**Simulation Time**: [fixed timestep, events, activation/sleep, or N/A with rationale]
+**Randomness**: [seed format and PRNG abstraction, or N/A with rationale]
+**World Configuration**: [logical units, configurable bounds, and relevant scenario limits]
+**Rendering Approach**: [simulation-to-presentation boundary and rendering technology]
+**Persistence**: [save format/version/migration approach, or N/A]
+**Browser/Deployment**: [Chrome/Firefox/Safari verification and static-build approach]
 **Performance Goals**: [domain-specific, e.g., 1000 req/s, 10k lines/sec, 60 fps or NEEDS CLARIFICATION]  
 **Constraints**: [domain-specific, e.g., <200ms p95, <100MB memory, offline-capable or NEEDS CLARIFICATION]  
 **Scale/Scope**: [domain-specific, e.g., 10k users, 1M LOC, 50 screens or NEEDS CLARIFICATION]
@@ -31,7 +37,40 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+- **Clean-room originality**: Identify code/content/asset provenance and confirm the
+  feature neither copies proprietary game material nor implies official affiliation.
+- **Simulation boundary**: Show that authoritative rules and state remain headless,
+  command-driven, tick-driven, and independent of DOM, rendering, wall-clock, and UI
+  framework state.
+- **Determinism**: Define seeds, PRNG abstraction, command ordering, tick semantics,
+  and deterministic test fixtures. Confirm simulation code never calls
+  `Math.random()` directly.
+- **Logical world**: Define world-space units and scenario-derived bounds; keep camera,
+  zoom, and pixels out of authoritative rules.
+- **Transportation**: Model applicable walking, stairs, stops, queues, cars, capacity,
+  travel time, transfers, and failed boarding without teleportation; preserve extension
+  points for advanced elevator service.
+- **Hybrid processing and lightweight people**: Separate continuous updates from
+  scheduled or dormant work and avoid full-population tick scans, rendering objects in
+  simulation records, and one DOM element per person.
+- **Explicit state and data**: Name state machines, transitions, invariants,
+  data-driven definitions, composed behaviors, and stable IDs affected by the feature.
+- **Emergent metrics**: Identify recorded trip or gameplay facts and show how derived
+  player-facing outcomes trace back to those facts.
+- **Economy**: Route monetary changes through auditable events using integer minor
+  units and derive UI values from authoritative economy state.
+- **Save contract**: State save-version, compatibility, migration, round-trip, and safe
+  failure impacts. Confirm persistence excludes presentation/framework objects.
+- **Browser and static delivery**: Plan current stable Chrome, Firefox, and Safari
+  verification, offline-capable core play, and static production output.
+- **Performance**: Define representative tower/population scale, measurable budgets,
+  profiling evidence, and protection from prohibited per-frame or per-entity traps.
+- **Playable slice and clarity**: Demonstrate a runnable, independently testable
+  milestone; reject speculative scope and justify necessary complexity.
+
+Any non-applicable gate MUST be marked N/A with a concrete reason. Any deliberate MUST
+violation MUST be recorded in Complexity Tracking with the principle, impracticality,
+alternatives, consequences, and temporary or permanent status.
 
 ## Project Structure
 
@@ -98,7 +137,6 @@ directories captured above]
 
 > **Fill ONLY if Constitution Check has violations that must be justified**
 
-| Violation | Why Needed | Simpler Alternative Rejected Because |
-|-----------|------------|-------------------------------------|
-| [e.g., 4th project] | [current need] | [why 3 projects insufficient] |
-| [e.g., Repository pattern] | [specific problem] | [why direct DB access insufficient] |
+| Violation | Impracticality | Alternatives | Consequences | Status / remedy |
+|-----------|----------------|--------------|--------------|-----------------|
+| [XIV: full scan] | [constraint] | [options] | [impact] | [status; remedy] |
