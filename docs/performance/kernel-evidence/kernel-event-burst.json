@@ -1,0 +1,146 @@
+{
+  "name": "kernel-event-burst",
+  "seed": "00000001000000020000000300000004",
+  "contentId": "kernel-v1",
+  "rulesId": "tower-kernel-v1",
+  "fixtureHash": "0705ba35a5baa9c2f70d1cca5de52410337cdfb0a8fa4b893157141fb95bb1ad",
+  "batchTicks": 0,
+  "warmups": 3,
+  "trials": 10,
+  "machine": {
+    "cpu": "Apple M2 Pro",
+    "logicalCpus": 12,
+    "ramBytes": 17179869184,
+    "os": "darwin 25.5.0"
+  },
+  "node": "v24.20.0",
+  "commit": "089d5b21131aacc47f190358b4e6f1efb6399947",
+  "dirty": true,
+  "buildMode": "vitest-node",
+  "instrumentation": "monotonic clock, no coverage; counters after timing",
+  "samplesMs": [
+    22.192999999999984,
+    21.24870899999999,
+    20.32804200000001,
+    20.832875,
+    21.035875000000033,
+    22.16020900000001,
+    24.88050000000004,
+    21.21608299999997,
+    22.5385,
+    21.541375000000016
+  ],
+  "medianMs": 21.395042000000004,
+  "p95Ms": 24.88050000000004,
+  "totalTicks": 0,
+  "simulatedSeconds": 0,
+  "durationMs": 217.97516800000005,
+  "ticksPerSecond": 0,
+  "digests": [
+    "a247da0d17657ff43031fb9da46f471f8f2aeedb51d9937b523cacc3b8728dd4",
+    "a247da0d17657ff43031fb9da46f471f8f2aeedb51d9937b523cacc3b8728dd4",
+    "a247da0d17657ff43031fb9da46f471f8f2aeedb51d9937b523cacc3b8728dd4",
+    "a247da0d17657ff43031fb9da46f471f8f2aeedb51d9937b523cacc3b8728dd4",
+    "a247da0d17657ff43031fb9da46f471f8f2aeedb51d9937b523cacc3b8728dd4",
+    "a247da0d17657ff43031fb9da46f471f8f2aeedb51d9937b523cacc3b8728dd4",
+    "a247da0d17657ff43031fb9da46f471f8f2aeedb51d9937b523cacc3b8728dd4",
+    "a247da0d17657ff43031fb9da46f471f8f2aeedb51d9937b523cacc3b8728dd4",
+    "a247da0d17657ff43031fb9da46f471f8f2aeedb51d9937b523cacc3b8728dd4",
+    "a247da0d17657ff43031fb9da46f471f8f2aeedb51d9937b523cacc3b8728dd4",
+    "a247da0d17657ff43031fb9da46f471f8f2aeedb51d9937b523cacc3b8728dd4",
+    "a247da0d17657ff43031fb9da46f471f8f2aeedb51d9937b523cacc3b8728dd4",
+    "a247da0d17657ff43031fb9da46f471f8f2aeedb51d9937b523cacc3b8728dd4"
+  ],
+  "counters": [
+    {
+      "heap": 0,
+      "ids": 0,
+      "sequences": 0,
+      "owners": 0,
+      "insertions": 5000,
+      "pops": 5000,
+      "peakHeap": 5000
+    },
+    {
+      "heap": 0,
+      "ids": 0,
+      "sequences": 0,
+      "owners": 0,
+      "insertions": 5000,
+      "pops": 5000,
+      "peakHeap": 5000
+    },
+    {
+      "heap": 0,
+      "ids": 0,
+      "sequences": 0,
+      "owners": 0,
+      "insertions": 5000,
+      "pops": 5000,
+      "peakHeap": 5000
+    },
+    {
+      "heap": 0,
+      "ids": 0,
+      "sequences": 0,
+      "owners": 0,
+      "insertions": 5000,
+      "pops": 5000,
+      "peakHeap": 5000
+    },
+    {
+      "heap": 0,
+      "ids": 0,
+      "sequences": 0,
+      "owners": 0,
+      "insertions": 5000,
+      "pops": 5000,
+      "peakHeap": 5000
+    },
+    {
+      "heap": 0,
+      "ids": 0,
+      "sequences": 0,
+      "owners": 0,
+      "insertions": 5000,
+      "pops": 5000,
+      "peakHeap": 5000
+    },
+    {
+      "heap": 0,
+      "ids": 0,
+      "sequences": 0,
+      "owners": 0,
+      "insertions": 5000,
+      "pops": 5000,
+      "peakHeap": 5000
+    },
+    {
+      "heap": 0,
+      "ids": 0,
+      "sequences": 0,
+      "owners": 0,
+      "insertions": 5000,
+      "pops": 5000,
+      "peakHeap": 5000
+    },
+    {
+      "heap": 0,
+      "ids": 0,
+      "sequences": 0,
+      "owners": 0,
+      "insertions": 5000,
+      "pops": 5000,
+      "peakHeap": 5000
+    },
+    {
+      "heap": 0,
+      "ids": 0,
+      "sequences": 0,
+      "owners": 0,
+      "insertions": 5000,
+      "pops": 5000,
+      "peakHeap": 5000
+    }
+  ]
+}

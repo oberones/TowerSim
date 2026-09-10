@@ -3,6 +3,7 @@
   <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>TowerSim</title></head>
   <body><main id="app"></main><script type="module">
     import { mountGame } from './src/main.ts';
-    mountGame(document.getElementById('app'));
+    import { MVP_DEFAULT } from './src/content/scenarios/mvp-default.ts';
+    mountGame(document.getElementById('app'), { scenario: MVP_DEFAULT });
   </script></body>
 </html>

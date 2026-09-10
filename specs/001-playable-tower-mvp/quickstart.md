@@ -1,6 +1,6 @@
 # TowerSim MVP quickstart and playable validation
 
-This is the target developer/player walkthrough for the planned implementation. Phase 1 provides the npm entrypoints and static bootstrap. Gameplay, prepared fixtures and the player walkthrough below remain future work. Setup validation is recorded in `docs/release-evidence.md`.
+Phases 1–4 now provide the deterministic kernel and an interactive construction slice: paused new tower, speed controls, Canvas camera, floor construction/demolition and floor inspection. See `docs/construction.md` for the implemented controls and limitations. Offices, people, transport, operating finance, progression evaluation and browser storage remain later phases. The full player walkthrough below describes that future MVP. C0/M1 native-browser qualification remains open; automated and supplemental in-app observations are in `docs/release-evidence.md`.
 
 ## Developer startup after implementation
 
@@ -11,6 +11,7 @@ nvm use
 npm ci
 npm run check:types
 npm run check:boundaries
+npm run check:comments
 npm test
 npm run test:integration
 npm run dev -- --host 127.0.0.1

@@ -11,13 +11,14 @@
     "preview": "vite preview",
     "check:types": "tsc -p tsconfig.simulation.json && tsc -p tsconfig.browser.json && tsc -p tsconfig.tests.json",
     "check:boundaries": "node scripts/check-boundaries.mjs",
-    "build": "npm run check:types && npm run check:boundaries && vite build",
+    "build": "npm run check:types && npm run check:boundaries && npm run check:comments && vite build",
     "test": "vitest run",
     "test:integration": "vitest run --project integration",
     "bench": "node scripts/run-benchmarks.mjs",
-    "build:browser-test": "npm run check:types && npm run check:boundaries && vite build --config vite.browser.config.ts --mode production",
+    "build:browser-test": "npm run check:types && npm run check:boundaries && npm run check:comments && vite build --config vite.browser.config.ts --mode production",
     "preview:browser-test": "vite preview --config vite.browser.config.ts",
-    "check:browser-builds": "node scripts/check-browser-builds.mjs"
+    "check:browser-builds": "node scripts/check-browser-builds.mjs",
+    "check:comments": "node scripts/check-function-comments.mjs"
   },
   "devDependencies": {
     "typescript": "7.0.2",

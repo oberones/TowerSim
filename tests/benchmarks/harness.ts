@@ -17,7 +17,7 @@ export interface Benchmark<S> {
   counters?: (state: S) => Record<string, number>;
 }
 export function runBenchmark<S>(benchmark: Benchmark<S>) {
-  assert.ok(Number.isSafeInteger(benchmark.ticks) && benchmark.ticks > 0);
+  assert.ok(Number.isSafeInteger(benchmark.ticks) && benchmark.ticks >= 0);
   const samples: number[] = [];
   const digests: string[] = [];
   const counters: Record<string, number>[] = [];

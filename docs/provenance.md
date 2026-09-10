@@ -1,12 +1,14 @@
 # Provenance
 
-Phase 1 source, bootstrap wording, checks and harnesses were authored for TowerSim with Codex assistance from this repository's specification. No external application source was copied. There are no game shapes, images, fonts, audio or gameplay content yet. Future Canvas geometry and content must be independently authored and entered here when introduced.
+Phase 1 source, bootstrap wording, checks and harnesses were authored for TowerSim with Codex assistance from this repository's specification. No external application source was copied. Phase 1 had no game assets; the original phase 3/4 Canvas geometry and content are recorded below. No external images, fonts or audio were added.
 
 Excluded: proprietary tower-game code, extracted assets, screenshots, names, UI text, data tables, traced artwork and reverse-engineered resources. No runtime CDN or production npm dependencies are used. Vite's generated module-preload helper is build-generated code covered by Vite's MIT license.
 
-## Permitted future PRNG reference
+## PRNG reference and Phase 2 authorship
 
-The [xoshiro128** reference](https://prng.di.unimi.it/xoshiro128starstar.c) is credited to David Blackman and Sebastiano Vigna (2018). Its header dedicates rights to the public domain where possible and grants unrestricted use, modification and distribution, with warranty disclaimer. T007 must preserve that permission/disclaimer with any adaptation and independently verify vectors. No PRNG implementation is present in Phase 1.
+The [xoshiro128** reference](https://prng.di.unimi.it/xoshiro128starstar.c) is credited to David Blackman and Sebastiano Vigna (2018). Its header dedicates rights to the public domain where possible and grants unrestricted use, modification and distribution, with warranty disclaimer. Phase 2 adapts its corrected 1.1 transition in `src/simulation/core/random/xoshiro128.ts`. The full permission/disclaimer is retained in `tests/fixtures/xoshiro-reference.c`; the source adapter links to it. The C fixture adds a fixed input/output driver and was compiled independently to establish the ten golden outputs used in `tests/unit/random.test.ts`. Reproduce with `cc tests/fixtures/xoshiro-reference.c -o /tmp/towersim-prng-reference && /tmp/towersim-prng-reference`.
+
+The remaining Phase 2 arithmetic, indexed heap, boundary processing, state/codec, ingress, ledger, replay fixtures and benchmark code were independently authored for this specification with Codex assistance. No reference priority-queue source was copied. No new dependency or gameplay asset was introduced.
 
 ## Locked development dependency inventory
 
@@ -103,3 +105,7 @@ Captured from package-lock.json on 2026-09-10, including optional platform packa
 | vite | 8.2.2 | MIT |
 | vitest | 5.0.0 | MIT |
 | why-is-node-running | 2.3.0 | MIT |
+
+## Phase 3/4 authorship
+
+The site grid, floor slabs, lobby rectangle, selection and preview overlays, palette, copy and CSS were authored for this repository with Codex assistance. They use Canvas primitives and system fonts, with no copied game artwork, screenshots, audio or UI text. Scenario prices, footprints, timing, schedules, finite demand and Level 2 data implement this repository's accepted design artifacts. Session/pacing, camera, construction, content validation, query and input code were independently authored. No production or development dependencies were added.

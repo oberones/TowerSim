@@ -1,6 +1,6 @@
 # Native browser build
 
-Phase 1 mounts the same honest bootstrap as release. T022 will add validated starting fixtures before play; there is no fixture picker or gameplay yet. Importing src/main.ts does not mount automatically.
+The harness now offers a default paused site, a narrow site with negative ground, and a validated completed boundary. Select a fixture before mounting the same ordinary construction application as release. There are no mid-play state-mutation controls. Importing src/main.ts does not mount automatically. See evidence/us01-start.md and evidence/us02-construct-tower.md for the incomplete native-browser qualification gates.
 
 From the repository root:
 
