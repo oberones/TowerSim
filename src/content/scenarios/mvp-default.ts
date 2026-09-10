@@ -7,7 +7,7 @@ import { add, multiply } from '../../simulation/core/values';
 export const MVP_DEFAULT=validateScenario({
   scenarioId:'mvp-default',scenarioVersion:1,tickSeconds:1,dayTicks:86400,initialTick:21600,startingFundsMinor:1000000,capabilities:[],
   world:{widthCells:120,minFloor:0,maxFloor:40,groundFloor:0,initialConstructedRanges:[{startX:0,endXExclusive:120}],lobbyX:0,lobbyDefinitionId:'lobby.basic'},
-  content:{definitions:DEFINITIONS,floorCostMinorPerCell:100,officeMarketWorkers:192,restaurantDailyCustomers:40,walkingTicksPerCell:1,stairTicksPerFloor:30,standardCarCapacity:8,
+  content:{definitions:DEFINITIONS,floorCostMinorPerCell:100,officeMarketWorkers:192,restaurantDailyCustomers:40,walkingTicksPerCell:30,stairTicksPerFloor:30,standardCarCapacity:8,
     elevatorTiming:{startTicks:2,floorTicks:4,levelTicks:2,openTicks:2,closeTicks:2,boardTicks:1,unloadTicks:1,dwellTicks:2},
     schedules:SCHEDULES,level2:LEVEL2,routing:{routeCacheEntries:4096,nominalCycleTicks:96,transferPenaltyTicks:30,rerouteImprovementTicks:10},
     metrics:{version:1,walkingBasisPointsPerMinute:10,waitingBasisPointsPerMinute:300,ridingBasisPointsPerMinute:25,denialBasisPoints:400,transferBasisPoints:200,strandedBasisPointsPerMinute:300},

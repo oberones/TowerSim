@@ -46,7 +46,7 @@ No duplicate authoritative active-set membership, current clock string, car pixe
 | `startingFundsMinor` | Provisional 1,000,000; nonnegative safe integer and affordable-starter check required. |
 | `tickSeconds`, `dayTicks`, `initialTick` | 1, 86,400, 21,600 (day 1, 06:00); initial review pending. |
 | `officeMarketWorkers`, `restaurantDailyCustomers` | Finite nonnegative caps; initial examples 192 and 40. Qualification fixtures may override finite limits. |
-| `walkingTicksPerCell`, `stairTicksPerFloor` | Provisional 1 and 30; positive integer times. Half-cell movement duration rounds up once per committed leg. |
+| `walkingTicksPerCell`, `stairTicksPerFloor` | 30 and 30; positive integer times. Walking was raised from the provisional 1 to 30 after Phase 5 functional feedback so travelers remain observable at the published playback speeds. Half-cell movement duration rounds up once per committed leg. |
 | `elevatorTiming`, `standardCarCapacity` | R07 timing data and capacity 8; immutable during play. |
 | `routing`, `metrics`, `historyLimits` | Nominal wait/cycle estimates, transfer/reroute thresholds, score coefficients and fixed reporting windows. |
 | `facilityDefinitions`, `scheduleProfiles`, `progressionDefinitions` | Validated immutable data; every referenced stable ID exists. |

@@ -4,6 +4,8 @@ Phases 1–5 provide construction plus office placement/leasing, finite workforc
 
 ## Developer startup after implementation
 
+The root Makefile provides shortcuts for the commands below. After `nvm use` and `make install`, use `make dev` for development or **`make manual-test`** to run tests, build both artifacts, check fixture isolation and launch the manual-validation fixture chooser at `http://127.0.0.1:4174/`. Use `make phase-check` to include benchmarks. See [Makefile workflows](../../docs/makefile.md) for every target and configurable ports.
+
 Use Node 24 LTS and the committed npm lockfile. From the repository root:
 
 ```sh
@@ -43,6 +45,10 @@ npm run bench
 ```
 
 Capture the machine/version/fixture metadata described in [validation.md](validation.md). This command measures domain throughput, not Canvas FPS.
+
+## Walking visibility
+
+New towers use 30 simulated seconds per walking cell. A 28-cell office approach lasts 7 real seconds at Normal, 1.75 seconds at 4× and 0.875 seconds at 8×; the 12-minute Normal game day is unchanged. Person markers and click targets remain screen-sized when zooming out. After rebuilding with `make manual-test`, select a fresh fixture or start a New Game to use the updated pace. Existing captured states retain their saved scenario timings. Full native-browser readability at every speed remains a manual observation, separate from deterministic timing tests.
 
 ## Default testable tower layout
 

@@ -1,3 +1,4 @@
+import { OFFICE_WALK_TICKS } from '../fixtures/one-worker';
 import { expect, test } from 'vitest';
 import { createKernelState, captureState, encodeState, decodeState, validateState, rebuildDerived } from '../../src/simulation';
 import { advance } from '../../src/simulation/core/clock/advance';
@@ -43,7 +44,7 @@ test('playable content, lobby, edited floor identities and topology resume at th
 import {leasedWorker,until,command} from '../fixtures/one-worker';
 test.each(['scheduled','halfWalk','inside','invalidated'] as const)('office continuation preserves %s state with cold indices and zero random draws',phase=>{
  const {s,id}=leasedWorker(),q=s.occupants[id]!.schedule!;
- if(phase!=='scheduled')until(s,q.arrivalTick+(phase==='inside'?28:10));
+ if(phase!=='scheduled')until(s,q.arrivalTick+(phase==='inside'?OFFICE_WALK_TICKS:10));
  if(phase==='invalidated')command(s,{kind:'demolishEntity',payload:{entityId:Object.keys(s.offices)[0]!}});
  const before=encodeState(s),restored=decodeState(before);rebuildDerived(restored);expect(encodeState(restored)).toBe(before);
  until(s,86400+70000);until(restored,86400);until(restored,86400+70000);expect(encodeState(restored)).toBe(encodeState(s));

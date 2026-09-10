@@ -1,6 +1,8 @@
 # Native browser build
 
-The harness now offers a default paused site, a narrow site with negative ground, and a validated completed boundary. Select a fixture before mounting the same ordinary construction application as release. There are no mid-play state-mutation controls. Importing src/main.ts does not mount automatically. See evidence/us01-start.md and evidence/us02-construct-tower.md for the incomplete native-browser qualification gates.
+The harness offers one-worker visible-approach and same-floor-office scenarios, a default paused site, a narrow site with negative ground, and a validated completed boundary. Select a fixture before mounting the same ordinary application as release. There are no mid-play state-mutation controls. Importing src/main.ts does not mount automatically. The files in evidence/ record each phase's observations and remaining native-browser qualification gates.
+
+For a single-command launch after installing dependencies, run **`make manual-test`** from the repository root. It runs the tests, builds both artifacts, checks isolation and serves the fixture chooser on port 4174. Stop it with Ctrl-C. Use `make preview` in another terminal for the release smoke test on port 4173. Ports are strict and configurable, for example `make manual-test TEST_PORT=4184 OPEN=1`. See [Makefile workflows](../../docs/makefile.md).
 
 From the repository root:
 
