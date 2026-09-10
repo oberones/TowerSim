@@ -1,3 +1,6 @@
+import { createRunner } from '../../simulation/core/clock/advance';
+import { inspectOffice } from './facility-queries';
+import { inspectOccupant } from './occupant-queries';
 import { createGame, captureState, advance, validateCommand } from '../../simulation';
 import type { GameState, Command, CommandResult } from '../../simulation';
 import type { ClockPort, FramePort } from '../ports/clock';
@@ -14,17 +17,17 @@ function initialState(input:SessionInput):GameState {
 }
 /** Own one domain state and runner; all timing, visibility and unsaved status stays outside saves. */
 export class GameSession {
-  private state:GameState;private pacing=new Pacing();private stop:(()=>void)|null=null;private disposed=false;
+  private state:GameState;private runner:ReturnType<typeof createRunner>;private pacing=new Pacing();private stop:(()=>void)|null=null;private disposed=false;
   private revision=1;private savedRevision=0;private generation=1;error:string|null=null;
   /** Construct a paused session using platform ports that tests can fully control. */
-  constructor(input:SessionInput,private readonly clock:ClockPort,private readonly driver:FramePort){this.state=initialState(input);}
+  constructor(input:SessionInput,private readonly clock:ClockPort,private readonly driver:FramePort){this.state=initialState(input);this.runner=createRunner(this.state);}
   /** Subscribe once even when composition calls start repeatedly. */
   start(draw:()=>void):void {if(this.disposed)throw Error('Disposed session');if(this.stop)return;this.stop=this.driver.start(timestamp=>{this.frame(timestamp);draw();});}
   /** Preserve owed ticks while yielding after at most 240 ticks or about four milliseconds. */
   frame(timestamp:number):void {
     if(this.disposed)return;this.pacing.accumulate(timestamp);const started=this.clock.now();let remaining=240;
     while(this.pacing.speed!==0 && this.pacing.wholeTicks>0 && remaining>0){
-      const count=this.pacing.take(Math.min(32,remaining));const result=advance(this.state,count);
+      const count=this.pacing.take(Math.min(32,remaining));const result=this.runner.advance(count);
       if(result.advanced>0)this.revision++;
       if(!result.ok){this.pacing.debt+=count-result.advanced;this.pacing.setSpeed(0,this.clock.now());this.error=`Simulation stopped: ${result.code}`;break;}
       remaining-=count;if(this.clock.now()-started>=4)break;
@@ -46,6 +49,10 @@ export class GameSession {
   world(bounds?:ViewBounds){return getWorldView(this.state,bounds);}
   /** Project floor selection details without exposing mutable ranges. */
   inspectFloor(level:number){return inspectFloor(this.state,level);}
+  /** Inspect one office without copying unrelated people or exposing live state. */
+  inspectOffice(id:string){return inspectOffice(this.state,id);}
+  /** Keep selected identity observable while its worker is dormant or moving. */
+  inspectOccupant(id:string){return inspectOccupant(this.state,id);}
   /** Read the current geometry revision without copying any world records. */
   topologyRevision():number {return this.state.navigation.topologyVersion;}
   /** Expose diagnostic pacing values without granting access to the live accumulator. */
@@ -53,7 +60,7 @@ export class GameSession {
   /** Cancel without side effects or atomically replace with a validated paused tower; never write storage. */
   replace(input:SessionInput,discard:boolean):boolean {
     if(this.revision!==this.savedRevision && !discard)return false;
-    const next=initialState(input);const visible=this.pacing.visible;this.state=next;this.pacing=new Pacing();
+    const next=initialState(input);const visible=this.pacing.visible;this.state=next;this.runner=createRunner(this.state);this.pacing=new Pacing();
     this.pacing.setVisible(visible,this.clock.now());this.revision=1;this.savedRevision=0;this.generation++;this.error=null;return true;
   }
   /** Cancel this session's only runner; repeated disposal is harmless. */

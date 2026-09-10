@@ -1,3 +1,5 @@
+import { quoteFacility,quoteOfficeRemoval,commitFacility } from '../facilities/place-facility';
+import type { FacilityPayload } from '../facilities/place-facility';
 import { quoteFloor } from '../construction/floors';
 import { applyFloorCommand } from './floor-commands';
 import type { FloorKind, FloorPayload } from './types';
@@ -25,6 +27,8 @@ function proposal(state:GameState,command:Record<string,unknown>):CommandResult 
     }
   }catch{return {ok:false,code:'invalidCommand'};}
   if(command.kind==='constructFloorRange'||command.kind==='demolishFloorRange')return quoteFloor(state,command.kind,command.payload as FloorPayload);
+  if(command.kind==='placeFacility')return quoteFacility(state,command.payload as FacilityPayload);
+  if(command.kind==='demolishEntity')return quoteOfficeRemoval(state,(command.payload as {entityId:string}).entityId);
   return {ok:false,code:'notImplemented'};
 }
 /** Check current-tick sequencing and quote a command without changing any authoritative state. */
@@ -38,7 +42,7 @@ export function validateCommand(state:GameState,value:unknown):CommandResult {
 /** Apply accepted gameplay atomically and consume well-formed new command sequences even on rejection. */
 export function applyCommand(state:GameState,value:unknown):CommandResult {
   let result=validateCommand(state,value);
-  if(result.ok){const command=envelope(value);result=applyFloorCommand(state,command.kind as FloorKind,command.payload as FloorPayload,command.sequence as number);}
+  if(result.ok){const command=envelope(value);result=command.kind==='placeFacility'?commitFacility(state,command.payload as FacilityPayload,command.sequence as number):command.kind==='demolishEntity'?commitFacility(state,(command.payload as {entityId:string}).entityId,command.sequence as number):applyFloorCommand(state,command.kind as FloorKind,command.payload as FloorPayload,command.sequence as number);}
   try {const command=envelope(value);if((command.sequence as number)>state.lastCommandSequence)state.lastCommandSequence=command.sequence as number;}catch { /* Invalid envelope consumes no metadata. */ }
   return result;
 }

@@ -13,7 +13,7 @@ export interface EventRecord {
   readonly targetGeneration: number;
   readonly payload: { [key: string]: Json };
 }
-export type KernelEvent = EventRecord & ({kind:'dayBoundary'; phasePriority:0} | {kind:'dailyReview'; phasePriority:20});
+export type KernelEvent = EventRecord & ({kind:'dayBoundary'; phasePriority:0} | {kind:'dailyReview'; phasePriority:20} | {kind:'workerArrival';phasePriority:30} | {kind:'workerDeparture';phasePriority:10} | {kind:'walkComplete';phasePriority:40});
 /** Totally order events by due tick, phase priority and unique insertion sequence. */
 export function compareEvents(a: EventRecord,b: EventRecord): number { return a.dueTick-b.dueTick || a.phasePriority-b.phasePriority || a.sequence-b.sequence; }
 /** Reject invalid identities, generations, phases and nonfuture scheduled times. */

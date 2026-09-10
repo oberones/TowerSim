@@ -1,3 +1,4 @@
+import { assertOffices } from './validate-offices';
 import { assertTower } from '../world/tower';
 import { DomainError, integer, tick, positive } from '../core/values';
 import { parseId } from '../core/ids/allocator';
@@ -13,7 +14,7 @@ function check(condition:unknown,message:string):asserts condition {if(!conditio
 /** Enforce compatibility, world, clock, allocation, event and ledger invariants before capture or restore. */
 export function assertState(value:unknown):asserts value is GameState {
   assertPlain(value);
-  const root=record(value,['stateVersion','rulesetId','contentVersion','scenario','clock','rng','ids','lastCommandSequence','scheduledEvents','economy','tower','navigation','progression']);
+  const root=record(value,['stateVersion','rulesetId','contentVersion','scenario','clock','rng','ids','lastCommandSequence','scheduledEvents','economy','tower','navigation','progression','offices','occupants','trips','officeMarket']);
   check(root.stateVersion===STATE_VERSION && root.rulesetId===RULESET_ID && root.contentVersion===CONTENT_VERSION,'Unsupported state/rules/content version');
   const scenario=validateScenario(root.scenario);const s=value as GameState;
   record(s.clock,['tick','initialReviewPending','lastDayBoundaryTick']);tick(s.clock.tick);tick(s.clock.lastDayBoundaryTick);
@@ -32,12 +33,13 @@ export function assertState(value:unknown):asserts value is GameState {
     validateEvent(event,s.clock.tick);
     check(!ids.has(event.id) && !sequences.has(event.sequence),'Duplicate event identity');ids.add(event.id);sequences.add(event.sequence);
     check(parseId(event.id).ordinal<s.ids.event.next && event.sequence<s.ids.eventSequence.next,'Event counter behind records');
-    check(event.targetId==='kernel:1' && event.targetGeneration===0,'Invalid kernel owner/generation');
+    if(event.kind==='dayBoundary'||event.kind==='dailyReview')check(event.targetId==='kernel:1' && event.targetGeneration===0,'Invalid kernel owner/generation');
+    else check(!!s.occupants[event.targetId]&&s.occupants[event.targetId]!.generation===event.targetGeneration,'Invalid worker owner/generation');
     if(event.kind==='dayBoundary') {boundaries++;check(event.phasePriority===0 && event.dueTick===s.clock.lastDayBoundaryTick+scenario.dayTicks,'Invalid day boundary');}
     else if(event.kind==='dailyReview') {
       reviews++;const nextReview=scenario.initialTick+(Math.floor((s.clock.tick-scenario.initialTick)/scenario.dayTicks)+1)*scenario.dayTicks;
       check(event.phasePriority===20 && event.dueTick===nextReview,'Invalid review schedule');
-    }else throw new DomainError('invalidState','Unsupported event kind');
+    }else check(['workerArrival','workerDeparture','walkComplete'].includes(event.kind),'Unsupported event kind');
   }
   check(boundaries===1 && reviews===(s.clock.initialReviewPending ? 0 : 1),'Missing or duplicate recurring owner');
   record(s.economy,['initialMinor','balanceMinor','transactions']);integer(s.economy.initialMinor);integer(s.economy.balanceMinor);
@@ -52,7 +54,7 @@ export function assertState(value:unknown):asserts value is GameState {
     sources.add(transaction.source);transactionIds.add(transaction.id);lastOrdinal=id.ordinal;lastTick=transaction.atTick;
     balance+=transaction.amountMinor;integer(balance);
   }
-  check(reconcile(s.economy),'Ledger does not reconcile');
+  check(reconcile(s.economy),'Ledger does not reconcile');assertOffices(s);
 }
 export type StateValidation={ok:true;state:GameState}|{ok:false;errors:string[]};
 /** Return a detached canonical candidate or useful validation errors without touching the source. */

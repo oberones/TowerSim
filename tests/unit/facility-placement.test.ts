@@ -1,0 +1,9 @@
+import {test,expect} from 'vitest';
+import {tower,floor} from '../fixtures/tower';
+import {place,command} from '../fixtures/one-worker';
+import {quoteFacility} from '../../src/simulation/facilities/place-facility';
+import {rectangleReservations,reservationConflict} from '../../src/simulation/world/reservations';
+import {accessAt} from '../../src/simulation/world/walking-space';
+test('room placement rejects gaps, bounds, lobby/room overlap and preserves shared walking space',()=>{const s=tower();expect(quoteFacility(s,{definitionId:'office.small',floor:1,x:24}).code).toBe('missingFloor');expect(quoteFacility(s,{definitionId:'office.small',floor:0,x:110}).code).toBe('outOfBounds');expect(quoteFacility(s,{definitionId:'office.small',floor:0,x:0}).code).toBe('overlap');place(s);expect(quoteFacility(s,{definitionId:'office.small',floor:0,x:30}).code).toBe('overlap');expect(accessAt(s,0,110).accessible).toBe(true);floor(s,1,0,40);place(s,24,1);expect(floor(s,1,24,40,true).ok).toBe(false);});
+test('transport-shaped rectangles reserve every floor and touching edges do not conflict',()=>{const shaft=rectangleReservations('shaft:1',0,10,2,4);expect(shaft).toHaveLength(4);expect(reservationConflict(shaft,{ownerId:'office',floor:3,startX:11,endXExclusive:27})).toBe('shaft:1');expect(reservationConflict(shaft,{ownerId:'office',floor:3,startX:12,endXExclusive:28})).toBeNull();});
+test('exact affordability and once-only charge, rejection changes only command sequence',()=>{const s=tower({...tower().scenario,startingFundsMinor:60000});const o=place(s);expect(s.economy.balanceMinor).toBe(0);expect(s.economy.transactions).toHaveLength(1);const before=JSON.stringify({...s,lastCommandSequence:0});expect(command(s,{kind:'placeFacility',payload:{definitionId:'office.small',floor:0,x:44}}).code).toBe('insufficientFunds');expect(JSON.stringify({...s,lastCommandSequence:0})).toBe(before);expect(o.typeId).toBe('office.small');});

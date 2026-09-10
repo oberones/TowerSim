@@ -1,91 +1,49 @@
-import { add, tick, DomainError } from '../values';
-import { allocateId } from '../ids/allocator';
+import { compareIds } from '../ids/allocator';
 import { Scheduler } from '../events/scheduler';
+import { add, tick, DomainError } from '../values';
 import type { KernelEvent } from '../events/event';
-import { runBoundary } from '../events/phases';
+import { compareEvents } from '../events/event';
 import type { GameState } from '../../state/game-state';
 import { assertState } from '../../state/validate-state';
 import { clonePlain } from '../../state/plain';
+import { scheduleEvent } from '../../occupants/schedule-events';
+import { reviewOffices } from '../../demand/office-leasing';
+import { settleOffices } from '../../economy/settlement';
+import { arriveWorker,departWorker,completeWalk } from '../../occupants/facility-transitions';
+import { pruneTrips } from '../../metrics/trips';
+const heaps=new WeakMap<GameState['scheduledEvents'],Scheduler<KernelEvent>>();
+/** Reuse the immutable pending-event heap until a lifecycle boundary publishes a replacement list. */
+function nextDue(state:GameState):number {let heap=heaps.get(state.scheduledEvents);if(!heap){heap=new Scheduler(state.scheduledEvents,state.clock.tick);heaps.set(state.scheduledEvents,heap);}return heap.peek()?.dueTick??Infinity;}
 export type AdvanceResult={ok:true;advanced:number;atTick:number}|{ok:false;code:'invalidNumber'|'overflow'|'invalidState';advanced:number;atTick:number};
-/** Allocate a future recurring event on the unpublished boundary draft using durable sequence counters. */
-function schedule(state:GameState,heap:Scheduler<KernelEvent>,kind:KernelEvent['kind'],dueTick:number):void {
-  const event={id:allocateId('event',state.ids.event),dueTick,sequence:state.ids.eventSequence.next,
-    targetId:'kernel:1',targetGeneration:0,payload:{}};
-  state.ids.eventSequence.next=add(state.ids.eventSequence.next,1);
-  heap.insert(kind==='dayBoundary' ? {...event,kind,phasePriority:0} : {...event,kind,phasePriority:20},state.clock.tick);
+/** Dispatch ordered wakeups on an unpublished boundary; departures precede endpoint admission. */
+function processEvent(state:GameState,event:KernelEvent):void {
+ if(event.kind==='dayBoundary'){settleOffices(state);pruneTrips(state);state.clock.lastDayBoundaryTick=state.clock.tick;scheduleEvent(state,event.kind,'kernel:1',0,add(event.dueTick,state.scenario.dayTicks));}
+ else if(event.kind==='dailyReview'){reviewOffices(state);scheduleEvent(state,event.kind,'kernel:1',0,add(event.dueTick,state.scenario.dayTicks));}
+ else{const p=state.occupants[event.targetId];if(!p||p.generation!==event.targetGeneration)return;if(event.kind==='workerArrival')arriveWorker(state,p);else if(event.kind==='workerDeparture')departWorker(state,p);else completeWalk(state,p);}
 }
-/** Consume the current recurring event and schedule its next occurrence exactly once. */
-function processEvent(state:GameState,heap:Scheduler<KernelEvent>):void {
-  const event=heap.pop()!;
-  if(event.targetId!=='kernel:1' || event.targetGeneration!==0)return;
-  if(event.kind==='dayBoundary') {
-    // One owner for future settlement/report/evaluation/reset, introduced by owning stories.
-    state.clock.lastDayBoundaryTick=state.clock.tick;
-  }
-  schedule(state,heap,event.kind,add(event.dueTick,state.scenario.dayTicks));
+/** Advance every integer interval exactly; timestamp-based walking permits coalescing intervals with no transitions. */
+function advanceOwned(state:GameState,count:number,validate:boolean):AdvanceResult {
+ const start=state.clock.tick;
+ try{if(validate){assertState(state);heaps.delete(state.scheduledEvents);}tick(count);const end=add(start,count);if(count===0)return {ok:true,advanced:0,atTick:start};
+ while(state.clock.tick<end){
+ const bootstrap=state.clock.initialReviewPending;
+ const due=nextDue(state);
+ const next=bootstrap?state.clock.tick+1:Math.min(end,due);
+ if(!bootstrap&&due>next){state.clock.tick=next;continue;}
+ if(!bootstrap&&next>state.clock.tick+1)state.clock.tick=next-1;
+ const draft=clonePlain(state);
+ if(bootstrap){reviewOffices(draft);scheduleEvent(draft,'dailyReview','kernel:1',0,add(draft.clock.tick,draft.scenario.dayTicks));draft.clock.initialReviewPending=false;}
+ draft.clock.tick=next;draft.scheduledEvents.sort(compareEvents);
+ const dueEvents=draft.scheduledEvents.filter(e=>e.dueTick===next);draft.scheduledEvents=draft.scheduledEvents.filter(e=>e.dueTick!==next);
+ for(const event of dueEvents.filter(e=>e.kind!=='walkComplete'))processEvent(draft,event);
+ for(const event of dueEvents.filter(e=>e.kind==='walkComplete').sort((a,b)=>compareIds(a.targetId,b.targetId)))processEvent(draft,event);
+ Object.assign(state,draft);
+ }
+ return {ok:true,advanced:state.clock.tick-start,atTick:state.clock.tick};
+ }catch(error){return {ok:false,code:error instanceof DomainError?error.code:'invalidState',advanced:state.clock.tick-start,atTick:state.clock.tick};}
 }
-/** Publish only completed boundaries; event failures retain the preceding tick. */
-export function advance(state: GameState, count: number): AdvanceResult {
-  let advanced = 0;
-  try {
-    assertState(state);
-    tick(count);
-    add(state.clock.tick, count); // Preflight the entire requested range before mutation.
-    if (count === 0) return { ok: true, advanced, atTick: state.clock.tick };
 
-    let next = state.clock.tick;
-    let draft = state;
-    let heap: Scheduler<KernelEvent> | undefined;
-    /** Find the next due boundary without rebuilding the scheduler on ordinary idle ticks. */
-    const earliestEvent = () => Math.min(...state.scheduledEvents.map(event => event.dueTick));
-    let nextEventTick = earliestEvent();
-    // Construct the phase callbacks once per call, outside the per-tick hot loop.
-    // Movement/completions/decisions gain real owners in the later story tasks.
-    const phases = {
-      integrate: () => {},
-      boundary: () => {
-        draft.clock.tick = next;
-        while (heap?.peek()?.dueTick === next && heap.peek()?.phasePriority === 0) {
-          processEvent(draft, heap);
-        }
-      },
-      events: () => {
-        while (heap?.peek()?.dueTick === next) processEvent(draft, heap);
-      },
-      completions: () => {},
-      decisions: () => {},
-      commit: () => {
-        if (heap) {
-          draft.scheduledEvents = heap.exportSorted();
-          Object.assign(state, {
-            clock: draft.clock,
-            ids: draft.ids,
-            scheduledEvents: draft.scheduledEvents,
-          });
-          nextEventTick = earliestEvent();
-        }
-      },
-    };
-    for (; advanced < count; advanced++) {
-      next = state.clock.tick + 1; // Safe because the requested end tick was checked above.
-      const needsEvents = state.clock.initialReviewPending || nextEventTick <= next;
-      // Phase 2 has no active movement. Event boundaries use a detached draft for rollback;
-      // ordinary ticks change only the clock. Stateful story handlers must extend staging.
-      draft = needsEvents ? clonePlain(state) : state;
-      heap = needsEvents ? new Scheduler(draft.scheduledEvents, draft.clock.tick) : undefined;
-      if (draft.clock.initialReviewPending && heap) {
-        schedule(draft, heap, 'dailyReview', add(draft.clock.tick, draft.scenario.dayTicks));
-        draft.clock.initialReviewPending = false;
-      }
-      runBoundary(phases);
-    }
-    return { ok: true, advanced, atTick: state.clock.tick };
-  } catch (error) {
-    return {
-      ok: false,
-      code: error instanceof DomainError ? error.code : 'invalidState',
-      advanced,
-      atTick: state.clock.tick,
-    };
-  }
-}
+/** Validate arbitrary external state before advancing through the public headless boundary. */
+export function advance(state:GameState,count:number):AdvanceResult {return advanceOwned(state,count,true);}
+/** Validate a privately owned runtime once; callers must use domain commands for all subsequent mutations. */
+export function createRunner(state:GameState){assertState(state);nextDue(state);return {advance:(count:number)=>advanceOwned(state,count,false)};}

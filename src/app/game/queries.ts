@@ -1,3 +1,5 @@
+import { visibleOccupants } from './occupant-queries';
+import { reservations } from '../../simulation/world/reservations';
 import type { GameState } from '../../simulation';
 import type { Speed } from './pacing';
 import { freezeDeep } from '../../simulation/state/plain';
@@ -10,7 +12,7 @@ export function getHud(state:GameState,speed:Speed,unsaved:boolean) {
 export function getWorldView(state:GameState,bounds?:ViewBounds) {
   const tower=state.tower;if(!tower || !state.scenario.world)throw Error('No playable world');
   const floors=tower.floors.filter(f=>!bounds || f.level>=bounds.minFloor && f.level<=bounds.maxFloor).map(f=>({id:f.id,level:f.level,constructedRanges:f.constructedRanges.filter(r=>!bounds || r.startX<bounds.maxX && r.endXExclusive>bounds.minX).map(r=>({...r}))}));
-  return freezeDeep({floors,lobby:{...tower.lobby},bounds:{widthCells:state.scenario.world.widthCells,minFloor:state.scenario.world.minFloor,maxFloor:state.scenario.world.maxFloor,groundFloor:state.scenario.world.groundFloor},topologyVersion:state.navigation.topologyVersion});
+  return freezeDeep({offices:Object.values(state.offices).filter(o=>!bounds||o.floor>=bounds.minFloor&&o.floor<=bounds.maxFloor&&o.x<bounds.maxX&&o.x+o.width>bounds.minX).map(o=>({id:o.id,floor:o.floor,x:o.x,width:o.width})),occupants:visibleOccupants(state,bounds),floors,lobby:{...tower.lobby},bounds:{widthCells:state.scenario.world.widthCells,minFloor:state.scenario.world.minFloor,maxFloor:state.scenario.world.maxFloor,groundFloor:state.scenario.world.groundFloor},topologyVersion:state.navigation.topologyVersion});
 }
 export type WorldView=ReturnType<typeof getWorldView>;
 
@@ -19,7 +21,7 @@ import { subtractRange } from '../../simulation/world/ranges';
 /** Project constructed/free spans and per-span access, preserving the lobby's placement reservation. */
 export function inspectFloor(state:GameState,level:number){
   const floor=state.tower?.floors.find(f=>f.level===level);if(!floor || !state.tower)return null;
-  const lobby=state.tower.lobby;const free=level===lobby.floor?subtractRange(floor.constructedRanges,{startX:lobby.x,endXExclusive:lobby.x+lobby.width}):floor.constructedRanges.map(r=>({...r}));
+  let free=floor.constructedRanges.map(r=>({...r}));for(const r of reservations(state).filter(r=>r.floor===level))free=subtractRange(free,r);
   return freezeDeep({id:floor.id,level,builtCells:floor.constructedRanges.reduce((sum,r)=>sum+r.endXExclusive-r.startX,0),freeCells:free.reduce((sum,r)=>sum+r.endXExclusive-r.startX,0),freeRanges:free,
     spans:floor.constructedRanges.map(r=>({...r,access:accessAt(state,level,r.startX+r.endXExclusive)}))});
 }

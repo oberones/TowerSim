@@ -103,5 +103,20 @@
     "name": "rendering",
     "source": "import \"../rendering/canvas/renderer\";",
     "reject": true
+  },
+  {
+    "name": "domain location property",
+    "source": "const person = { location: { kind: 'outside' } }; person.location;",
+    "reject": false
+  },
+  {
+    "name": "bare browser location remains forbidden",
+    "source": "const url = location.href;",
+    "reject": true
+  },
+  {
+    "name": "shorthand browser location remains forbidden",
+    "source": "const leaked = { location };",
+    "reject": true
   }
 ]

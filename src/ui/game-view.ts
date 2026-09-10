@@ -1,3 +1,4 @@
+import { createOfficePanel } from './office-inspector';
 import { createConstructionPanel } from './construction-panel';
 import type { GameSession } from '../app/game/session';
 import type { PlayableScenario } from '../simulation';
@@ -20,7 +21,7 @@ export function createGameView(root:HTMLElement,session:GameSession):GameView {
   for(const [speed,label] of [[0,'Pause'],[1,'Normal 1×'],[4,'Fast 4×'],[8,'Very fast 8×']] as const){const b=button(label,()=>{session.setSpeed(speed);refresh();});speedButtons.set(speed,b);controls.append(b);}
   const canvas=element('canvas');canvas.tabIndex=0;canvas.setAttribute('aria-label','Tower site. Select Floor and drag a span, then Commit span. Shift-drag to pan, scroll to zoom, or use labeled coordinate fields.');
   const viewport=element('div','','viewport');viewport.append(canvas);
-  const status=element('p','A new site, paused at 06:00.','status');status.setAttribute('role','status');
+  const status=element('p',`Tower ready, paused at ${session.hud().time}.`,'status');status.setAttribute('role','status');
   const navigation=element('div','','camera-controls');
   const camera=new Camera(900,600,1),renderer=new Renderer(canvas,camera);
   navigation.append(button('Zoom in',()=>{camera.zoomAt(1.25,{x:camera.width/2,y:camera.height/2});draw();}),button('Zoom out',()=>{camera.zoomAt(0.8,{x:camera.width/2,y:camera.height/2});draw();}),button('Reset view',()=>{camera.fit(scenario.world.widthCells,scenario.world.groundFloor);draw();}));
@@ -34,12 +35,13 @@ export function createGameView(root:HTMLElement,session:GameSession):GameView {
   const actions=element('section','','session-actions');const newGame=button('New Game',()=>{dialog.showModal();cancel.focus();});
   const save=button('Save — later phase',()=>{}),load=button('Load — later phase',()=>{});save.disabled=true;load.disabled=true;actions.append(newGame,save,load);
   const dialog=element('dialog');dialog.setAttribute('aria-label','Start a new tower');dialog.append(element('h2','Start a new tower?'),element('p','Discard this unsaved tower and start paused at 06:00. Your local save will be left alone.'));
-  const cancel=button('Cancel',()=>dialog.close());const discard=button('Discard & start',()=>{session.replace({scenario,seed:newSeed()},true);renderer.invalidate();construction.reset();camera.fit(scenario.world.widthCells,scenario.world.groundFloor);dialog.close();status.textContent='New tower started, paused at 06:00.';refresh();});dialog.append(cancel,discard);
+  const cancel=button('Cancel',()=>dialog.close());const discard=button('Discard & start',()=>{session.replace({scenario,seed:newSeed()},true);renderer.invalidate();construction.reset();offices.reset();camera.fit(scenario.world.widthCells,scenario.world.groundFloor);dialog.close();status.textContent='New tower started, paused at 06:00.';refresh();});dialog.append(cancel,discard);
   root.replaceChildren(header,workspace,actions,info,dialog);
   let lastHud=-Infinity;
   const construction=createConstructionPanel(root,session,canvas,camera,renderer,toolbar.tools,status,refresh,signal);aside.append(construction.node);
+  const offices=createOfficePanel(session,canvas,camera,renderer,toolbar.tools,refresh,signal);aside.append(offices.node);
   /** Draw the current visible world; HUD text has its own bounded refresh cadence. */
-  function draw():void {renderer.draw(session.world(camera.bounds()));construction.draw();const now=performance.now();if(now-lastHud>=100){refreshHud();lastHud=now;}}
+  function draw():void {renderer.draw(session.world(camera.bounds()));construction.draw();offices.draw();const now=performance.now();if(now-lastHud>=100){refreshHud();lastHud=now;}}
   /** Refresh named mode buttons and small status labels without replacing focused controls. */
   function refreshHud():void {hud.update();for(const [speed,b] of speedButtons)b.setAttribute('aria-pressed',String(speed===session.hud().speed));if(session.error)status.textContent=session.error;}
   /** Deliver immediate command feedback and render an updated scene. */

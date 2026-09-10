@@ -1,0 +1,4 @@
+import {test,expect} from 'vitest';
+import {oneWorker} from '../fixtures/one-worker';
+import {startTrip,openSegment,closeSegment,finishTrip,tripElapsed} from '../../src/simulation/metrics/trips';
+test('mode intervals close once, queries include age without mutation, failures retain all elapsed penalties',()=>{const s=oneWorker(),t=startTrip(s,'occupant:999','officeArrival'),start=s.clock.tick;for(const [i,kind] of (['walking','waiting','stair','riding','stranded'] as const).entries())openSegment(t,kind,start+i*10);const before=JSON.stringify(t);expect(tripElapsed(t,start+50)).toEqual({walking:10,waiting:10,stair:10,riding:10,stranded:10});expect(JSON.stringify(t)).toBe(before);finishTrip(t,'abandoned',start+50);closeSegment(t,start+60);finishTrip(t,'completed',start+60);expect(t.outcome).toBe('abandoned');expect(t.endTick).toBe(start+50);expect(t.totals.waiting).toBe(10);});

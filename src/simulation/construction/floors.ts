@@ -24,7 +24,8 @@ export function quoteFloor(state:GameState,kind:FloorKind,p:FloorPayload):Comman
       if(!existing || !covers(existing.constructedRanges,p))return reject('missingFloor','Demolition requires an entirely constructed span.');
       if(p.floor===world.groundFloor && world.initialConstructedRanges.some(r=>overlaps(r,p)))return reject('protectedBase','The initial ground base and permanent lobby are protected.');
       if(tower.floors.find(f=>f.level===p.floor+1)?.constructedRanges.some(r=>overlaps(r,p)))return reject('upperSupport',`This span supports floor ${p.floor+1}; remove the upper space first.`,p.floor+1);
-      // Facilities, landings and occupied traversals extend this transaction guard in their owning phases.
+      if(Object.values(state.offices).some(o=>o.floor===p.floor&&overlaps({startX:o.x,endXExclusive:o.x+o.width},p)))return reject('overlap','Remove the supported office first.');
+      if(Object.values(state.occupants).some(o=>o.location.kind==='walkEdge'?o.location.from.floor===p.floor&&Math.min(o.location.from.x2,o.location.to.x2)<p.endXExclusive*2&&Math.max(o.location.from.x2,o.location.to.x2)>=p.startX*2:o.location.kind==='anchor'&&o.location.at.floor===p.floor&&o.location.at.x2>=p.startX*2&&o.location.at.x2<p.endXExclusive*2))return reject('overlap','This span supports a person or committed walking leg.');
     }
     add(state.navigation.topologyVersion,1);
     return {ok:true,code:'valid',quote};

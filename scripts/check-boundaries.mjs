@@ -25,7 +25,12 @@ export function checkSource(source, filename) {
     if (node.type === 'TSExternalModuleReference') checkImport(node.expression);
     if (node.type === 'MetaProperty') report('platform import metadata is forbidden');
     // Intentionally conservative: these reserved names cannot be rebound in domain code.
-    if (node.type === 'Identifier' && forbidden.has(node.name)) report(`forbidden platform identifier: ${node.name}`);
+    // An occupant's literal location field is domain data; a bare/global location remains forbidden.
+    const locationField = node.name === 'location' && (
+      (['MemberExpression', 'OptionalMemberExpression'].includes(parent?.type) && parent.property === node && !parent.computed) ||
+      (['ObjectProperty', 'TSPropertySignature'].includes(parent?.type) && parent.key === node && !parent.computed && !parent.shorthand)
+    );
+    if (node.type === 'Identifier' && forbidden.has(node.name) && !locationField) report(`forbidden platform identifier: ${node.name}`);
     if ((node.type === 'MemberExpression' || node.type === 'OptionalMemberExpression') && node.object?.name === 'Math') {
       if (node.computed || node.property?.name === 'random') report('computed Math access / direct randomness is forbidden');
     }

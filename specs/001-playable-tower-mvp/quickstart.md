@@ -1,6 +1,6 @@
 # TowerSim MVP quickstart and playable validation
 
-Phases 1–4 now provide the deterministic kernel and an interactive construction slice: paused new tower, speed controls, Canvas camera, floor construction/demolition and floor inspection. See `docs/construction.md` for the implemented controls and limitations. Offices, people, transport, operating finance, progression evaluation and browser storage remain later phases. The full player walkthrough below describes that future MVP. C0/M1 native-browser qualification remains open; automated and supplemental in-app observations are in `docs/release-evidence.md`.
+Phases 1–5 provide construction plus office placement/leasing, finite workforce schedules, real same-floor walking, person/office inspection, source accrual/settlement and pure state continuation. See `docs/construction.md` and `docs/offices.md` for implemented controls. Transport, restaurants, aggregate reporting, progression and browser storage remain later phases. Full supported-browser C0/M1/M2 qualification remains open; headless checks and scoped browser observations are in `docs/release-evidence.md`. The full walkthrough below continues to describe the planned later MVP.
 
 ## Developer startup after implementation
 

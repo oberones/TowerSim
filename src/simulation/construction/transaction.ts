@@ -9,13 +9,15 @@ import { topologyChanged } from '../world/topology-change';
 /** Stage geometry, allocations, finance and topology together; publish only after every step succeeds. */
 export function commitFloor(state:GameState,kind:FloorKind,payload:FloorPayload,sequence:number):CommandResult {
   const validation=quoteFloor(state,kind,payload);if(!validation.ok || !validation.quote)return validation;
-  const draft:GameState={...state,tower:clonePlain(state.tower),ids:clonePlain(state.ids),navigation:{...state.navigation},economy:{...state.economy,transactions:[...state.economy.transactions]}};
+  try {
+  const draft=clonePlain(state);
   const tower=draft.tower!;let floor=tower.floors.find(f=>f.level===payload.floor);
   if(!floor){floor={id:allocateId('floor',draft.ids.entity),level:payload.floor,constructedRanges:[]};tower.floors.push(floor);tower.floors.sort((a,b)=>a.level-b.level);}
   floor.constructedRanges=kind==='constructFloorRange'?normalizeRanges([...floor.constructedRanges,{startX:payload.startX,endXExclusive:payload.endXExclusive}]):subtractRange(floor.constructedRanges,payload);
   if(floor.constructedRanges.length===0)tower.floors=tower.floors.filter(f=>f!==floor);
   if(validation.quote.cashDeltaMinor!==0){const result=post(draft,{source:`construction:command:${sequence}:floor:${payload.floor}:${payload.startX}-${payload.endXExclusive}`,amountMinor:validation.quote.cashDeltaMinor});if(!result.ok)return {ok:false,code:result.code==='overflow'?'overflow':'invalidCommand',message:'The construction charge could not be posted.'};}
   topologyChanged(draft);
-  Object.assign(state,{tower:draft.tower,ids:draft.ids,economy:draft.economy,navigation:draft.navigation});
+  Object.assign(state,draft);
   return {...validation,code:'applied'};
+  }catch{return {ok:false,code:'overflow',message:'The complete floor edit could not settle within safe limits.'};}
 }

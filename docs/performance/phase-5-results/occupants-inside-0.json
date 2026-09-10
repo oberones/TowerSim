@@ -1,0 +1,146 @@
+{
+  "name": "occupants-inside-0",
+  "seed": "00000001000000020000000300000004",
+  "contentId": "mvp-offices-v1",
+  "rulesId": "tower-offices-v1",
+  "fixtureHash": "27d3cfa95b4c13573e79ef376adfd4ee7f0f88719354500a098696846e24ba5c",
+  "batchTicks": 100,
+  "warmups": 3,
+  "trials": 10,
+  "machine": {
+    "cpu": "Apple M2 Pro",
+    "logicalCpus": 12,
+    "ramBytes": 17179869184,
+    "os": "darwin 25.5.0"
+  },
+  "node": "v20.20.2",
+  "commit": "ba414e722cc1a1630349484fb364352c25de7a95",
+  "dirty": true,
+  "buildMode": "vitest-node",
+  "instrumentation": "monotonic clock, no coverage; counters after timing",
+  "samplesMs": [
+    0.03633300000001327,
+    0.01916700000037963,
+    0.01279199999953562,
+    0.010833999998794752,
+    0.01112499999908323,
+    0.009792000000743428,
+    0.014917000000423286,
+    0.010999999998603016,
+    0.02050000000053842,
+    0.014999999999417923
+  ],
+  "medianMs": 0.013854499999979453,
+  "p95Ms": 0.03633300000001327,
+  "totalTicks": 1000,
+  "simulatedSeconds": 1000,
+  "durationMs": 0.16145999999753258,
+  "ticksPerSecond": 6193484.454448668,
+  "digests": [
+    "7e66cec8bab8a1e94202bb445462c28063c705655823f49722514037fd5f059f",
+    "7e66cec8bab8a1e94202bb445462c28063c705655823f49722514037fd5f059f",
+    "7e66cec8bab8a1e94202bb445462c28063c705655823f49722514037fd5f059f",
+    "7e66cec8bab8a1e94202bb445462c28063c705655823f49722514037fd5f059f",
+    "7e66cec8bab8a1e94202bb445462c28063c705655823f49722514037fd5f059f",
+    "7e66cec8bab8a1e94202bb445462c28063c705655823f49722514037fd5f059f",
+    "7e66cec8bab8a1e94202bb445462c28063c705655823f49722514037fd5f059f",
+    "7e66cec8bab8a1e94202bb445462c28063c705655823f49722514037fd5f059f",
+    "7e66cec8bab8a1e94202bb445462c28063c705655823f49722514037fd5f059f",
+    "7e66cec8bab8a1e94202bb445462c28063c705655823f49722514037fd5f059f",
+    "7e66cec8bab8a1e94202bb445462c28063c705655823f49722514037fd5f059f",
+    "7e66cec8bab8a1e94202bb445462c28063c705655823f49722514037fd5f059f",
+    "7e66cec8bab8a1e94202bb445462c28063c705655823f49722514037fd5f059f"
+  ],
+  "counters": [
+    {
+      "activeMin": 1,
+      "activeMean": 1,
+      "activeMax": 1,
+      "dormant": 0,
+      "events": 3,
+      "routeRequestsDuringInterval": 0,
+      "wakeupsDuringInterval": 0
+    },
+    {
+      "activeMin": 1,
+      "activeMean": 1,
+      "activeMax": 1,
+      "dormant": 0,
+      "events": 3,
+      "routeRequestsDuringInterval": 0,
+      "wakeupsDuringInterval": 0
+    },
+    {
+      "activeMin": 1,
+      "activeMean": 1,
+      "activeMax": 1,
+      "dormant": 0,
+      "events": 3,
+      "routeRequestsDuringInterval": 0,
+      "wakeupsDuringInterval": 0
+    },
+    {
+      "activeMin": 1,
+      "activeMean": 1,
+      "activeMax": 1,
+      "dormant": 0,
+      "events": 3,
+      "routeRequestsDuringInterval": 0,
+      "wakeupsDuringInterval": 0
+    },
+    {
+      "activeMin": 1,
+      "activeMean": 1,
+      "activeMax": 1,
+      "dormant": 0,
+      "events": 3,
+      "routeRequestsDuringInterval": 0,
+      "wakeupsDuringInterval": 0
+    },
+    {
+      "activeMin": 1,
+      "activeMean": 1,
+      "activeMax": 1,
+      "dormant": 0,
+      "events": 3,
+      "routeRequestsDuringInterval": 0,
+      "wakeupsDuringInterval": 0
+    },
+    {
+      "activeMin": 1,
+      "activeMean": 1,
+      "activeMax": 1,
+      "dormant": 0,
+      "events": 3,
+      "routeRequestsDuringInterval": 0,
+      "wakeupsDuringInterval": 0
+    },
+    {
+      "activeMin": 1,
+      "activeMean": 1,
+      "activeMax": 1,
+      "dormant": 0,
+      "events": 3,
+      "routeRequestsDuringInterval": 0,
+      "wakeupsDuringInterval": 0
+    },
+    {
+      "activeMin": 1,
+      "activeMean": 1,
+      "activeMax": 1,
+      "dormant": 0,
+      "events": 3,
+      "routeRequestsDuringInterval": 0,
+      "wakeupsDuringInterval": 0
+    },
+    {
+      "activeMin": 1,
+      "activeMean": 1,
+      "activeMax": 1,
+      "dormant": 0,
+      "events": 3,
+      "routeRequestsDuringInterval": 0,
+      "wakeupsDuringInterval": 0
+    }
+  ]
+}

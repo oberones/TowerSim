@@ -39,3 +39,13 @@ test('playable content, lobby, edited floor identities and topology resume at th
   }
   advance(state,86400);advance(restored,40000);advance(restored,46400);expect(encodeState(restored)).toBe(encodeState(state));
 });
+
+import {leasedWorker,until,command} from '../fixtures/one-worker';
+test.each(['scheduled','halfWalk','inside','invalidated'] as const)('office continuation preserves %s state with cold indices and zero random draws',phase=>{
+ const {s,id}=leasedWorker(),q=s.occupants[id]!.schedule!;
+ if(phase!=='scheduled')until(s,q.arrivalTick+(phase==='inside'?28:10));
+ if(phase==='invalidated')command(s,{kind:'demolishEntity',payload:{entityId:Object.keys(s.offices)[0]!}});
+ const before=encodeState(s),restored=decodeState(before);rebuildDerived(restored);expect(encodeState(restored)).toBe(before);
+ until(s,86400+70000);until(restored,86400);until(restored,86400+70000);expect(encodeState(restored)).toBe(encodeState(s));
+});
+test('office codec rejects missing wakeups, duplicated workforce, impossible locations and accrual tampering',()=>{const {s,id}=leasedWorker();until(s,s.occupants[id]!.schedule!.arrivalTick+5);for(const edit of [(x:any)=>x.scheduledEvents=x.scheduledEvents.filter((e:any)=>e.kind!=='walkComplete'),(x:any)=>x.occupants[id].location.to.x2=500,(x:any)=>x.occupants[id].state='insideFacility',(x:any)=>x.offices[Object.keys(x.offices)[0]!].accrual.eligibleTicks=999999,(x:any)=>x.occupants[id].goal.facilityId='facility:999']){const bad=JSON.parse(encodeState(s));edit(bad);expect(validateState(bad).ok).toBe(false);}});
