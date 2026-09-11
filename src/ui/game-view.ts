@@ -1,3 +1,4 @@
+import { createTrafficPanel } from './traffic-panel';
 import { createTransportPanel } from './transport-panel';
 import { createOfficePanel } from './office-inspector';
 import { createConstructionPanel } from './construction-panel';
@@ -36,14 +37,15 @@ export function createGameView(root:HTMLElement,session:GameSession):GameView {
   const actions=element('section','','session-actions');const newGame=button('New Game',()=>{dialog.showModal();cancel.focus();});
   const save=button('Save — later phase',()=>{}),load=button('Load — later phase',()=>{});save.disabled=true;load.disabled=true;actions.append(newGame,save,load);
   const dialog=element('dialog');dialog.setAttribute('aria-label','Start a new tower');dialog.append(element('h2','Start a new tower?'),element('p','Discard this unsaved tower and start paused at 06:00. Your local save will be left alone.'));
-  const cancel=button('Cancel',()=>dialog.close());const discard=button('Discard & start',()=>{session.replace({scenario,seed:newSeed()},true);renderer.invalidate();construction.reset();offices.reset();transport.reset();camera.fit(scenario.world.widthCells,scenario.world.groundFloor);dialog.close();status.textContent='New tower started, paused at 06:00.';refresh();});dialog.append(cancel,discard);
+  const cancel=button('Cancel',()=>dialog.close());const discard=button('Discard & start',()=>{session.replace({scenario,seed:newSeed()},true);renderer.invalidate();construction.reset();offices.reset();transport.reset();traffic.reset();camera.fit(scenario.world.widthCells,scenario.world.groundFloor);dialog.close();status.textContent='New tower started, paused at 06:00.';refresh();});dialog.append(cancel,discard);
   root.replaceChildren(header,workspace,actions,info,dialog);
   let lastHud=-Infinity;
   const construction=createConstructionPanel(root,session,canvas,camera,renderer,toolbar.tools,status,refresh,signal);aside.append(construction.node);
   const offices=createOfficePanel(session,canvas,camera,renderer,toolbar.tools,refresh,signal);aside.append(offices.node);
   const transport=createTransportPanel(session,canvas,camera,renderer,toolbar.tools,refresh,signal);aside.append(transport.node);
+  const traffic=createTrafficPanel(session,renderer,refresh);aside.append(traffic.node);
   /** Draw the current visible world; HUD text has its own bounded refresh cadence. */
-  function draw():void {renderer.draw(session.world(camera.bounds()));construction.draw();offices.draw();transport.draw();const now=performance.now();if(now-lastHud>=100){refreshHud();lastHud=now;}}
+  function draw():void {renderer.draw(session.world(camera.bounds()));construction.draw();offices.draw();transport.draw();traffic.draw();const now=performance.now();if(now-lastHud>=100){refreshHud();lastHud=now;}}
   /** Refresh named mode buttons and small status labels without replacing focused controls. */
   function refreshHud():void {hud.update();for(const [speed,b] of speedButtons)b.setAttribute('aria-pressed',String(speed===session.hud().speed));if(session.error)status.textContent=session.error;}
   /** Deliver immediate command feedback and render an updated scene. */

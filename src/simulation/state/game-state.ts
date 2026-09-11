@@ -1,3 +1,6 @@
+import { emptyTransportReports } from '../metrics/report-state';
+import type { TransportReports } from '../metrics/report-state';
+import type { WorkforceDay } from '../occupants/worker-lifecycle';
 import type { Shaft,ElevatorStop,ElevatorQueue,ElevatorCar } from '../transportation/elevators/types';
 import type { Stair } from '../transportation/stairs/stairs';
 import type { Tower } from '../world/tower';
@@ -21,6 +24,7 @@ export interface GameState {
   rng:RandomState;
   ids:{entity:Counter;event:Counter;eventSequence:Counter;transaction:Counter;queueAdmission:Counter};
   shafts:Record<string,Shaft>;stops:Record<string,ElevatorStop>;queues:Record<string,ElevatorQueue>;cars:Record<string,ElevatorCar>;stairs:Record<string,Stair>; offices:Record<string,Office>; occupants:Record<string,Occupant>; trips:Record<string,Trip>; officeMarket:{pendingRelease:number};
+  transportReports:TransportReports;workforceDays:WorkforceDay[];
   economy:EconomyState;
   tower:Tower|null; navigation:{topologyVersion:number}; progression:{level:1};
   lastCommandSequence:number;
@@ -32,7 +36,7 @@ export function createKernelState(input:unknown,seed:string):GameState {
   return {stateVersion:STATE_VERSION,rulesetId:RULESET_ID,contentVersion:CONTENT_VERSION,scenario,
     clock:{tick:scenario.initialTick,initialReviewPending:true,lastDayBoundaryTick:0},rng:new Xoshiro128(seed).export(),
     ids:{entity:{next:1},event:{next:2},eventSequence:{next:2},transaction:{next:1},queueAdmission:{next:1}},lastCommandSequence:0,
-    shafts:{},stops:{},queues:{},cars:{},stairs:{},offices:{},occupants:{},trips:{},officeMarket:{pendingRelease:0},
+    transportReports:emptyTransportReports(),workforceDays:[],shafts:{},stops:{},queues:{},cars:{},stairs:{},offices:{},occupants:{},trips:{},officeMarket:{pendingRelease:0},
     tower:null,navigation:{topologyVersion:0},progression:{level:1},
     economy:{initialMinor:scenario.startingFundsMinor,balanceMinor:scenario.startingFundsMinor,transactions:[]},
     scheduledEvents:[{id:'event:1',dueTick:scenario.dayTicks,phasePriority:0,sequence:1,kind:'dayBoundary',targetId:'kernel:1',targetGeneration:0,payload:{}}],

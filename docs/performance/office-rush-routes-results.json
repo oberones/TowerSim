@@ -1,0 +1,116 @@
+{
+  "name": "office-rush-routes",
+  "seed": "00000001000000020000000300000004",
+  "contentId": "mvp-transport-v1",
+  "rulesId": "tower-transport-v1",
+  "fixtureHash": "dfc8cf769fcd62ea1c8d00b2245ed2213a43509338dfff02ce385121ab9c06a8",
+  "batchTicks": 0,
+  "warmups": 3,
+  "trials": 10,
+  "machine": {
+    "cpu": "Apple M2 Pro",
+    "logicalCpus": 12,
+    "ramBytes": 17179869184,
+    "os": "darwin 25.5.0"
+  },
+  "node": "v24.20.0",
+  "commit": "f1da72104b6dfcb2ea42a19d70b2c7acf492bae0",
+  "dirty": true,
+  "buildMode": "vitest-node",
+  "instrumentation": "monotonic clock, no coverage; counters after timing",
+  "samplesMs": [
+    3.286833000000115,
+    2.9587910000009288,
+    3.144125000000713,
+    3.492959000001065,
+    2.999707999999373,
+    2.692291999999725,
+    3.022000000000844,
+    2.712792000000263,
+    2.8082909999993717,
+    2.7056250000005093
+  ],
+  "medianMs": 2.979249500000151,
+  "p95Ms": 3.492959000001065,
+  "totalTicks": 0,
+  "simulatedSeconds": 0,
+  "durationMs": 29.823416000002908,
+  "ticksPerSecond": 0,
+  "digests": [
+    "dfc8cf769fcd62ea1c8d00b2245ed2213a43509338dfff02ce385121ab9c06a8",
+    "dfc8cf769fcd62ea1c8d00b2245ed2213a43509338dfff02ce385121ab9c06a8",
+    "dfc8cf769fcd62ea1c8d00b2245ed2213a43509338dfff02ce385121ab9c06a8",
+    "dfc8cf769fcd62ea1c8d00b2245ed2213a43509338dfff02ce385121ab9c06a8",
+    "dfc8cf769fcd62ea1c8d00b2245ed2213a43509338dfff02ce385121ab9c06a8",
+    "dfc8cf769fcd62ea1c8d00b2245ed2213a43509338dfff02ce385121ab9c06a8",
+    "dfc8cf769fcd62ea1c8d00b2245ed2213a43509338dfff02ce385121ab9c06a8",
+    "dfc8cf769fcd62ea1c8d00b2245ed2213a43509338dfff02ce385121ab9c06a8",
+    "dfc8cf769fcd62ea1c8d00b2245ed2213a43509338dfff02ce385121ab9c06a8",
+    "dfc8cf769fcd62ea1c8d00b2245ed2213a43509338dfff02ce385121ab9c06a8",
+    "dfc8cf769fcd62ea1c8d00b2245ed2213a43509338dfff02ce385121ab9c06a8",
+    "dfc8cf769fcd62ea1c8d00b2245ed2213a43509338dfff02ce385121ab9c06a8",
+    "dfc8cf769fcd62ea1c8d00b2245ed2213a43509338dfff02ce385121ab9c06a8"
+  ],
+  "counters": [
+    {
+      "graphBuilds": 100,
+      "routeSearches": 100,
+      "nodes": 14,
+      "edges": 24
+    },
+    {
+      "graphBuilds": 100,
+      "routeSearches": 100,
+      "nodes": 14,
+      "edges": 24
+    },
+    {
+      "graphBuilds": 100,
+      "routeSearches": 100,
+      "nodes": 14,
+      "edges": 24
+    },
+    {
+      "graphBuilds": 100,
+      "routeSearches": 100,
+      "nodes": 14,
+      "edges": 24
+    },
+    {
+      "graphBuilds": 100,
+      "routeSearches": 100,
+      "nodes": 14,
+      "edges": 24
+    },
+    {
+      "graphBuilds": 100,
+      "routeSearches": 100,
+      "nodes": 14,
+      "edges": 24
+    },
+    {
+      "graphBuilds": 100,
+      "routeSearches": 100,
+      "nodes": 14,
+      "edges": 24
+    },
+    {
+      "graphBuilds": 100,
+      "routeSearches": 100,
+      "nodes": 14,
+      "edges": 24
+    },
+    {
+      "graphBuilds": 100,
+      "routeSearches": 100,
+      "nodes": 14,
+      "edges": 24
+    },
+    {
+      "graphBuilds": 100,
+      "routeSearches": 100,
+      "nodes": 14,
+      "edges": 24
+    }
+  ]
+}

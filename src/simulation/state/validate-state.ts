@@ -1,3 +1,5 @@
+import { assertReports } from './validate-reports';
+import { assertWorkforce } from './validate-workforce';
 import { assertOffices } from './validate-offices';
 import { assertTower } from '../world/tower';
 import { DomainError, integer, tick, positive } from '../core/values';
@@ -14,7 +16,7 @@ function check(condition:unknown,message:string):asserts condition {if(!conditio
 /** Enforce compatibility, world, clock, allocation, event and ledger invariants before capture or restore. */
 export function assertState(value:unknown):asserts value is GameState {
   assertPlain(value);
-  const root=record(value,['stateVersion','rulesetId','contentVersion','scenario','clock','rng','ids','lastCommandSequence','scheduledEvents','economy','tower','navigation','progression','offices','occupants','trips','officeMarket','stairs','shafts','stops','queues','cars']);
+  const root=record(value,['stateVersion','rulesetId','contentVersion','scenario','clock','rng','ids','lastCommandSequence','scheduledEvents','economy','tower','navigation','progression','offices','occupants','trips','officeMarket','stairs','shafts','stops','queues','cars','workforceDays','transportReports']);
   check(root.stateVersion===STATE_VERSION && root.rulesetId===RULESET_ID && root.contentVersion===CONTENT_VERSION,'Unsupported state/rules/content version');
   const scenario=validateScenario(root.scenario);const s=value as GameState;
   record(s.clock,['tick','initialReviewPending','lastDayBoundaryTick']);tick(s.clock.tick);tick(s.clock.lastDayBoundaryTick);
@@ -55,7 +57,7 @@ export function assertState(value:unknown):asserts value is GameState {
     sources.add(transaction.source);transactionIds.add(transaction.id);lastOrdinal=id.ordinal;lastTick=transaction.atTick;
     balance+=transaction.amountMinor;integer(balance);
   }
-  check(reconcile(s.economy),'Ledger does not reconcile');assertOffices(s);
+  check(reconcile(s.economy),'Ledger does not reconcile');assertOffices(s);assertWorkforce(s);assertReports(s);
 }
 export type StateValidation={ok:true;state:GameState}|{ok:false;errors:string[]};
 /** Return a detached canonical candidate or useful validation errors without touching the source. */

@@ -1,5 +1,7 @@
 # Native browser build
 
+Phases 8–10 add nine-worker cutoff/full-car fixtures and the default 32-worker morning, evening, full-attendance, next-day and stranded-exit observations. The nine-person fixture concentrates valid scheduled requests while keeping standard car capacity/timing. Open **Traffic reports** to choose live, latest/previous morning or previous-day scope; select a person to retain inspection indoors or while traveling. **Show waiting-time overlay** labels exact stop ages. These controls also ship in the ordinary release build. All fixture setup finishes before mounting.
+
 The harness also offers upper offices needing stairs/elevators, a pre-arrival elevator rider, all nine paused elevator phases, and stair ascent/descent/inside-office states. These reduced-worker fixtures retain production eight-person car capacity and timing. They are generated through domain commands and advancement, with boundary/continuation coverage in `tests/integration/transport-observations.test.ts`. Use ordinary controls after mounting; inspect connections on Canvas or with the Selected connection selector.
 
 The harness offers one-worker visible-approach and same-floor-office scenarios, a default paused site, a narrow site with negative ground, and a validated completed boundary. Select a fixture before mounting the same ordinary application as release. There are no mid-play state-mutation controls. Importing src/main.ts does not mount automatically. The files in evidence/ record each phase's observations and remaining native-browser qualification gates.

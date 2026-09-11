@@ -1,0 +1,126 @@
+{
+  "name": "queues",
+  "seed": "00000001000000020000000300000004",
+  "contentId": "mvp-transport-v1",
+  "rulesId": "tower-transport-v1",
+  "fixtureHash": "ef49f85946b9e4a673436d7ab75d430ab6d6aba5a485cf941d0d4e5c5fcb0a9f",
+  "batchTicks": 2000,
+  "warmups": 3,
+  "trials": 10,
+  "machine": {
+    "cpu": "Apple M2 Pro",
+    "logicalCpus": 12,
+    "ramBytes": 17179869184,
+    "os": "darwin 25.5.0"
+  },
+  "node": "v24.20.0",
+  "commit": "f1da72104b6dfcb2ea42a19d70b2c7acf492bae0",
+  "dirty": true,
+  "buildMode": "vitest-node",
+  "instrumentation": "monotonic clock, no coverage; counters after timing",
+  "samplesMs": [
+    162.787334,
+    157.31337500000006,
+    158.79679099999998,
+    153.0252089999999,
+    164.18879200000015,
+    152.29091700000004,
+    153.31991700000003,
+    152.64983400000006,
+    154.93162500000017,
+    152.7022920000004
+  ],
+  "medianMs": 154.1257710000001,
+  "p95Ms": 164.18879200000015,
+  "totalTicks": 20000,
+  "simulatedSeconds": 20000,
+  "durationMs": 1562.0060860000008,
+  "ticksPerSecond": 12804.047422898448,
+  "digests": [
+    "034544093dac54a5bdfb044a3da5c863d09e465cfb1fe772aab9a7402e40b408",
+    "034544093dac54a5bdfb044a3da5c863d09e465cfb1fe772aab9a7402e40b408",
+    "034544093dac54a5bdfb044a3da5c863d09e465cfb1fe772aab9a7402e40b408",
+    "034544093dac54a5bdfb044a3da5c863d09e465cfb1fe772aab9a7402e40b408",
+    "034544093dac54a5bdfb044a3da5c863d09e465cfb1fe772aab9a7402e40b408",
+    "034544093dac54a5bdfb044a3da5c863d09e465cfb1fe772aab9a7402e40b408",
+    "034544093dac54a5bdfb044a3da5c863d09e465cfb1fe772aab9a7402e40b408",
+    "034544093dac54a5bdfb044a3da5c863d09e465cfb1fe772aab9a7402e40b408",
+    "034544093dac54a5bdfb044a3da5c863d09e465cfb1fe772aab9a7402e40b408",
+    "034544093dac54a5bdfb044a3da5c863d09e465cfb1fe772aab9a7402e40b408",
+    "034544093dac54a5bdfb044a3da5c863d09e465cfb1fe772aab9a7402e40b408",
+    "034544093dac54a5bdfb044a3da5c863d09e465cfb1fe772aab9a7402e40b408",
+    "034544093dac54a5bdfb044a3da5c863d09e465cfb1fe772aab9a7402e40b408"
+  ],
+  "counters": [
+    {
+      "people": 32,
+      "peakQueue": 32,
+      "denials": 48,
+      "completed": 32,
+      "aggregateReads": 10000
+    },
+    {
+      "people": 32,
+      "peakQueue": 32,
+      "denials": 48,
+      "completed": 32,
+      "aggregateReads": 10000
+    },
+    {
+      "people": 32,
+      "peakQueue": 32,
+      "denials": 48,
+      "completed": 32,
+      "aggregateReads": 10000
+    },
+    {
+      "people": 32,
+      "peakQueue": 32,
+      "denials": 48,
+      "completed": 32,
+      "aggregateReads": 10000
+    },
+    {
+      "people": 32,
+      "peakQueue": 32,
+      "denials": 48,
+      "completed": 32,
+      "aggregateReads": 10000
+    },
+    {
+      "people": 32,
+      "peakQueue": 32,
+      "denials": 48,
+      "completed": 32,
+      "aggregateReads": 10000
+    },
+    {
+      "people": 32,
+      "peakQueue": 32,
+      "denials": 48,
+      "completed": 32,
+      "aggregateReads": 10000
+    },
+    {
+      "people": 32,
+      "peakQueue": 32,
+      "denials": 48,
+      "completed": 32,
+      "aggregateReads": 10000
+    },
+    {
+      "people": 32,
+      "peakQueue": 32,
+      "denials": 48,
+      "completed": 32,
+      "aggregateReads": 10000
+    },
+    {
+      "people": 32,
+      "peakQueue": 32,
+      "denials": 48,
+      "completed": 32,
+      "aggregateReads": 10000
+    }
+  ]
+}

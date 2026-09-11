@@ -109,3 +109,8 @@ Captured from package-lock.json on 2026-09-10, including optional platform packa
 ## Phase 3/4 authorship
 
 The site grid, floor slabs, lobby rectangle, selection and preview overlays, palette, copy and CSS were authored for this repository with Codex assistance. They use Canvas primitives and system fonts, with no copied game artwork, screenshots, audio or UI text. Scenario prices, footprints, timing, schedules, finite demand and Level 2 data implement this repository's accepted design artifacts. Session/pacing, camera, construction, content validation, query and input code were independently authored. No production or development dependencies were added.
+
+
+## Phase 8–10 authorship
+
+Queue group glyphs, waiting-time overlays, traffic/workforce copy, report controls, FIFO indexing, lifecycle traces and report calculations were authored for this repository with Codex assistance. They use original Canvas primitives, Unicode direction arrows and system fonts. Score coefficients implement the provisional values already accepted in the design; they are not claimed as congestion calibration. No assets, reference code, runtime dependencies or development dependencies were added.

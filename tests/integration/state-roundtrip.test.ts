@@ -42,6 +42,19 @@ test('playable content, lobby, edited floor identities and topology resume at th
 });
 
 import {leasedWorker,until,command} from '../fixtures/one-worker';
+import { servicePhase } from '../fixtures/service-phases';
+import { cohortReport } from '../../src/simulation/metrics/cohort-report';
+test.each(['boarding','unloading','denied'] as const)('transport codec preserves open segments, %s history and retained summaries into the next feasible day',phase=>{
+ const s=servicePhase(phase),copy=decodeState(encodeState(s));rebuildDerived(copy);expect(encodeState(copy)).toBe(encodeState(s));until(s,130000);until(copy,130000);expect(encodeState(copy)).toBe(encodeState(s));expect(cohortReport(copy,0)?.completed).toBe(17);expect(copy.transportReports.daily).toHaveLength(1);
+});
+test('codec rejects altered report populations, queue aggregates, history identities and summary quality',()=>{
+ const s=servicePhase('denied');until(s,86400);
+ for(const edit of [(x:any)=>x.transportReports.daily[0].samples++,(x:any)=>x.transportReports.daily[0].quality=101,(x:any)=>x.transportReports.cohorts[0].currentQueued++,(x:any)=>x.workforceDays[0].members[0].arrivalTick++,(x:any)=>x.transportReports.dayFinished.completed++]){const bad=JSON.parse(encodeState(s));edit(bad);expect(validateState(bad).ok).toBe(false);}
+});
+test('a canceled selected boarding cohort remains historical and resumes identically after restoration',()=>{
+ const s=servicePhase('boarding');expect(command(s,{kind:'demolishEntity',payload:{entityId:Object.keys(s.offices)[0]!}}).ok).toBe(true);
+ const copy=decodeState(encodeState(s));until(s,110000);until(copy,110000);expect(encodeState(copy)).toBe(encodeState(s));expect(Object.keys(copy.occupants)).toHaveLength(0);
+});
 test.each(['scheduled','halfWalk','inside','invalidated'] as const)('office continuation preserves %s state with cold indices and zero random draws',phase=>{
  const {s,id}=leasedWorker(),q=s.occupants[id]!.schedule!;
  if(phase!=='scheduled')until(s,q.arrivalTick+(phase==='inside'?OFFICE_WALK_TICKS:10));

@@ -1,0 +1,156 @@
+{
+  "name": "office-rush",
+  "seed": "00000001000000020000000300000004",
+  "contentId": "mvp-transport-v1",
+  "rulesId": "tower-transport-v1",
+  "fixtureHash": "dfc8cf769fcd62ea1c8d00b2245ed2213a43509338dfff02ce385121ab9c06a8",
+  "batchTicks": 50400,
+  "warmups": 3,
+  "trials": 10,
+  "machine": {
+    "cpu": "Apple M2 Pro",
+    "logicalCpus": 12,
+    "ramBytes": 17179869184,
+    "os": "darwin 25.5.0"
+  },
+  "node": "v24.20.0",
+  "commit": "f1da72104b6dfcb2ea42a19d70b2c7acf492bae0",
+  "dirty": true,
+  "buildMode": "vitest-node",
+  "instrumentation": "monotonic clock, no coverage; counters after timing",
+  "samplesMs": [
+    971.979167,
+    970.8230839999997,
+    973.125583,
+    986.0618750000003,
+    931.1035419999998,
+    962.3574999999992,
+    948.9800000000014,
+    964.594000000001,
+    979.9385419999999,
+    955.4898329999996
+  ],
+  "medianMs": 967.7085420000003,
+  "p95Ms": 986.0618750000003,
+  "totalTicks": 504000,
+  "simulatedSeconds": 504000,
+  "durationMs": 9644.453126,
+  "ticksPerSecond": 52258.01747548459,
+  "digests": [
+    "694713715fd4a646e5848b4ee9b4c0e813348e2221128ecc29760a9bcbd3c864",
+    "694713715fd4a646e5848b4ee9b4c0e813348e2221128ecc29760a9bcbd3c864",
+    "694713715fd4a646e5848b4ee9b4c0e813348e2221128ecc29760a9bcbd3c864",
+    "694713715fd4a646e5848b4ee9b4c0e813348e2221128ecc29760a9bcbd3c864",
+    "694713715fd4a646e5848b4ee9b4c0e813348e2221128ecc29760a9bcbd3c864",
+    "694713715fd4a646e5848b4ee9b4c0e813348e2221128ecc29760a9bcbd3c864",
+    "694713715fd4a646e5848b4ee9b4c0e813348e2221128ecc29760a9bcbd3c864",
+    "694713715fd4a646e5848b4ee9b4c0e813348e2221128ecc29760a9bcbd3c864",
+    "694713715fd4a646e5848b4ee9b4c0e813348e2221128ecc29760a9bcbd3c864",
+    "694713715fd4a646e5848b4ee9b4c0e813348e2221128ecc29760a9bcbd3c864",
+    "694713715fd4a646e5848b4ee9b4c0e813348e2221128ecc29760a9bcbd3c864",
+    "694713715fd4a646e5848b4ee9b4c0e813348e2221128ecc29760a9bcbd3c864",
+    "694713715fd4a646e5848b4ee9b4c0e813348e2221128ecc29760a9bcbd3c864"
+  ],
+  "counters": [
+    {
+      "maxActive": 10,
+      "maxInside": 32,
+      "maxEvents": 66,
+      "maxQueued": 2,
+      "morningPeakQueue": 2,
+      "scheduledEvents": 1241,
+      "completed": 64,
+      "people": 32
+    },
+    {
+      "maxActive": 10,
+      "maxInside": 32,
+      "maxEvents": 66,
+      "maxQueued": 2,
+      "morningPeakQueue": 2,
+      "scheduledEvents": 1241,
+      "completed": 64,
+      "people": 32
+    },
+    {
+      "maxActive": 10,
+      "maxInside": 32,
+      "maxEvents": 66,
+      "maxQueued": 2,
+      "morningPeakQueue": 2,
+      "scheduledEvents": 1241,
+      "completed": 64,
+      "people": 32
+    },
+    {
+      "maxActive": 10,
+      "maxInside": 32,
+      "maxEvents": 66,
+      "maxQueued": 2,
+      "morningPeakQueue": 2,
+      "scheduledEvents": 1241,
+      "completed": 64,
+      "people": 32
+    },
+    {
+      "maxActive": 10,
+      "maxInside": 32,
+      "maxEvents": 66,
+      "maxQueued": 2,
+      "morningPeakQueue": 2,
+      "scheduledEvents": 1241,
+      "completed": 64,
+      "people": 32
+    },
+    {
+      "maxActive": 10,
+      "maxInside": 32,
+      "maxEvents": 66,
+      "maxQueued": 2,
+      "morningPeakQueue": 2,
+      "scheduledEvents": 1241,
+      "completed": 64,
+      "people": 32
+    },
+    {
+      "maxActive": 10,
+      "maxInside": 32,
+      "maxEvents": 66,
+      "maxQueued": 2,
+      "morningPeakQueue": 2,
+      "scheduledEvents": 1241,
+      "completed": 64,
+      "people": 32
+    },
+    {
+      "maxActive": 10,
+      "maxInside": 32,
+      "maxEvents": 66,
+      "maxQueued": 2,
+      "morningPeakQueue": 2,
+      "scheduledEvents": 1241,
+      "completed": 64,
+      "people": 32
+    },
+    {
+      "maxActive": 10,
+      "maxInside": 32,
+      "maxEvents": 66,
+      "maxQueued": 2,
+      "morningPeakQueue": 2,
+      "scheduledEvents": 1241,
+      "completed": 64,
+      "people": 32
+    },
+    {
+      "maxActive": 10,
+      "maxInside": 32,
+      "maxEvents": 66,
+      "maxQueued": 2,
+      "morningPeakQueue": 2,
+      "scheduledEvents": 1241,
+      "completed": 64,
+      "people": 32
+    }
+  ]
+}

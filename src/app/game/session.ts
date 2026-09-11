@@ -1,3 +1,5 @@
+import { transportQuery } from './transport-queries';
+import { workforceQuery } from './workforce-queries';
 import { inspectElevator } from './elevator-queries';
 import { createRunner } from '../../simulation/core/clock/advance';
 import { inspectOffice } from './facility-queries';
@@ -56,6 +58,10 @@ export class GameSession {
   inspectOccupant(id:string){return inspectOccupant(this.state,id);}
   /** Inspect the selected shaft without exposing mutable car or queue records. */
   inspectElevator(id:string){return inspectElevator(this.state,id);}
+  /** Read scoped transport reports without allowing presentation to settle or modify trips. */
+  transport(){return transportQuery(this.state);}
+  /** Expose retained workforce and actual indoor attendance independently of scheduled demand. */
+  workforce(){return workforceQuery(this.state);}
   /** Read the current geometry revision without copying any world records. */
   topologyRevision():number {return this.state.navigation.topologyVersion;}
   /** Expose diagnostic pacing values without granting access to the live accumulator. */

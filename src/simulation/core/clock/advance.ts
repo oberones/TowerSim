@@ -1,3 +1,4 @@
+import { finalizeTransportDay } from '../../metrics/daily-report';
 import { completeCarPhase,resolveCars } from '../../transportation/elevators/car';
 import { settleShaft } from '../../transportation/elevators/shaft';
 import { compareIds } from '../ids/allocator';
@@ -19,7 +20,7 @@ function nextDue(state:GameState):number {let heap=heaps.get(state.scheduledEven
 export type AdvanceResult={ok:true;advanced:number;atTick:number}|{ok:false;code:'invalidNumber'|'overflow'|'invalidState';advanced:number;atTick:number};
 /** Dispatch ordered wakeups on an unpublished boundary; departures precede endpoint admission. */
 function processEvent(state:GameState,event:KernelEvent):void {
- if(event.kind==='dayBoundary'){settleOffices(state);for(const shaft of Object.values(state.shafts))settleShaft(state,shaft);pruneTrips(state);state.clock.lastDayBoundaryTick=state.clock.tick;scheduleEvent(state,event.kind,'kernel:1',0,add(event.dueTick,state.scenario.dayTicks));}
+ if(event.kind==='dayBoundary'){finalizeTransportDay(state);settleOffices(state);for(const shaft of Object.values(state.shafts))settleShaft(state,shaft);pruneTrips(state);state.clock.lastDayBoundaryTick=state.clock.tick;scheduleEvent(state,event.kind,'kernel:1',0,add(event.dueTick,state.scenario.dayTicks));}
  else if(event.kind==='dailyReview'){reviewOffices(state);scheduleEvent(state,event.kind,'kernel:1',0,add(event.dueTick,state.scenario.dayTicks));}
  else if(event.kind==='carComplete'){const car=state.cars[event.targetId];if(car&&car.generation===event.targetGeneration)completeCarPhase(state,car);}
  else{const p=state.occupants[event.targetId];if(!p||p.generation!==event.targetGeneration)return;if(event.kind==='workerArrival')arriveWorker(state,p);else if(event.kind==='workerDeparture')departWorker(state,p);else completeWalk(state,p);}
