@@ -15,7 +15,7 @@ export function reviewOffices(state:GameState):void {
  for(const office of Object.values(state.offices).sort((a,b)=>compareIds(a.id,b.id))){
  if(!office.lease&&accessAt(state,office.floor,office.entranceX2).accessible&&officeDefinition(state).capacity>0&&availableMarket(state)>=officeDefinition(state).capacity){
  const tenantId=allocateId('tenant',state.ids.entity);office.lease={tenantId,leasedAtTick:state.clock.tick,assignedWorkerIds:[]};
- for(let i=0;i<officeDefinition(state).capacity;i++){const id=allocateId('occupant',state.ids.entity);state.occupants[id]={id,kind:'worker',generation:0,leaseFacilityId:office.id,goal:{kind:'none'},state:'outside',location:{kind:'outside'},schedule:null,tripId:null,replanAfterCurrentLeg:false};office.lease.assignedWorkerIds.push(id);}
+ for(let i=0;i<officeDefinition(state).capacity;i++){const id=allocateId('occupant',state.ids.entity);state.occupants[id]={id,kind:'worker',generation:0,leaseFacilityId:office.id,goal:{kind:'none'},state:'outside',location:{kind:'outside'},schedule:null,journey:null,tripId:null,replanAfterCurrentLeg:false};office.lease.assignedWorkerIds.push(id);}
  accrue(office.accrual,state.clock.tick,true);
  }
  for(const id of office.lease?.assignedWorkerIds??[])scheduleWorker(state,state.occupants[id]!);

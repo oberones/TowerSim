@@ -9,5 +9,5 @@ export type CommandEnvelope = Command & {sequence:number;atTick:number};
 export type FloorKind='constructFloorRange'|'demolishFloorRange';
 export interface FloorPayload {floor:number;startX:number;endXExclusive:number}
 export interface FloorQuote {footprint:FloorPayload;constructionCostMinor:number;demolitionCostMinor:number;accruedSettlementMinor:number;cashDeltaMinor:number;topologyVersion:number}
-export type CommandError = 'invalidCommand'|'duplicateCommand'|'staleTick'|'unknownCommand'|'notImplemented'|'outOfBounds'|'overlap'|'missingSupport'|'insufficientFunds'|'missingFloor'|'protectedBase'|'upperSupport'|'overflow';
+export type CommandError = 'activeTraversal'|'loadedCar'|'invalidServiceRange'|'invalidCommand'|'duplicateCommand'|'staleTick'|'unknownCommand'|'notImplemented'|'outOfBounds'|'overlap'|'missingSupport'|'insufficientFunds'|'missingFloor'|'protectedBase'|'upperSupport'|'overflow';
 export type CommandResult = {ok:true;code:'applied'|'valid';quote?:FloorQuote} | {ok:false;code:CommandError;message?:string;quote?:FloorQuote;blockingFloor?:number};

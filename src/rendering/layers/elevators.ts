@@ -1,0 +1,4 @@
+import type { WorldView } from '../../app/game/queries';
+import type { Camera } from '../camera/camera';
+/** Draw aligned shaft extents and their actual moving cars without inventing a second passenger position. */
+export function drawElevators(ctx:CanvasRenderingContext2D,view:WorldView,camera:Camera):void {for(const s of view.elevators){const a=camera.worldToScreen({x:s.x,y:s.minFloor+0.08}),b=camera.worldToScreen({x:s.x+s.width,y:s.maxFloor+0.92});ctx.strokeStyle='#82b9cb';ctx.lineWidth=1;ctx.strokeRect(a.x,b.y,b.x-a.x,a.y-b.y);for(const floor of s.stops){const stop=camera.worldToScreen({x:s.x,y:floor+0.1});ctx.beginPath();ctx.moveTo(stop.x,stop.y);ctx.lineTo(b.x,stop.y);ctx.stroke();}const low=camera.worldToScreen({x:s.x+0.12,y:s.position+0.15}),high=camera.worldToScreen({x:s.x+s.width-0.12,y:s.position+0.85});ctx.fillStyle=s.load?'#80efc0':'#6399b0';ctx.fillRect(low.x,high.y,high.x-low.x,low.y-high.y);}}

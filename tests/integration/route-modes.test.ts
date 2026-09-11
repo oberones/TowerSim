@@ -1,0 +1,7 @@
+import { test,expect } from 'vitest';
+import { stairs,upperOffice,elevator } from '../fixtures/transport';
+import { buildGraph } from '../../src/simulation/navigation/graph';
+import { findRoute } from '../../src/simulation/navigation/find-route';
+test.each([1,2,3])('journeys to floor %i respect mode preference before generalized costs',floor=>{const s=elevator(stairs(upperOffice(floor),floor),floor),g=buildGraph(s),r=findRoute(g,s.tower!.lobby.id,Object.keys(s.offices)[0]!)!;expect(r.legs.some(l=>l.kind==='elevator')).toBe(floor===3);expect(r.legs.some(l=>l.kind==='stair')).toBe(floor<=2);});
+test('opposite-mode fallback stays reachable and same-floor trips walk',()=>{const s=elevator(upperOffice(1),1);expect(findRoute(buildGraph(s),s.tower!.lobby.id,Object.keys(s.offices)[0]!)!.legs.some(l=>l.kind==='elevator')).toBe(true);const a=stairs(upperOffice(3),3);expect(findRoute(buildGraph(a),a.tower!.lobby.id,Object.keys(a.offices)[0]!)!.legs.some(l=>l.kind==='stair')).toBe(true);const g=buildGraph(s,[{id:'near',at:{floor:0,x2:60}}]);expect(findRoute(g,s.tower!.lobby.id,'near')!.legs.every(l=>l.kind==='walk')).toBe(true);});
+test('an immutable elevator preference survives intermediate floors and a large queue estimate',()=>{const s=elevator(stairs(upperOffice(3),3),3);const g=buildGraph(s,[{id:'replan',at:{floor:2,x2:20}}]);for(const edges of g.edges.values())for(const edge of edges)if(edge.kind==='board')edge.cost2=1000000;expect(findRoute(g,'replan',Object.keys(s.offices)[0]!,'elevator')!.legs.some(l=>l.kind==='elevator')).toBe(true);});

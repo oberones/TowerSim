@@ -1,3 +1,5 @@
+import { completeCarPhase,resolveCars } from '../../transportation/elevators/car';
+import { settleShaft } from '../../transportation/elevators/shaft';
 import { compareIds } from '../ids/allocator';
 import { Scheduler } from '../events/scheduler';
 import { add, tick, DomainError } from '../values';
@@ -17,8 +19,9 @@ function nextDue(state:GameState):number {let heap=heaps.get(state.scheduledEven
 export type AdvanceResult={ok:true;advanced:number;atTick:number}|{ok:false;code:'invalidNumber'|'overflow'|'invalidState';advanced:number;atTick:number};
 /** Dispatch ordered wakeups on an unpublished boundary; departures precede endpoint admission. */
 function processEvent(state:GameState,event:KernelEvent):void {
- if(event.kind==='dayBoundary'){settleOffices(state);pruneTrips(state);state.clock.lastDayBoundaryTick=state.clock.tick;scheduleEvent(state,event.kind,'kernel:1',0,add(event.dueTick,state.scenario.dayTicks));}
+ if(event.kind==='dayBoundary'){settleOffices(state);for(const shaft of Object.values(state.shafts))settleShaft(state,shaft);pruneTrips(state);state.clock.lastDayBoundaryTick=state.clock.tick;scheduleEvent(state,event.kind,'kernel:1',0,add(event.dueTick,state.scenario.dayTicks));}
  else if(event.kind==='dailyReview'){reviewOffices(state);scheduleEvent(state,event.kind,'kernel:1',0,add(event.dueTick,state.scenario.dayTicks));}
+ else if(event.kind==='carComplete'){const car=state.cars[event.targetId];if(car&&car.generation===event.targetGeneration)completeCarPhase(state,car);}
  else{const p=state.occupants[event.targetId];if(!p||p.generation!==event.targetGeneration)return;if(event.kind==='workerArrival')arriveWorker(state,p);else if(event.kind==='workerDeparture')departWorker(state,p);else completeWalk(state,p);}
 }
 /** Advance every integer interval exactly; timestamp-based walking permits coalescing intervals with no transitions. */
@@ -35,8 +38,10 @@ function advanceOwned(state:GameState,count:number,validate:boolean):AdvanceResu
  if(bootstrap){reviewOffices(draft);scheduleEvent(draft,'dailyReview','kernel:1',0,add(draft.clock.tick,draft.scenario.dayTicks));draft.clock.initialReviewPending=false;}
  draft.clock.tick=next;draft.scheduledEvents.sort(compareEvents);
  const dueEvents=draft.scheduledEvents.filter(e=>e.dueTick===next);draft.scheduledEvents=draft.scheduledEvents.filter(e=>e.dueTick!==next);
- for(const event of dueEvents.filter(e=>e.kind!=='walkComplete'))processEvent(draft,event);
+ for(const event of dueEvents.filter(e=>e.kind!=='walkComplete'&&e.kind!=='carComplete'))processEvent(draft,event);
  for(const event of dueEvents.filter(e=>e.kind==='walkComplete').sort((a,b)=>compareIds(a.targetId,b.targetId)))processEvent(draft,event);
+ for(const event of dueEvents.filter(e=>e.kind==='carComplete').sort((a,b)=>(draft.cars[a.targetId]?.phase==='unloading'?-1:0)-(draft.cars[b.targetId]?.phase==='unloading'?-1:0)||compareIds(a.targetId,b.targetId)))processEvent(draft,event);
+ resolveCars(draft);
  Object.assign(state,draft);
  }
  return {ok:true,advanced:state.clock.tick-start,atTick:state.clock.tick};

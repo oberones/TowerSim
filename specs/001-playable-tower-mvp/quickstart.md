@@ -1,6 +1,6 @@
 # TowerSim MVP quickstart and playable validation
 
-Phases 1–5 provide construction plus office placement/leasing, finite workforce schedules, real same-floor walking, person/office inspection, source accrual/settlement and pure state continuation. See `docs/construction.md` and `docs/offices.md` for implemented controls. Transport, restaurants, aggregate reporting, progression and browser storage remain later phases. Full supported-browser C0/M1/M2 qualification remains open; headless checks and scoped browser observations are in `docs/release-evidence.md`. The full walkthrough below continues to describe the planned later MVP.
+Phases 1–7 provide construction, offices and schedules, real walking/stairs/elevator journeys, safe transport edits, source accrual and pure state continuation. See `docs/construction.md`, `docs/offices.md` and `docs/transport.md` for implemented controls. Phase 8 queue acceptance, restaurants, aggregate reporting, progression and browser storage remain later work. Full supported-browser checkpoints remain open; headless checks and scoped observations are in `docs/release-evidence.md`. The full walkthrough below continues to describe the planned later MVP.
 
 ## Developer startup after implementation
 

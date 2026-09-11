@@ -1,3 +1,9 @@
+import { quoteShaft,quoteService,quoteShaftRemoval } from '../transportation/elevators/shaft';
+import type { ShaftPayload,ServicePayload } from '../transportation/elevators/shaft';
+import { commitElevator } from './elevator-commands';
+import { quoteStair,quoteStairRemoval } from '../transportation/stairs/stairs';
+import type { StairPayload } from '../transportation/stairs/stairs';
+import { commitStair } from './stair-commands';
 import { quoteFacility,quoteOfficeRemoval,commitFacility } from '../facilities/place-facility';
 import type { FacilityPayload } from '../facilities/place-facility';
 import { quoteFloor } from '../construction/floors';
@@ -28,6 +34,11 @@ function proposal(state:GameState,command:Record<string,unknown>):CommandResult 
   }catch{return {ok:false,code:'invalidCommand'};}
   if(command.kind==='constructFloorRange'||command.kind==='demolishFloorRange')return quoteFloor(state,command.kind,command.payload as FloorPayload);
   if(command.kind==='placeFacility')return quoteFacility(state,command.payload as FacilityPayload);
+  if(command.kind==='buildElevatorShaft')return quoteShaft(state,command.payload as ShaftPayload);
+  if(command.kind==='setElevatorServiceRange')return quoteService(state,command.payload as ServicePayload);
+  if(command.kind==='demolishEntity'&&state.shafts[(command.payload as {entityId:string}).entityId])return quoteShaftRemoval(state,(command.payload as {entityId:string}).entityId);
+  if(command.kind==='buildStair')return quoteStair(state,command.payload as StairPayload);
+  if(command.kind==='demolishEntity'&&state.stairs[(command.payload as {entityId:string}).entityId])return quoteStairRemoval(state,(command.payload as {entityId:string}).entityId);
   if(command.kind==='demolishEntity')return quoteOfficeRemoval(state,(command.payload as {entityId:string}).entityId);
   return {ok:false,code:'notImplemented'};
 }
@@ -42,7 +53,7 @@ export function validateCommand(state:GameState,value:unknown):CommandResult {
 /** Apply accepted gameplay atomically and consume well-formed new command sequences even on rejection. */
 export function applyCommand(state:GameState,value:unknown):CommandResult {
   let result=validateCommand(state,value);
-  if(result.ok){const command=envelope(value);result=command.kind==='placeFacility'?commitFacility(state,command.payload as FacilityPayload,command.sequence as number):command.kind==='demolishEntity'?commitFacility(state,(command.payload as {entityId:string}).entityId,command.sequence as number):applyFloorCommand(state,command.kind as FloorKind,command.payload as FloorPayload,command.sequence as number);}
+  if(result.ok){const command=envelope(value);result=command.kind==='buildElevatorShaft'||command.kind==='setElevatorServiceRange'?commitElevator(state,command.payload as ShaftPayload|ServicePayload,command.sequence as number):command.kind==='demolishEntity'&&state.shafts[(command.payload as {entityId:string}).entityId]?commitElevator(state,(command.payload as {entityId:string}).entityId,command.sequence as number):command.kind==='buildStair'?commitStair(state,command.payload as StairPayload,command.sequence as number):command.kind==='demolishEntity'&&state.stairs[(command.payload as {entityId:string}).entityId]?commitStair(state,(command.payload as {entityId:string}).entityId,command.sequence as number):command.kind==='placeFacility'?commitFacility(state,command.payload as FacilityPayload,command.sequence as number):command.kind==='demolishEntity'?commitFacility(state,(command.payload as {entityId:string}).entityId,command.sequence as number):applyFloorCommand(state,command.kind as FloorKind,command.payload as FloorPayload,command.sequence as number);}
   try {const command=envelope(value);if((command.sequence as number)>state.lastCommandSequence)state.lastCommandSequence=command.sequence as number;}catch { /* Invalid envelope consumes no metadata. */ }
   return result;
 }
