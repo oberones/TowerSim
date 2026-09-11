@@ -1,0 +1,27 @@
+{
+  "date": "2026-09-11",
+  "node": "24.20.0",
+  "tests": 226,
+  "testFiles": 87,
+  "benchmarkTests": 18,
+  "benchmarkFiles": 9,
+  "nativeBrowsers": {
+    "Firefox": "155.0.1",
+    "Safari": "26.6.2",
+    "Chrome": "not installed in /Applications or enabled inventory"
+  },
+  "artifacts": {
+    "dist": {
+      "dist/.vite/manifest.json": "d2ed712f0384ed97d712f95cfb650015ca200144f34e93acb4500c2943525516",
+      "dist/assets/index-CSo-1Qn3.css": "3b32be7c09a9f22657c7a15a30de5c018340a9e231fa16cd6faeab7fcfb0b8ef",
+      "dist/assets/index-bTjFW9_C.js": "e32ee9fc786f0b028fffece230813564f9e5657a509288275389c9ac19de323d",
+      "dist/index.html": "2f0f34cff671436f00296efa91de672cbed98a09b52c7ef4cdd1723f214690b2"
+    },
+    "dist-browser-test": {
+      "dist-browser-test/.vite/manifest.json": "c75027085f0a03aa6baf6476beee5d342ffc1c55a8e8bfa3b3c22d2427a3781f",
+      "dist-browser-test/assets/index-CSo-1Qn3.css": "3b32be7c09a9f22657c7a15a30de5c018340a9e231fa16cd6faeab7fcfb0b8ef",
+      "dist-browser-test/assets/index-Y59mYDu8.js": "2ea7c72eb6d9a59867d1d883d443befae0dcb83433e4582dc636eeb1dd31b15e",
+      "dist-browser-test/index.html": "20c170fb8dea9a87f8035c8b372ad0fc899a91bb72705571453d7c221fab245f"
+    }
+  }
+}

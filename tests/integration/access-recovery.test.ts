@@ -1,0 +1,5 @@
+import {expect,it} from 'vitest';
+import {elevator,upperOffice,arrival} from '../fixtures/transport';
+import {command,until} from '../fixtures/one-worker';
+import {captureState,encodeState,decodeState,rebuildDerived} from '../../src/simulation';
+it('retains the same stranded worker and resumes a physical exit after rebuilding sole access',()=>{const s=elevator(upperOffice(3),3),id=arrival(s);until(s,43200);const departure=s.occupants[id]!.schedule!.departureTick;expect(command(s,{kind:'demolishEntity',payload:{entityId:Object.keys(s.shafts)[0]!}}).ok).toBe(true);until(s,departure);expect(s.occupants[id]!.state).toBe('stranded');const at=s.occupants[id]!.location,cold=decodeState(encodeState(s));rebuildDerived(cold);for(const state of [s,cold]){elevator(state,3);expect(state.occupants[id]!.state).toBe('walking');expect(state.occupants[id]!.location.kind==='walkEdge'&&state.occupants[id]!.location.from).toEqual(at.kind==='anchor'&&at.at);until(state,departure+2000);expect(state.occupants[id]!.state).toBe('outside');captureState(state);}expect(encodeState(s)).toBe(encodeState(cold));});

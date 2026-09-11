@@ -1,0 +1,7 @@
+import { expect,it } from 'vitest';
+import { congestion } from '../fixtures/congestion';
+import { until } from '../fixtures/one-worker';
+import { elevator } from '../fixtures/transport';
+import { captureState,encodeState,decodeState } from '../../src/simulation';
+it('moves existing waiters physically with retained history, protected boarders and fresh local admissions',()=>{const s=congestion();until(s,29700);const waiting=Object.values(s.occupants).filter(p=>p.state==='waitingForElevator').map(p=>({id:p.id,trip:p.tripId!,entry:Object.values(s.queues).flatMap(q=>q.entries).find(e=>e.occupantId===p.id)!})),before=captureState(s),sequence=s.ids.queueAdmission.next;elevator(s,5,14);const moved=waiting.filter(p=>s.occupants[p.id]!.state==='walking');expect(moved.length).toBeGreaterThan(0);for(const old of waiting){const p=s.occupants[old.id]!,t=s.trips[old.trip]!;expect(t.deniedBoardingCount).toBe(before.trips[old.trip]!.deniedBoardingCount);if(old.entry.reservedVisitId)expect(p.location).toEqual(before.occupants[p.id]!.location);if(p.state==='walking'){expect(p.location.from).toEqual({floor:0,x2:22});expect(t.totals.waiting).toBeGreaterThanOrEqual(before.trips[t.id]!.totals.waiting);}}
+ const cold=decodeState(encodeState(s));until(s,30000);until(cold,30000);expect(encodeState(s)).toBe(encodeState(cold));expect(Object.values(s.queues).flatMap(q=>q.entries).filter(e=>moved.some(p=>p.id===e.occupantId)).every(e=>e.admissionSequence>=sequence)).toBe(true);captureState(s);},30000);

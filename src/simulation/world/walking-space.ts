@@ -1,5 +1,4 @@
-import { buildGraph } from '../navigation/graph';
-import { findRoute } from '../navigation/find-route';
+import { accessReason } from '../navigation/access-reasons';
 import type { Tower } from './tower';
 import type { GameState } from '../state/game-state';
 import type { Range } from '../state/content';
@@ -10,10 +9,7 @@ export function hasWalkingPath(tower:Tower,floor:number,fromX2:number,toX2:numbe
 }
 /** Explain real lobby reachability through constructed hallways and available vertical connections. */
 export function accessAt(state:GameState,floor:number,x2:number):{accessible:boolean;reason:string} {
-  const t=state.tower;if(!t || !hasWalkingPath(t,floor,x2,x2))return {accessible:false,reason:'No constructed walking space at this location'};
-  if(Object.keys(state.stairs).length||Object.keys(state.shafts).length){const accessible=!!findRoute(buildGraph(state,[{id:'access:target',at:{floor,x2}}]),t.lobby.id,'access:target');return {accessible,reason:accessible?'Connected to the lobby by walking and vertical transport':'No connected stairs or elevator landing reaches this span'};}
-  if(floor!==t.lobby.floor)return {accessible:false,reason:'No stairs or elevator connection to the lobby'};
-  const accessible=hasWalkingPath(t,floor,t.lobby.entranceX2,x2);return {accessible,reason:accessible?'Connected to the lobby by the shared walking path':'An unbuilt gap separates this span from the lobby'};
+  return accessReason(state,floor,x2);
 }
 /** Rebuild disposable per-floor walking intervals at the existing saved topology version. */
 export function buildWalkingSpace(state:GameState):WalkingSpace|null {

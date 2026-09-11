@@ -18,17 +18,7 @@ export function quoteShaft(state:GameState,p:ShaftPayload):CommandResult {
  if(state.economy.balanceMinor<cost)return {ok:false,code:'insufficientFunds',quote};add(state.ids.entity.next,3+3*(p.servedMaxFloor-p.servedMinFloor+1));add(state.ids.transaction.next,1);add(state.navigation.topologyVersion,1);return {ok:true,code:'valid',quote};
  }catch{return {ok:false,code:'overflow'};}
 }
-/** Validate service changes against every loaded unload commitment and current physical car phase. */
-export function quoteService(state:GameState,p:ServicePayload):CommandResult {
- const s=state.shafts[p.shaftId];if(!s)return {ok:false,code:'invalidCommand'};
- if(![p.minFloor,p.maxFloor].every(Number.isSafeInteger)||p.minFloor<p.maxFloor&& (p.minFloor<s.minFloor||p.maxFloor>s.maxFloor)||p.minFloor>=p.maxFloor)return {ok:false,code:'invalidServiceRange',message:'Keep a contiguous service of at least two floors inside this shaft.'};
- const car=state.cars[s.carIds[0]]!;
- /** Check whether a protected floor survives the complete proposed service range. */
- const within=(floor:number)=>floor>=p.minFloor&&floor<=p.maxFloor;
- if(car.onboard.some(o=>!within(state.stops[o.unloadStopId]!.floor)))return {ok:false,code:'loadedCar',message:'The loaded car must retain every committed unloading stop.'};
- if(!within(car.currentFloor)||car.segment&&(!within(car.segment.fromFloor)||!within(car.segment.toFloor))||car.targetStopId&&!within(state.stops[car.targetStopId]!.floor)||car.visit&&!within(state.stops[car.visit.stopId]!.floor))return {ok:false,code:'activeTraversal',message:'This range removes the car’s current position or committed stop. Wait until it is safely within the range.'};
- return {ok:true,code:'valid',quote:{footprint:{floor:s.minFloor,startX:s.x,endXExclusive:s.x+s.width},constructionCostMinor:0,demolitionCostMinor:0,accruedSettlementMinor:0,cashDeltaMinor:0,topologyVersion:state.navigation.topologyVersion}};
-}
+export { quoteService } from './service-edits';
 /** Quote running cost by existence time, including empty idle service. */
 export function shaftCost(state:GameState,s:Shaft):number {const d=state.scenario.content!.definitions.find(d=>d.typeId===s.definitionId)!;return prorate(d.operatingMinorPerDay,state.clock.tick-s.costSinceTick,state.scenario.dayTicks);}
 /** Settle an elevator's accrued cost exactly once at demolition or midnight. */

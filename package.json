@@ -18,7 +18,9 @@
     "build:browser-test": "npm run check:types && npm run check:boundaries && npm run check:comments && vite build --config vite.browser.config.ts --mode production",
     "preview:browser-test": "vite preview --config vite.browser.config.ts",
     "check:browser-builds": "node scripts/check-browser-builds.mjs",
-    "check:comments": "node scripts/check-function-comments.mjs"
+    "check:comments": "node scripts/check-function-comments.mjs",
+    "test:congestion": "vitest run --project integration tests/integration/congestion-baseline.test.ts tests/integration/congestion-loop.test.ts",
+    "check:release": "npm test && npm run build && npm run build:browser-test && npm run check:browser-builds"
   },
   "devDependencies": {
     "typescript": "7.0.2",

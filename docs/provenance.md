@@ -114,3 +114,7 @@ The site grid, floor slabs, lobby rectangle, selection and preview overlays, pal
 ## Phase 8–10 authorship
 
 Queue group glyphs, waiting-time overlays, traffic/workforce copy, report controls, FIFO indexing, lifecycle traces and report calculations were authored for this repository with Codex assistance. They use original Canvas primitives, Unicode direction arrows and system fonts. Score coefficients implement the provisional values already accepted in the design; they are not claimed as congestion calibration. No assets, reference code, runtime dependencies or development dependencies were added.
+
+## Phases 11–13 (2026-09-11)
+
+Congestion fixtures, acceptance traces, queue cost/reservation and migration code, access diagnostics, and recovery tests were independently authored in this repository. The shared arrival-window calibration is original balance data. No third-party assets, code, gameplay service, or production dependency was added. Existing prototype Canvas shapes remain in use.

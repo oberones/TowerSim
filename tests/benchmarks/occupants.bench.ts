@@ -9,10 +9,11 @@ import {compareEvents} from '../../src/simulation/core/events/event';
 
 /** Prepare equal walking work with extra valid scheduled sleepers; no wake falls in the timed interval. */
 function fixture(dormant:number,inside=false){
- const sc=oneWorkerScenario(),s=createGame({...sc,scenarioId:'walking-benchmark',content:{...sc.content!,officeMarketWorkers:dormant+1,walkingTicksPerCell:1000,definitions:sc.content!.definitions.map(d=>d.typeId==='office.small'?{...d,capacity:dormant+1}:d)}},WALKER_SEED);
+ const sc=oneWorkerScenario(),s=createGame({...sc,scenarioId:'walking-benchmark',content:{...sc.content!,officeMarketWorkers:dormant+1,walkingTicksPerCell:1000,schedules:{...sc.content!.schedules,office:{...sc.content!.schedules.office,arrivalEnd:36000}},definitions:sc.content!.definitions.map(d=>d.typeId==='office.small'?{...d,capacity:dormant+1}:d)}},WALKER_SEED);
  place(s);until(s,21601);const ids=Object.keys(s.occupants);
  // Performance-only DTO arrangement: retain domain-created identities; freeze nonmeasured wakeups in their valid window.
  for(const [i,id] of ids.entries()){const p=s.occupants[id]!;p.schedule!.arrivalTick=i===0?28800:33000;if(inside)p.schedule!.departureTick=i===0?61200:68300;for(const e of s.scheduledEvents)if(e.targetId===id){if(e.kind==='workerArrival')e.dueTick=p.schedule!.arrivalTick;if(e.kind==='workerDeparture')e.dueTick=p.schedule!.departureTick;}}
+ for(const m of s.workforceDays[0]!.members){const p=s.occupants[m.occupantId]!;m.arrivalTick=p.schedule!.arrivalTick;m.departureTick=p.schedule!.departureTick;}
  s.scheduledEvents.sort(compareEvents);until(s,inside?61200:28800);return s;
 }
 /** Hash the canonical boundary outside timing for reproducible restored-trial comparisons. */

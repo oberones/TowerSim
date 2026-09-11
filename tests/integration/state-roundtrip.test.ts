@@ -1,3 +1,4 @@
+import { passengerAtPhase } from '../fixtures/one-elevator-passenger';
 import { OFFICE_WALK_TICKS } from '../fixtures/one-worker';
 import { expect, test } from 'vitest';
 import { createKernelState, captureState, encodeState, decodeState, validateState, rebuildDerived } from '../../src/simulation';
@@ -63,3 +64,5 @@ test.each(['scheduled','halfWalk','inside','invalidated'] as const)('office cont
  until(s,86400+70000);until(restored,86400);until(restored,86400+70000);expect(encodeState(restored)).toBe(encodeState(s));
 });
 test('office codec rejects missing wakeups, duplicated workforce, impossible locations and accrual tampering',()=>{const {s,id}=leasedWorker();until(s,s.occupants[id]!.schedule!.arrivalTick+5);for(const edit of [(x:any)=>x.scheduledEvents=x.scheduledEvents.filter((e:any)=>e.kind!=='walkComplete'),(x:any)=>x.occupants[id].location.to.x2=500,(x:any)=>x.occupants[id].state='insideFacility',(x:any)=>x.offices[Object.keys(x.offices)[0]!].accrual.eligibleTicks=999999,(x:any)=>x.occupants[id].goal.facilityId='facility:999']){const bad=JSON.parse(encodeState(s));edit(bad);expect(validateState(bad).ok).toBe(false);}});
+
+test('paused service edits preserve riding commitments and cold-cache continuation without schedule or RNG changes',()=>{const {s,id,carId}=passengerAtPhase('moving'),before=captureState(s),shaftId=s.cars[carId]!.shaftId;expect(command(s,{kind:'setElevatorServiceRange',payload:{shaftId,minFloor:0,maxFloor:3}}).ok).toBe(true);expect(s.rng).toEqual(before.rng);expect(s.workforceDays).toEqual(before.workforceDays);expect(s.occupants[id]!.location).toEqual(before.occupants[id]!.location);const cold=decodeState(encodeState(s));rebuildDerived(cold);expect(advance(s,1000).ok).toBe(true);expect(advance(cold,1000).ok).toBe(true);expect(encodeState(cold)).toBe(encodeState(s));});

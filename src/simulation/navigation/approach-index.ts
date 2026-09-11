@@ -1,0 +1,3 @@
+import type { GameState } from '../state/game-state';
+/** Reconstruct reservations from each person's next committed elevator leg, excluding the current decision maker. */
+export function approachIndex(state:GameState,exclude?:string):Map<string,number> {const result=new Map<string,number>();for(const p of Object.values(state.occupants)){if(p.id===exclude||p.state==='waitingForElevator'||p.state==='ridingElevator')continue;const leg=p.journey?.legs.find(l=>l.kind==='elevator');if(leg?.kind!=='elevator')continue;const key=`${leg.boardingStopId}:${leg.to.floor>leg.from.floor?'up':'down'}`;result.set(key,(result.get(key)??0)+1);}return result;}

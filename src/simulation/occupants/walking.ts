@@ -14,7 +14,7 @@ export function beginWalk(state:GameState,p:Occupant,to:Anchor):boolean {
  if(from.floor===to.floor&&from.x2===to.x2){p.journey=null;return true;}
  if(!p.journey||p.replanAfterCurrentLeg||p.journey.topologyVersion!==state.navigation.topologyVersion||!p.journey.legs.length){
  const origin=p.journey?.origin??{...from},preference=p.journey?.preference??modePreference(origin,to);
- const route=findRoute(buildGraph(state,[{id:'route:from',at:from},{id:'route:to',at:to}]),'route:from','route:to',preference);
+ const route=findRoute(buildGraph(state,[{id:'route:from',at:from},{id:'route:to',at:to}],p.id),'route:from','route:to',preference);
  if(!route){p.journey={origin,destination:{...to},preference,legs:[],topologyVersion:state.navigation.topologyVersion};p.replanAfterCurrentLeg=false;transition(p,{state:'stranded',location:{kind:'anchor',at:{...from}}});if(p.tripId){const trip=state.trips[p.tripId]!;trip.outcome='stranded';openSegment(trip,'stranded',state.clock.tick);}return false;}
  p.journey={origin,destination:{...to},preference,legs:route.legs,topologyVersion:state.navigation.topologyVersion};p.replanAfterCurrentLeg=false;
  }

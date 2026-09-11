@@ -1,0 +1,4 @@
+import expected from '../fixtures/congestion-baseline-expected.json';
+import { expect,it } from 'vitest';
+import { congestion,observeRush } from '../fixtures/congestion';
+it('recovers the complete fixed cohort after sustained eligible-visit queue growth and repeated denials',()=>{const s=congestion(),ids=Object.keys(s.occupants),r=observeRush(s);expect(ids).toHaveLength(96);expect(r.report.memberIds).toEqual(ids);expect(r.report.completed).toBe(96);expect(r.report.completeBeforeDeadline).toBe(true);expect(r.maxWait).toBeGreaterThanOrEqual(600);expect(r.maxDenials).toBeGreaterThanOrEqual(2);expect(r.visits.some((v,i,a)=>i>=2&&v.queued>a[i-1]!.queued&&a[i-1]!.queued>a[i-2]!.queued)).toBe(true);expect(r.quality.some((v,i,a)=>i>0&&v.unfinished>0&&v.quality!<a[i-1]!.quality!)).toBe(true);expect(r).toEqual(expected);},30000);

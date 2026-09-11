@@ -1,2 +1,2 @@
 /** Translate a current access projection into a concise, truthful player-facing explanation. */
-export function accessStatus(access:{accessible:boolean;reason:string}):string {return `${access.accessible?'Accessible':'Inaccessible'}: ${access.reason}.`;}
+export function accessStatus(access:{accessible:boolean;reason:string;affectedFloors?:readonly number[];stranded?:readonly unknown[]}):string {return `${access.accessible?'Accessible':'Inaccessible'}: ${access.reason}.${access.stranded?.length?` ${access.stranded.length} stranded; restore access on floors ${access.affectedFloors!.join(', ')}.`:''}`;}

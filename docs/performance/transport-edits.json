@@ -1,0 +1,106 @@
+{
+  "name": "transport-edits",
+  "seed": "00000001000000020000000300000004",
+  "contentId": "mvp-transport-v1",
+  "rulesId": "tower-transport-v1",
+  "fixtureHash": "f672d0db9bea72784213f3abb7f36d00c068f4906cacef054e9bf0a417b4fbba",
+  "batchTicks": 0,
+  "warmups": 3,
+  "trials": 10,
+  "machine": {
+    "cpu": "Apple M2 Pro",
+    "logicalCpus": 12,
+    "ramBytes": 17179869184,
+    "os": "darwin 25.6.0"
+  },
+  "node": "v24.20.0",
+  "commit": "a67280907347b78fce49e80500cc74e4bd30c658",
+  "dirty": true,
+  "buildMode": "vitest-node",
+  "instrumentation": "monotonic clock, no coverage; counters after timing",
+  "samplesMs": [
+    30.307583000000022,
+    30.757042000000183,
+    29.519874999999956,
+    28.994042000000036,
+    29.039167000000134,
+    28.503375000000005,
+    28.236083000000008,
+    28.314292000000023,
+    27.538334000000077,
+    27.945165999999972
+  ],
+  "medianMs": 28.74870850000002,
+  "p95Ms": 30.757042000000183,
+  "totalTicks": 0,
+  "simulatedSeconds": 0,
+  "durationMs": 289.1549590000004,
+  "ticksPerSecond": 0,
+  "digests": [
+    "dfb3c32c1af15eb354cb64e4b4d2201766d767009d2dfd5e801394f3ece7ae86",
+    "dfb3c32c1af15eb354cb64e4b4d2201766d767009d2dfd5e801394f3ece7ae86",
+    "dfb3c32c1af15eb354cb64e4b4d2201766d767009d2dfd5e801394f3ece7ae86",
+    "dfb3c32c1af15eb354cb64e4b4d2201766d767009d2dfd5e801394f3ece7ae86",
+    "dfb3c32c1af15eb354cb64e4b4d2201766d767009d2dfd5e801394f3ece7ae86",
+    "dfb3c32c1af15eb354cb64e4b4d2201766d767009d2dfd5e801394f3ece7ae86",
+    "dfb3c32c1af15eb354cb64e4b4d2201766d767009d2dfd5e801394f3ece7ae86",
+    "dfb3c32c1af15eb354cb64e4b4d2201766d767009d2dfd5e801394f3ece7ae86",
+    "dfb3c32c1af15eb354cb64e4b4d2201766d767009d2dfd5e801394f3ece7ae86",
+    "dfb3c32c1af15eb354cb64e4b4d2201766d767009d2dfd5e801394f3ece7ae86",
+    "dfb3c32c1af15eb354cb64e4b4d2201766d767009d2dfd5e801394f3ece7ae86",
+    "dfb3c32c1af15eb354cb64e4b4d2201766d767009d2dfd5e801394f3ece7ae86",
+    "dfb3c32c1af15eb354cb64e4b4d2201766d767009d2dfd5e801394f3ece7ae86"
+  ],
+  "counters": [
+    {
+      "people": 96,
+      "waiting": 21,
+      "walking": 65
+    },
+    {
+      "people": 96,
+      "waiting": 21,
+      "walking": 65
+    },
+    {
+      "people": 96,
+      "waiting": 21,
+      "walking": 65
+    },
+    {
+      "people": 96,
+      "waiting": 21,
+      "walking": 65
+    },
+    {
+      "people": 96,
+      "waiting": 21,
+      "walking": 65
+    },
+    {
+      "people": 96,
+      "waiting": 21,
+      "walking": 65
+    },
+    {
+      "people": 96,
+      "waiting": 21,
+      "walking": 65
+    },
+    {
+      "people": 96,
+      "waiting": 21,
+      "walking": 65
+    },
+    {
+      "people": 96,
+      "waiting": 21,
+      "walking": 65
+    },
+    {
+      "people": 96,
+      "waiting": 21,
+      "walking": 65
+    }
+  ]
+}
