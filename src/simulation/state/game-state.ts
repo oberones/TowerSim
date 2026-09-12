@@ -1,3 +1,5 @@
+import { initialProgression } from '../progression/day-evidence';
+import type { ProgressionState } from '../progression/day-evidence';
 import type { Restaurant,RestaurantDay } from '../facilities/restaurants';
 import { emptyTransportReports } from '../metrics/report-state';
 import type { TransportReports } from '../metrics/report-state';
@@ -16,8 +18,8 @@ import type { Office } from '../facilities/offices';
 import type { Occupant } from '../occupants/occupant';
 import type { Trip } from '../metrics/trips';
 export const STATE_VERSION=1 as const;
-export const RULESET_ID='tower-restaurant-v1' as const;
-export const CONTENT_VERSION='mvp-restaurant-v1' as const;
+export const RULESET_ID='tower-mvp-v1' as const;
+export const CONTENT_VERSION='mvp-v1' as const;
 export interface GameState {
   readonly stateVersion:typeof STATE_VERSION; readonly rulesetId:typeof RULESET_ID; readonly contentVersion:typeof CONTENT_VERSION;
   readonly scenario:KernelScenario;
@@ -27,7 +29,7 @@ export interface GameState {
   shafts:Record<string,Shaft>;stops:Record<string,ElevatorStop>;queues:Record<string,ElevatorQueue>;cars:Record<string,ElevatorCar>;stairs:Record<string,Stair>; offices:Record<string,Office>; occupants:Record<string,Occupant>; trips:Record<string,Trip>; officeMarket:{pendingRelease:number};
   restaurants:Record<string,Restaurant>;restaurantDays:RestaurantDay[];transportReports:TransportReports;workforceDays:WorkforceDay[];
   economy:EconomyState;
-  tower:Tower|null; navigation:{topologyVersion:number}; progression:{level:1};
+  tower:Tower|null; navigation:{topologyVersion:number}; progression:ProgressionState;
   lastCommandSequence:number;
   scheduledEvents:KernelEvent[];
 }
@@ -38,7 +40,7 @@ export function createKernelState(input:unknown,seed:string):GameState {
     clock:{tick:scenario.initialTick,initialReviewPending:true,lastDayBoundaryTick:0},rng:new Xoshiro128(seed).export(),
     ids:{entity:{next:1},event:{next:2},eventSequence:{next:2},transaction:{next:1},queueAdmission:{next:1}},lastCommandSequence:0,
     restaurants:{},restaurantDays:[],transportReports:emptyTransportReports(),workforceDays:[],shafts:{},stops:{},queues:{},cars:{},stairs:{},offices:{},occupants:{},trips:{},officeMarket:{pendingRelease:0},
-    tower:null,navigation:{topologyVersion:0},progression:{level:1},
+    tower:null,navigation:{topologyVersion:0},progression:initialProgression(scenario.initialTick),
     economy:{initialMinor:scenario.startingFundsMinor,balanceMinor:scenario.startingFundsMinor,transactions:[],archive:{incomeMinor:0,expensesMinor:0,netMinor:0,count:0,throughTick:0,lastOrdinal:0},operatingDays:[]},
     scheduledEvents:[{id:'event:1',dueTick:scenario.dayTicks,phasePriority:0,sequence:1,kind:'dayBoundary',targetId:'kernel:1',targetGeneration:0,payload:{}}],
   };

@@ -1,0 +1,6 @@
+import { expect,it } from 'vitest';
+import { mvpJourney } from '../fixtures/mvp-journey';
+import { until } from '../fixtures/one-worker';
+import { createRunner } from '../../src/simulation/core/clock/advance';
+import { progressionPredicates } from '../../src/simulation/progression/evaluate';
+it('completes an affordable ordinary default game with actual congestion, expansion, meals and income',()=>{const s=mvpJourney();expect(s.scenario.scenarioId).toBe('mvp-default');expect(s.economy.initialMinor).toBe(1000000);expect(Object.keys(s.shafts)).toHaveLength(2);expect(Object.values(s.trips).some(t=>t.deniedBoardingCount>=2)).toBe(true);expect(s.economy.transactions.some(t=>t.source.startsWith('officeRent:'))).toBe(false);const runner=createRunner(s);expect(runner.advance(172800-s.clock.tick).ok).toBe(true);expect(s.progression.level).toBe(2);expect(progressionPredicates(s.progression.lastEvaluation!,s.scenario.content!.level2).every(x=>x.met)).toBe(true);expect(s.economy.operatingDays.find(d=>d.day===1)!.netMinor).toBeGreaterThan(0);expect(s.transportReports.daily.at(-1)!.samples).toBe(272);const awarded=s.progression.awardedTick;until(s,172801);expect(s.progression.awardedTick).toBe(awarded);},120000);

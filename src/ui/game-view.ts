@@ -1,3 +1,6 @@
+import { createSavePanel } from './save-panel';
+import type { SaveRepository } from '../app/ports/save-repository';
+import { createProgressionPanel } from './progression-panel';
 import { createRestaurantPanel } from './restaurant-inspector';
 import { createFinancePanel } from './finance-panel';
 import { createTrafficPanel } from './traffic-panel';
@@ -15,7 +18,7 @@ import { element, button, money, timeOfDay } from './elements';
 import { newSeed } from '../platform/seed';
 export interface GameView {draw:()=>void;dispose:()=>void}
 /** Compose the ordinary player UI; all commands go through the application session. */
-export function createGameView(root:HTMLElement,session:GameSession):GameView {
+export function createGameView(root:HTMLElement,session:GameSession,repository:SaveRepository,onReplaced:()=>void):GameView {
   const scenario=session.capture().scenario as PlayableScenario;const controller=new AbortController();const signal=controller.signal;
   const header=element('header'),brand=element('div');brand.append(element('p','A VERTICAL CITY IN THE MAKING','eyebrow'),element('h1','TowerSim'));
   const hud=createHud(session);header.append(brand,hud.node);
@@ -35,9 +38,9 @@ export function createGameView(root:HTMLElement,session:GameSession):GameView {
   details.append(element('p',`Site: ${scenario.world.widthCells} cells · floors ${scenario.world.minFloor}–${scenario.world.maxFloor}. Starting funds ${money(scenario.startingFundsMinor)}. Normal time: 120 simulated seconds per real second.`));
   for(const d of scenario.content.definitions)details.append(element('p',`${d.displayName}: width ${d.footprint.width}, build ${money(d.constructionCostMinor)}${d.perFloorCostMinor?` + ${money(d.perFloorCostMinor)} per floor`:''}, operation ${money(d.operatingMinorPerDay)}/day${d.rentMinorPerDay?`, rent ${money(d.rentMinorPerDay)}/day`:''}${d.visitPriceMinor?`, ${money(d.visitPriceMinor)} per admitted visit`:''}.`));
   details.append(element('p',`Daily demand: ${scenario.content.officeMarketWorkers} office workers, ${scenario.content.restaurantDailyCustomers} restaurant customers/day. Office arrivals ${timeOfDay(scenario.content.schedules.office.arrivalStart)}–${timeOfDay(scenario.content.schedules.office.arrivalEnd)}, departures ${timeOfDay(scenario.content.schedules.office.departureStart)}–${timeOfDay(scenario.content.schedules.office.departureEnd)}. Restaurant meal wave ${timeOfDay(scenario.content.schedules.restaurant.mealStart)}–${timeOfDay(scenario.content.schedules.restaurant.mealEnd)} (${scenario.content.schedules.restaurant.mealShareBasisPoints/100}% of requests); visits ${scenario.content.schedules.restaurant.visitMinTicks/60}–${scenario.content.schedules.restaurant.visitMaxTicks/60} minutes.`));
-  details.append(element('p',`Level 2 target: ${scenario.content.level2.offices} accessible leased offices, ${scenario.content.level2.workers} workers for a full day; ${scenario.content.level2.restaurants} accessible restaurant, ${scenario.content.level2.visits} visits; cash ≥ ${money(scenario.content.level2.minimumCashMinor)}, positive operating net, quality ≥ ${scenario.content.level2.quality}, ${scenario.content.level2.completedOfficeArrivals} completed arrivals and no stranded people or unresolved prior-day trips. Progression arrives in a later phase.`));
+  details.append(element('p',`Level 2 target: ${scenario.content.level2.offices} accessible leased offices, ${scenario.content.level2.workers} workers for a full day; ${scenario.content.level2.restaurants} accessible restaurant, ${scenario.content.level2.visits} visits; cash ≥ ${money(scenario.content.level2.minimumCashMinor)}, positive operating net, quality ≥ ${scenario.content.level2.quality}, ${scenario.content.level2.completedOfficeArrivals} completed arrivals and no stranded people or unresolved prior-day trips.`));
   const actions=element('section','','session-actions');const newGame=button('New Game',()=>{dialog.showModal();cancel.focus();});
-  const save=button('Save — later phase',()=>{}),load=button('Load — later phase',()=>{});save.disabled=true;load.disabled=true;actions.append(newGame,save,load);
+  const saves=createSavePanel(session,repository,onReplaced);actions.append(newGame,saves.node);
   const dialog=element('dialog');dialog.setAttribute('aria-label','Start a new tower');dialog.append(element('h2','Start a new tower?'),element('p','Discard this unsaved tower and start paused at 06:00. Your local save will be left alone.'));
   const cancel=button('Cancel',()=>dialog.close());const discard=button('Discard & start',()=>{session.replace({scenario,seed:newSeed()},true);renderer.invalidate();construction.reset();offices.reset();restaurants.reset();transport.reset();traffic.reset();camera.fit(scenario.world.widthCells,scenario.world.groundFloor);dialog.close();status.textContent='New tower started, paused at 06:00.';refresh();});dialog.append(cancel,discard);
   root.replaceChildren(header,workspace,actions,info,dialog);
@@ -46,12 +49,13 @@ export function createGameView(root:HTMLElement,session:GameSession):GameView {
   const offices=createOfficePanel(session,canvas,camera,renderer,toolbar.tools,refresh,signal);aside.append(offices.node);
   const transport=createTransportPanel(session,canvas,camera,renderer,toolbar.tools,refresh,signal);aside.append(transport.node);
   const restaurants=createRestaurantPanel(session,canvas,camera,renderer,toolbar.tools,refresh,signal);aside.append(restaurants.node);
+  const progression=createProgressionPanel(session);aside.append(progression.node);
   const finance=createFinancePanel(session);aside.append(finance.node);
   const traffic=createTrafficPanel(session,renderer,refresh);aside.append(traffic.node);
   /** Draw the current visible world; HUD text has its own bounded refresh cadence. */
   function draw():void {renderer.draw(session.world(camera.bounds()));construction.draw();offices.draw();restaurants.draw();transport.draw();traffic.draw();finance.draw();const now=performance.now();if(now-lastHud>=100){refreshHud();lastHud=now;}}
   /** Refresh named mode buttons and small status labels without replacing focused controls. */
-  function refreshHud():void {hud.update();for(const [speed,b] of speedButtons)b.setAttribute('aria-pressed',String(speed===session.hud().speed));if(session.error)status.textContent=session.error;}
+  function refreshHud():void {hud.update();progression.draw();saves.draw();newGame.disabled=saves.busy;for(const [speed,b] of speedButtons)b.setAttribute('aria-pressed',String(speed===session.hud().speed));if(session.error)status.textContent=session.error;}
   /** Deliver immediate command feedback and render an updated scene. */
   function refresh():void {refreshHud();draw();}
   /** Match backing pixels to the observed viewport while preserving logical camera/proposals. */
@@ -60,5 +64,5 @@ export function createGameView(root:HTMLElement,session:GameSession):GameView {
   canvas.addEventListener('keydown',event=>{const directions:Record<string,[number,number]>={ArrowLeft:[50,0],ArrowRight:[-50,0],ArrowUp:[0,50],ArrowDown:[0,-50]};const delta=directions[event.key];if(delta){event.preventDefault();camera.panBy(...delta);}else if(event.key==='+'||event.key==='=')camera.zoomAt(1.25,{x:camera.width/2,y:camera.height/2});else if(event.key==='-')camera.zoomAt(0.8,{x:camera.width/2,y:camera.height/2});draw();},{signal});
   document.addEventListener('visibilitychange',()=>{session.visibility(!document.hidden);refresh();},{signal});
   window.addEventListener('resize',resize,{signal});const observer=new ResizeObserver(resize);observer.observe(viewport);resize();camera.fit(scenario.world.widthCells,scenario.world.groundFloor);session.visibility(!document.hidden);refresh();
-  return {draw,dispose:()=>{controller.abort();observer.disconnect();root.replaceChildren();}};
+  return {draw,dispose:()=>{controller.abort();saves.dispose();observer.disconnect();root.replaceChildren();}};
 }

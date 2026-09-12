@@ -1,0 +1,6 @@
+import { expect,it,vi } from 'vitest';
+import { SaveWorkflow } from '../../src/app/game/save-workflow';
+import { GameSession } from '../../src/app/game/session';
+import { MemorySaveRepository } from '../fixtures/save-repository';
+import { oneWorker } from '../fixtures/one-worker';
+it('prevents conflicting submissions, permits play, exposes captured tick, and retries after failure',async()=>{const session=new GameSession({state:oneWorker()},{now:()=>0,requestFrame:()=>0,cancelFrame:()=>{}},{start:()=>()=>{}}),repository=new MemorySaveRepository(),ui=new SaveWorkflow(session,repository);let commit!:()=>void;repository.gate=new Promise(resolve=>{commit=resolve;});const pending=ui.save();expect(ui.busy).toBe(true);const confirm=vi.fn(async()=>true);expect(await ui.load(confirm)).toBe(false);await ui.save();session.setSpeed(1);session.frame(0);session.frame(1000);expect(session.hud().tick).toBe(21720);commit();await pending;expect(repository.writes).toBe(1);expect(ui.message).toContain('Saved tick 21600');expect(ui.message).toContain('Newer progress');expect(confirm).not.toHaveBeenCalled();repository.fail=true;await ui.save();expect(ui.message).toContain('Save failed');expect(ui.busy).toBe(false);repository.fail=false;await ui.save();expect(ui.message).toContain('Saved tick 21720');});

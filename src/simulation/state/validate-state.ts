@@ -1,3 +1,5 @@
+import { assertCollectionBounds,assertReferences } from './validate-references';
+import { assertProgression } from './validate-progression';
 import { assertReports } from './validate-reports';
 import { assertWorkforce } from './validate-workforce';
 import { assertOffices } from './validate-offices';
@@ -26,7 +28,7 @@ export function assertState(value:unknown):asserts value is GameState {
   record(s.rng,['algorithmId','seed','words']);const rng=Xoshiro128.restore(s.rng);check(rng.seed===s.rng.seed,'Noncanonical seed');
   record(s.ids,['entity','event','eventSequence','transaction','queueAdmission']);for(const counter of Object.values(s.ids)){record(counter,['next']);positive(counter.next);}
   record(s.navigation,['topologyVersion']);tick(s.navigation.topologyVersion);
-  record(s.progression,['level']);check(s.progression.level===1,'Unsupported progression state');assertTower(s);
+  assertTower(s);
   tick(s.lastCommandSequence);
   check(Array.isArray(s.scheduledEvents),'Missing events');
   const ids=new Set<string>();const sequences=new Set<number>();let boundaries=0;let reviews=0;
@@ -62,7 +64,7 @@ export function assertState(value:unknown):asserts value is GameState {
     sources.add(transaction.source);transactionIds.add(transaction.id);lastOrdinal=id.ordinal;lastTick=transaction.atTick;
     balance+=transaction.amountMinor;integer(balance);
   }
-  check(reconcile(s.economy),'Ledger does not reconcile');assertOffices(s);assertWorkforce(s);assertReports(s);
+  check(reconcile(s.economy),'Ledger does not reconcile');assertCollectionBounds(s);assertOffices(s);assertWorkforce(s);assertReports(s);assertProgression(s);assertReferences(s);
 }
 export type StateValidation={ok:true;state:GameState}|{ok:false;errors:string[]};
 /** Return a detached canonical candidate or useful validation errors without touching the source. */

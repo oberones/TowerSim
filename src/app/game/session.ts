@@ -1,3 +1,4 @@
+import { progressionQuery } from './progression-queries';
 import { financeQuery } from './finance-queries';
 import { transportQuery } from './transport-queries';
 import { workforceQuery } from './workforce-queries';
@@ -5,7 +6,7 @@ import { inspectElevator } from './elevator-queries';
 import { createRunner } from '../../simulation/core/clock/advance';
 import { inspectOffice,inspectRestaurant } from './facility-queries';
 import { inspectOccupant } from './occupant-queries';
-import { createGame, captureState, advance, validateCommand } from '../../simulation';
+import { createGame, captureState, validateCommand } from '../../simulation';
 import type { GameState, Command, CommandResult } from '../../simulation';
 import type { ClockPort, FramePort } from '../ports/clock';
 import { Pacing } from './pacing';
@@ -22,11 +23,12 @@ function initialState(input:SessionInput):GameState {
 /** Own one domain state and runner; all timing, visibility and unsaved status stays outside saves. */
 export class GameSession {
   private state:GameState;private runner:ReturnType<typeof createRunner>;private pacing=new Pacing();private stop:(()=>void)|null=null;private disposed=false;
+  private frameEpoch=0;private draw:(()=>void)|null=null;
   private revision=1;private savedRevision=0;private generation=1;error:string|null=null;
   /** Construct a paused session using platform ports that tests can fully control. */
   constructor(input:SessionInput,private readonly clock:ClockPort,private readonly driver:FramePort){this.state=initialState(input);this.runner=createRunner(this.state);}
   /** Subscribe once even when composition calls start repeatedly. */
-  start(draw:()=>void):void {if(this.disposed)throw Error('Disposed session');if(this.stop)return;this.stop=this.driver.start(timestamp=>{this.frame(timestamp);draw();});}
+  start(draw:()=>void):void {if(this.disposed)throw Error('Disposed session');if(this.stop)return;this.draw=draw;const epoch=++this.frameEpoch;this.stop=this.driver.start(timestamp=>{if(epoch!==this.frameEpoch||this.disposed)return;this.frame(timestamp);draw();});}
   /** Preserve owed ticks while yielding after at most 240 ticks or about four milliseconds. */
   frame(timestamp:number):void {
     if(this.disposed)return;this.pacing.accumulate(timestamp);const started=this.clock.now();let remaining=240;
@@ -45,7 +47,7 @@ export class GameSession {
   dispatch(command:Command):CommandResult {const before=this.state.lastCommandSequence;const result=dispatch(this.state,command);if(before!==this.state.lastCommandSequence)this.revision++;return result;}
   /** Quote through pure domain rules without consuming command ordinals or random values. */
   preview(command:Command):CommandResult {return validateCommand(this.state,{...command,sequence:this.state.lastCommandSequence+1,atTick:this.state.clock.tick});}
-  /** Return a detached valid boundary for tests and the future persistence owner. */
+  /** Return a detached valid boundary for tests and the application persistence owner. */
   capture():GameState {return captureState(this.state);}
   /** Return immutable scalar HUD information, including application-owned unsaved state. */
   hud(){return getHud(this.state,this.pacing.speed,this.revision!==this.savedRevision);}
@@ -65,18 +67,24 @@ export class GameSession {
   transport(){return transportQuery(this.state);}
   /** Expose retained workforce and actual indoor attendance independently of scheduled demand. */
   workforce(){return workforceQuery(this.state);}
+  /** Project the maintained milestone evidence and permanent award without mutating the day. */
+  progression(){return progressionQuery(this.state);}
   /** Read cash history and pending accrual without settling any source. */
   finance(){return financeQuery(this.state);}
   /** Read the current geometry revision without copying any world records. */
   topologyRevision():number {return this.state.navigation.topologyVersion;}
   /** Expose diagnostic pacing values without granting access to the live accumulator. */
   pacingStatus(){return Object.freeze({debt:this.pacing.debt,speed:this.pacing.speed,generation:this.generation});}
+  /** Capture the application identity associated with the last completed domain boundary. */
+  persistenceToken(){return {generation:this.generation,revision:this.revision,tick:this.state.clock.tick};}
+  /** Acknowledge only a committed snapshot belonging to this still-active session generation. */
+  markSaved(token:{generation:number;revision:number}):boolean {if(this.disposed||token.generation!==this.generation)return false;this.savedRevision=Math.max(this.savedRevision,token.revision);return true;}
   /** Cancel without side effects or atomically replace with a validated paused tower; never write storage. */
   replace(input:SessionInput,discard:boolean):boolean {
-    if(this.revision!==this.savedRevision && !discard)return false;
-    const next=initialState(input);const visible=this.pacing.visible;this.state=next;this.runner=createRunner(this.state);this.pacing=new Pacing();
-    this.pacing.setVisible(visible,this.clock.now());this.revision=1;this.savedRevision=0;this.generation++;this.error=null;return true;
+    const next=initialState(input);if(this.revision!==this.savedRevision && !discard)return false;
+    const nextRunner=createRunner(next);const visible=this.pacing.visible;this.state=next;this.runner=nextRunner;this.pacing=new Pacing();
+    this.pacing.setVisible(visible,this.clock.now());this.revision=1;this.savedRevision=0;this.generation++;this.error=null;this.frameEpoch++;this.stop?.();this.stop=null;if(this.draw)this.start(this.draw);return true;
   }
   /** Cancel this session's only runner; repeated disposal is harmless. */
-  dispose():void {if(this.disposed)return;this.disposed=true;this.stop?.();this.stop=null;}
+  dispose():void {if(this.disposed)return;this.disposed=true;this.generation++;this.frameEpoch++;this.stop?.();this.stop=null;}
 }

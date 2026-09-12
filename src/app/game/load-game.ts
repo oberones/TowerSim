@@ -1,0 +1,7 @@
+import type { SaveRepository } from '../ports/save-repository';
+import { MAIN_SLOT } from '../ports/save-repository';
+import { validateSaveEnvelope } from '../../simulation/state/save-envelope';
+import { rebuildDerived } from '../../simulation/state/rebuild-derived';
+import type { GameSession } from './session';
+/** Validate and rebuild before asking about replacement; re-check generation and revision after every asynchronous decision. */
+export async function loadGame(session:GameSession,repository:SaveRepository,confirm:(tick:number)=>Promise<boolean>):Promise<'loaded'|'canceled'|'stale'> {const generation=session.persistenceToken().generation;const raw=await repository.read(MAIN_SLOT);if(raw===null)throw Error('No local save exists yet');const candidate=validateSaveEnvelope(raw,MAIN_SLOT);if(!candidate.state.tower)throw Error('Save does not contain a playable tower');rebuildDerived(candidate.state);if(session.persistenceToken().generation!==generation)return 'stale';let token=session.persistenceToken();while(session.hud().unsaved){if(!await confirm(candidate.metadata.savedTick))return 'canceled';const latest=session.persistenceToken();if(latest.generation!==generation)return 'stale';if(latest.revision===token.revision)break;token=latest;}if(session.persistenceToken().generation!==generation)return 'stale';session.replace({state:candidate.state},true);session.markSaved(session.persistenceToken());return 'loaded';}

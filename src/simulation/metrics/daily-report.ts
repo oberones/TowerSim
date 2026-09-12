@@ -4,7 +4,7 @@ import { emptyAggregate } from './report-state';
 import { addTrip,aggregateMeans } from './aggregate';
 import { clonePlain } from '../state/plain';
 /** Accumulate completed outcomes at their transition so later live-window expiration cannot lose daily samples. */
-export function recordFinishedTrip(s:GameState,t:Trip):void {if(s.scenario.content)addTrip(s.transportReports.dayFinished,t,t.endTick!,s.scenario.content.metrics);}
+export function recordFinishedTrip(s:GameState,t:Trip):void {if(t.outcome==='completed'&&t.purpose==='officeArrival')s.progression.dayEvidence.completedOfficeArrivals++;if(s.scenario.content)addTrip(s.transportReports.dayFinished,t,t.endTick!,s.scenario.content.metrics);}
 /** Finalize the elapsed day before same-tick completions and retain a bounded thirty-day summary ring. */
 export function finalizeTransportDay(s:GameState):void {
  const day=s.clock.tick/s.scenario.dayTicks-1;if(!Number.isInteger(day))throw Error('Daily report requires midnight');

@@ -51,3 +51,4 @@ test('bounded frame batches retain foreground debt until every owed tick is proc
   for(let batch=0;batch<3;batch++)clock.fire(1000);
   expect(session.hud().tick).toBe(22560);expect(session.pacingStatus().debt).toBe(0);session.dispose();
 });
+test('repeated loaded-scenario presentations dispose old views and draw only the current one',()=>{const clock=new FakeClock(),root={} as HTMLElement,drawn:number[]=[],removed:number[]=[];let remount!:()=>void,mounts=0;const stop=mountGame(root,{scenario:MVP_DEFAULT,seed:SEEDS[0],clock,driver:new FrameDriver(clock),view:(_root,_session,replaced)=>{remount=replaced;const id=++mounts;return {draw:()=>drawn.push(id),dispose:()=>removed.push(id)};}});clock.fire(1);remount();clock.fire(2);remount();clock.fire(3);expect(drawn).toEqual([1,2,3]);expect(removed).toEqual([1,2]);expect(clock.pending.size).toBe(1);stop();stop();expect(removed).toEqual([1,2,3]);expect(clock.pending.size).toBe(0);});
