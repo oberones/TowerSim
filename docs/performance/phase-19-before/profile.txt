@@ -1,0 +1,32 @@
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2302:21)
+    at listenInCluster (node:net:2433:12)
+    at Server.listen (node:net:2558:7)
+    at Object.listen (file:///Users/oberon/Projects/coding/javascript/TowerSim/node_modules/vite/dist/node/chunks/node.js:17675:18)
+    at Object.listen (file:///Users/oberon/Projects/coding/javascript/TowerSim/node_modules/vite/dist/node/chunks/node.js:26963:27)
+    at DevEnvironment.listen (file:///Users/oberon/Projects/coding/javascript/TowerSim/node_modules/vite/dist/node/chunks/node.js:35537:12)
+    at file:///Users/oberon/Projects/coding/javascript/TowerSim/node_modules/vite/dist/node/chunks/node.js:26667:95
+    at Array.map (<anonymous>)
+    at file:///Users/oberon/Projects/coding/javascript/TowerSim/node_modules/vite/dist/node/chunks/node.js:26667:82
+    at async _createServer (file:///Users/oberon/Projects/coding/javascript/TowerSim/node_modules/vite/dist/node/chunks/node.js:26684:9)
+{"result":{"ok":true,"advanced":30,"atTick":29190},"elapsedMs":2542.709332999999}
+┌─────────┬───────────────────────┬───────────────────────┬─────────┐
+│ (index) │ function              │ file                  │ samples │
+├─────────┼───────────────────────┼───────────────────────┼─────────┤
+│ 0       │ 'clonePlain'          │ 'state/plain.ts'      │ 507     │
+│ 1       │ 'assertPlain'         │ 'state/plain.ts'      │ 312     │
+│ 2       │ 'assertPlain'         │ 'state/plain.ts'      │ 275     │
+│ 3       │ 'assertPlain'         │ 'state/plain.ts'      │ 227     │
+│ 4       │ 'assertPlain'         │ 'state/plain.ts'      │ 159     │
+│ 5       │ 'assertPlain'         │ 'state/plain.ts'      │ 141     │
+│ 6       │ 'assertPlain'         │ 'state/plain.ts'      │ 102     │
+│ 7       │ 'assertPlain'         │ 'state/plain.ts'      │ 65      │
+│ 8       │ '(garbage collector)' │ ''                    │ 60      │
+│ 9       │ 'copy'                │ ''                    │ 57      │
+│ 10      │ 'insert'              │ 'events/scheduler.ts' │ 23      │
+│ 11      │ 'assertPlain'         │ 'state/plain.ts'      │ 21      │
+│ 12      │ 'nextDue'             │ 'clock/advance.ts'    │ 19      │
+│ 13      │ 'parseId'             │ ''                    │ 17      │
+│ 14      │ 'validateEvent'       │ 'events/event.ts'     │ 7       │
+└─────────┴───────────────────────┴───────────────────────┴─────────┘

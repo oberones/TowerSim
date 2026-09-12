@@ -14,11 +14,13 @@ const mounted=new WeakSet<HTMLElement>();
 export function mountGame(root:HTMLElement,options:MountOptions={}):()=>void {
   if(mounted.has(root))throw Error('This root already owns a game');
   const clock=options.clock??browserClock();const session=new GameSession('state' in options?{state:options.state}:{scenario:options.scenario??MVP_DEFAULT,seed:options.seed??newSeed()},clock,options.driver??new FrameDriver(clock));
-  mounted.add(root);let view:GameView;let disposed=false;const repository=options.repository??new IndexedDbSaveRepository();
+  mounted.add(root);let view:GameView;let disposed=false;let diagnostics:{draw:()=>void;dispose:()=>void}|undefined;let diagnosticEpoch=0;const repository=options.repository??new IndexedDbSaveRepository();
   /** Construct controls from the currently loaded scenario without retaining earlier renderers or panels. */
   function compose():GameView {return options.view?options.view(root,session,remount):createGameView(root,session,repository,remount);}
   /** Dispose the previous presentation exactly once after a successful application-state replacement. */
-  function remount():void {if(disposed)return;view.dispose();view=compose();}
-  try{view=compose();session.start(()=>view.draw());}catch(error){session.dispose();mounted.delete(root);throw error;}
-  return ()=>{if(disposed)return;disposed=true;session.dispose();view.dispose();mounted.delete(root);};
+  function remount():void {if(disposed)return;diagnostics?.dispose();diagnostics=undefined;view.dispose();view=compose();attachDiagnostics();}
+  /** Load optional diagnostic code only in development, after each presentation replacement. */
+  function attachDiagnostics():void {const epoch=++diagnosticEpoch;if(import.meta.env.DEV){void import('./ui/diagnostics').then(({mountDiagnostics})=>{if(!disposed&&epoch===diagnosticEpoch)diagnostics=mountDiagnostics(root,session);});}}
+  try{view=compose();session.start(()=>{view.draw();diagnostics?.draw();});attachDiagnostics();}catch(error){session.dispose();mounted.delete(root);throw error;}
+  return ()=>{if(disposed)return;disposed=true;diagnostics?.dispose();diagnostics=undefined;session.dispose();view.dispose();mounted.delete(root);};
 }

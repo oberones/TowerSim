@@ -118,3 +118,9 @@ Queue group glyphs, waiting-time overlays, traffic/workforce copy, report contro
 ## Phases 11–13 (2026-09-11)
 
 Congestion fixtures, acceptance traces, queue cost/reservation and migration code, access diagnostics, and recovery tests were independently authored in this repository. The shared arrival-window calibration is original balance data. No third-party assets, code, gameplay service, or production dependency was added. Existing prototype Canvas shapes remain in use.
+
+## Phase 19 source/content audit — 2026-09-12
+
+New onboarding text, keyboard routing, diagnostic counters/panels, benchmark fixtures, test-only performance recorder and documentation were authored in this repository. No images, audio, fonts, proprietary layouts, third-party reference implementations or production dependencies were introduced. Existing native Canvas shapes and system font stack remain the only visual content. `package.json` and `package-lock.json` are unchanged; their earlier dependency/license inventory remains applicable.
+
+The release audit checks actual emitted assets and module graphs. Only `dist/` is a deployable output; prepared fixtures, diagnostic chunks, profiles, source archives, benchmark JSON, saves and development tools must not be uploaded as the game. The local artifact manifest lists exact shipped output hashes. No publishing/deployment was performed.

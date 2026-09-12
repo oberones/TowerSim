@@ -33,7 +33,9 @@ export class GameSession {
   frame(timestamp:number):void {
     if(this.disposed)return;this.pacing.accumulate(timestamp);const started=this.clock.now();let remaining=240;
     while(this.pacing.speed!==0 && this.pacing.wholeTicks>0 && remaining>0){
-      const count=this.pacing.take(Math.min(32,remaining));const result=this.runner.advance(count);
+      // A single event-heavy tick may already exceed the budget. Check after each
+      // completed tick so a 32-tick batch cannot freeze input for an entire rush burst.
+      const count=this.pacing.take(1);const result=this.runner.advance(count);
       if(result.advanced>0)this.revision++;
       if(!result.ok){this.pacing.debt+=count-result.advanced;this.pacing.setSpeed(0,this.clock.now());this.error=`Simulation stopped: ${result.code}`;break;}
       remaining-=count;if(this.clock.now()-started>=4)break;

@@ -1,3 +1,4 @@
+import { countWork } from '../core/work-counters';
 import { elevatorPortals,addElevatorEdges } from './elevator-edges';
 import { multiply } from '../core/values';
 import type { GameState } from '../state/game-state';
@@ -7,6 +8,7 @@ export interface GraphEdge {to:string;cost2:number;kind:'walk'|'stair'|'board'|'
 export interface WalkGraph {nodes:Portal[];edges:Map<string,GraphEdge[]>;walkingTicksPerCell:number}
 /** Connect canonical hallway anchors within spans, then add physical adjacent-floor stair edges. */
 export function buildGraph(state:GameState,extra:Portal[]=[],occupantId?:string):WalkGraph {
+ countWork('graphBuilds');
  const nodes:Portal[]=[...(state.tower?[{id:state.tower.lobby.id,at:{floor:state.tower.lobby.floor,x2:state.tower.lobby.entranceX2}}]:[]),...[...Object.values(state.offices),...Object.values(state.restaurants)].map(o=>({id:o.id,at:{floor:o.floor,x2:o.entranceX2}})),...Object.values(state.stairs).flatMap(s=>[{id:`${s.id}:lower`,at:s.lowerAnchor},{id:`${s.id}:upper`,at:s.upperAnchor}]),...elevatorPortals(state),...extra];
  nodes.sort((a,b)=>a.at.floor-b.at.floor||a.at.x2-b.at.x2||(a.id.replace(/\d+/g,n=>n.padStart(16,'0'))<b.id.replace(/\d+/g,n=>n.padStart(16,'0'))?-1:a.id===b.id?0:1));
  const edges=new Map(nodes.map(n=>[n.id,[] as GraphEdge[]]));

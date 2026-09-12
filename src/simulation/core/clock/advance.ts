@@ -1,3 +1,4 @@
+import { countWork } from '../work-counters';
 import { evaluateProgression } from '../../progression/evaluate';
 import { beginProgressionDay } from '../../progression/day-evidence';
 import { arriveCustomer,departCustomer } from '../../occupants/customer-lifecycle';
@@ -12,7 +13,6 @@ import type { KernelEvent } from '../events/event';
 import { compareEvents } from '../events/event';
 import type { GameState } from '../../state/game-state';
 import { assertState } from '../../state/validate-state';
-import { clonePlain } from '../../state/plain';
 import { scheduleEvent } from '../../occupants/schedule-events';
 import { dailyReview } from '../../demand/daily-review';
 import { settleOffices } from '../../economy/settlement';
@@ -24,6 +24,7 @@ function nextDue(state:GameState):number {let heap=heaps.get(state.scheduledEven
 export type AdvanceResult={ok:true;advanced:number;atTick:number}|{ok:false;code:'invalidNumber'|'overflow'|'invalidState';advanced:number;atTick:number};
 /** Dispatch ordered wakeups on an unpublished boundary; departures precede endpoint admission. */
 function processEvent(state:GameState,event:KernelEvent):void {
+ countWork('eventsProcessed');
  if(event.kind==='dayBoundary'){finalizeTransportDay(state);settleOffices(state);for(const shaft of Object.values(state.shafts))settleShaft(state,shaft);pruneTrips(state);finalizeFinanceDay(state);evaluateProgression(state);beginProgressionDay(state);state.clock.lastDayBoundaryTick=state.clock.tick;scheduleEvent(state,event.kind,'kernel:1',0,add(event.dueTick,state.scenario.dayTicks));}
  else if(event.kind==='dailyReview'){dailyReview(state);scheduleEvent(state,event.kind,'kernel:1',0,add(event.dueTick,state.scenario.dayTicks));}
  else if(event.kind==='carComplete'){const car=state.cars[event.targetId];if(car&&car.generation===event.targetGeneration)completeCarPhase(state,car);}
@@ -39,7 +40,10 @@ function advanceOwned(state:GameState,count:number,validate:boolean):AdvanceResu
  const next=bootstrap?state.clock.tick+1:Math.min(end,due);
  if(!bootstrap&&due>next){state.clock.tick=next;continue;}
  if(!bootstrap&&next>state.clock.tick+1)state.clock.tick=next-1;
- const draft=clonePlain(state);
+ // Public advance and runner creation already validate ownership. Keep a detached
+ // rollback draft, avoiding a second full descriptor walk at every event boundary.
+ countWork('boundaryCopies');
+ const draft=JSON.parse(JSON.stringify(state)) as GameState;
  if(bootstrap){dailyReview(draft);scheduleEvent(draft,'dailyReview','kernel:1',0,add(draft.clock.tick,draft.scenario.dayTicks));draft.clock.initialReviewPending=false;}
  draft.clock.tick=next;draft.scheduledEvents.sort(compareEvents);
  const dueEvents=draft.scheduledEvents.filter(e=>e.dueTick===next);draft.scheduledEvents=draft.scheduledEvents.filter(e=>e.dueTick!==next);

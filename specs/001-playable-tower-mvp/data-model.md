@@ -226,3 +226,9 @@ Fields: current level, attained milestone IDs, awarded tick per milestone, and `
 Keep shafts, cars, service ranges/stops, queues and dispatch decisions separate now; constrain the MVP to one car and contiguous stops through validation. Future multi-car collision/dispatch, express stops, service elevators or transfers need new policies and rules versions, not overloaded identifiers. Do not implement those behaviors or user controls now.
 
 Runtime indexes may use Maps/Sets/typed arrays or custom heap nodes internally; none is authoritative persistence. Cache reconstruction must consume zero random draws, preserve ordering, and leave the canonical state digest unchanged. Domain construction/edit operations validate their entire proposed result before changing geometry, cash, requests or occupancy.
+
+## Phase 19 implementation reconciliation
+
+The shipped boundary uses `GameState` in `src/simulation/state/game-state.ts`, schema v1, `tower-mvp-v1` rules and `mvp-v1` content. Its concrete top-level records include `offices`, `restaurants`, `stairs`, `shafts`, `stops`, `cars`, `queues`, `occupants`, `trips`, `workforceDays`, `restaurantDays`, `transportReports`, `economy` and `progression`. The earlier conceptual grouped names above describe responsibilities, not additional save fields. [Persistence contracts](contracts/persistence.md) and the strict codec/validators govern the exact shape.
+
+Phase 19 adds no persistent fields or balance changes. Keyboard focus, onboarding, diagnostic rate windows, optional work counters and performance recording stay outside saves. Benchmark scenario funding, workforce capacities, finite demand and schedule overrides are explicitly captured in each fixture's existing scenario snapshot. Unfinished trips and actual dormant people are retained; the fixtures do not fabricate transport completion or enlarge cars.

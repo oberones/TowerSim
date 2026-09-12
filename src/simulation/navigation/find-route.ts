@@ -1,3 +1,4 @@
+import { countWork } from '../core/work-counters';
 import { add } from '../core/values';
 import type { WalkGraph,GraphEdge } from './graph';
 import type { Anchor } from '../occupants/occupant';
@@ -6,6 +7,7 @@ import type { RouteLeg,ModePreference } from './route';
 export interface WalkRoute {from:Anchor;to:Anchor;cost2:number;durationTicks:number;legs:RouteLeg[]}
 /** Apply immutable journey mode preference before comparing route costs or current queue estimates. */
 export function findRoute(graph:WalkGraph,from:string,to:string,preference?:ModePreference):WalkRoute|null {
+ countWork('routeRequests');
  const a=graph.nodes.find(n=>n.id===from),b=graph.nodes.find(n=>n.id===to);if(!a||!b)return null;const mode=preference??modePreference(a.at,b.at);
  if(mode==='walk'||a.at.floor===b.at.floor){const walk=search(graph,from,to,'walk');if(walk)return walk;}
  if(mode==='elevator')return search(graph,from,to,'elevator')??search(graph,from,to,'stairs');
@@ -15,6 +17,7 @@ export function findRoute(graph:WalkGraph,from:string,to:string,preference?:Mode
 function semanticKey(id:string):string {return id.replace(/\d+/g,n=>n.padStart(16,'0'));}
 /** Search two-state paths so preferred elevator routes must contain an actual ride, not just boarding. */
 function search(graph:WalkGraph,from:string,to:string,mode:'walk'|'stairs'|'elevator'):WalkRoute|null {
+ countWork('pathSearches');
  const start=`0|${from}`,distances=new Map<string,{cost:number;transfers:number;tie:string}>([[start,{cost:0,transfers:0,tie:''}]]),previous=new Map<string,{key:string;from:string;edge:GraphEdge}>(),nodes=new Map(graph.nodes.map(n=>[n.id,n])),pending=new Set([start]),done=new Set<string>();
  /** Compare total cost, actual board count, and stable semantic edge identities in that order. */
  function compare(a:{cost:number;transfers:number;tie:string},b:{cost:number;transfers:number;tie:string}):number {return a.cost-b.cost||a.transfers-b.transfers||(a.tie<b.tie?-1:a.tie>b.tie?1:0);}

@@ -1,3 +1,5 @@
+import { bindKeyboard } from '../input/keyboard';
+import { createOnboarding,createInspectorNavigation } from './onboarding';
 import { createSavePanel } from './save-panel';
 import type { SaveRepository } from '../app/ports/save-repository';
 import { createProgressionPanel } from './progression-panel';
@@ -42,8 +44,9 @@ export function createGameView(root:HTMLElement,session:GameSession,repository:S
   const actions=element('section','','session-actions');const newGame=button('New Game',()=>{dialog.showModal();cancel.focus();});
   const saves=createSavePanel(session,repository,onReplaced);actions.append(newGame,saves.node);
   const dialog=element('dialog');dialog.setAttribute('aria-label','Start a new tower');dialog.append(element('h2','Start a new tower?'),element('p','Discard this unsaved tower and start paused at 06:00. Your local save will be left alone.'));
+  dialog.addEventListener('close',()=>newGame.focus(),{signal});
   const cancel=button('Cancel',()=>dialog.close());const discard=button('Discard & start',()=>{session.replace({scenario,seed:newSeed()},true);renderer.invalidate();construction.reset();offices.reset();restaurants.reset();transport.reset();traffic.reset();camera.fit(scenario.world.widthCells,scenario.world.groundFloor);dialog.close();status.textContent='New tower started, paused at 06:00.';refresh();});dialog.append(cancel,discard);
-  root.replaceChildren(header,workspace,actions,info,dialog);
+  root.replaceChildren(header,createOnboarding(),workspace,actions,info,dialog);
   let lastHud=-Infinity;
   const construction=createConstructionPanel(root,session,canvas,camera,renderer,toolbar.tools,status,refresh,signal);aside.append(construction.node);
   const offices=createOfficePanel(session,canvas,camera,renderer,toolbar.tools,refresh,signal);aside.append(offices.node);
@@ -52,6 +55,8 @@ export function createGameView(root:HTMLElement,session:GameSession,repository:S
   const progression=createProgressionPanel(session);aside.append(progression.node);
   const finance=createFinancePanel(session);aside.append(finance.node);
   const traffic=createTrafficPanel(session,renderer,refresh);aside.append(traffic.node);
+  aside.prepend(createInspectorNavigation([{label:'Build',node:construction.node},{label:'Offices',node:offices.node},{label:'Connections',node:transport.node},{label:'Restaurants',node:restaurants.node},{label:'Level 2',node:progression.node},{label:'Finances',node:finance.node},{label:'Traffic',node:traffic.node},{label:'Save / Load',node:actions}]));
+  bindKeyboard(root,toolbar.tools,value=>{session.setSpeed(value??(session.hud().speed===0?1:0));refresh();},()=>{construction.cancel();canvas.focus();refresh();},signal);
   /** Draw the current visible world; HUD text has its own bounded refresh cadence. */
   function draw():void {renderer.draw(session.world(camera.bounds()));construction.draw();offices.draw();restaurants.draw();transport.draw();traffic.draw();finance.draw();const now=performance.now();if(now-lastHud>=100){refreshHud();lastHud=now;}}
   /** Refresh named mode buttons and small status labels without replacing focused controls. */

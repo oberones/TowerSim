@@ -4,16 +4,22 @@ import { resolve, relative } from 'node:path';
 
 const configs = [];
 const graphs = [];
+const emittedGraphs = [];
 for (const configFile of ['vite.config.ts', 'vite.browser.config.ts']) {
-  const config = await resolveConfig({ configFile, mode: 'production' }, 'build');
+  const config = await resolveConfig({ configFile, mode: 'production' }, 'build', 'production', 'production');
+  assert.equal(config.env.DEV, false, 'production checks must not resolve development flags');
+  assert.equal(config.env.PROD, true);
   configs.push(config);
   const modules = new Set();
+  const emitted = new Set();
   await build({ configFile, mode: 'production', build: { write: false }, plugins: [{
-    name: 'inspect-module-graph', generateBundle() {
+    name: 'inspect-module-graph', generateBundle(_options, bundle) {
+      for (const output of Object.values(bundle)) if (output.type === 'chunk') for (const [id, info] of Object.entries(output.modules)) if (info.renderedLength > 0) emitted.add(id.split('?')[0]);
       for (const id of this.getModuleIds()) modules.add(id.split('?')[0]);
     },
   }] });
   graphs.push(modules);
+  emittedGraphs.push(emitted);
 }
 const [release, harness] = configs;
 assert.equal(resolve(release.build.outDir), resolve('dist'));
@@ -29,3 +35,6 @@ assert.ok(graphs.every(graph => graph.has(resolve('src/main.ts'))), 'shared moun
 for (const id of graphs[0]) assert.ok(!relative(resolve(), id).startsWith('tests/'), `test module in release: ${id}`);
 assert.ok(graphs[1].has(resolve('tests/browser/harness.ts')));
 console.log('Separate outputs, shared application graph/settings, and release isolation passed.');
+
+for (const graph of emittedGraphs) for (const name of ['src/ui/diagnostics.ts', 'src/app/game/diagnostic-queries.ts', 'src/platform/performance-counters.ts']) assert.ok(!graph.has(resolve(name)), `development diagnostics in production: ${name}`);
+console.log('Development diagnostic modules contain no emitted production code.');

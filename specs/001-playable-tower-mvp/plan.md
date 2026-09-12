@@ -2,7 +2,7 @@
 
 **Branch**: `001-playable-tower-mvp` | **Date**: 2026-09-09 | **Spec**: [spec.md](spec.md)
 **Input**: Current clarified specification and the technical planning request.
-**Status**: Design complete; implementation and runtime qualification have not run.
+**Status**: Gameplay and Phase 19 implementation delivered; final release qualification remains blocked by the measured reference-performance and open native/player gates. See [tasks](tasks.md) and [release evidence](../../docs/release-evidence.md).
 
 ## Summary
 

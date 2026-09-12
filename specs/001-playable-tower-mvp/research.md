@@ -189,3 +189,11 @@ Installed and locked TypeScript 7.0.2, Vite 8.2.2, Vitest 5.0.0, and @types/node
 Added development-only @babel/parser 8.0.4 (MIT) for stable TypeScript AST parsing in the boundary checker, independent of TypeScript 7's unstable compiler APIs. Its Node requirement raises this project's minimum to 24.11.0 within the selected Node 24 line. No production dependencies were added. Boundary checking conservatively reserves platform identifier names, rejects non-relative/computed imports and computed Math access; source review still checks indirect capability injection.
 
 Metadata sources: [Vite](https://registry.npmjs.org/vite/8.2.2), [Vitest](https://registry.npmjs.org/vitest/5.0.0), [parser](https://registry.npmjs.org/@babel%2fparser/8.0.4). Installation audit reported zero vulnerabilities; this is a dated tooling result, not release qualification.
+
+## Phase 19 measured decisions — 2026-09-12
+
+Default prices, demand, walking speed, schedule windows, metric coefficients and eight-person cars are unchanged. Scale tests use finite saved overrides; dense walkers and event-heavy rushes are separate workloads. Population sampling runs in an untimed replay so observer scans are not mistaken for domain cost. Scoped optional counters record graph/path/cache and event work without entering authoritative state.
+
+The reference profile identified repeated `assertPlain` descriptor walks plus whole-boundary copying as a major hot path. Public advance and runner creation retain full validation. The owned event loop now copies its already validated state directly with JSON, retaining detached rollback on failure. The full-state copy remains expensive, and reference rush/edit budgets remain unmet; see `docs/performance/remediation.md`. No workers, ECS, incremental graphs or LOD were introduced. The live route path currently rebuilds graphs and does not use the separate bounded RouteCache utility; diagnostics disclose that limitation.
+
+Production graph verification previously called Vite's `resolveConfig` with its default development Node environment despite production mode. The checker now passes explicit production defaults and asserts `DEV=false`/`PROD=true` before checking both graphs and emitted diagnostic code. Ordinary CLI production builds already used production flags.

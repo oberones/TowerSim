@@ -1,0 +1,20 @@
+{"result":{"ok":true,"advanced":30,"atTick":29190},"elapsedMs":972.4592499999999}
+┌─────────┬───────────────────────┬───────────────────────┬─────────┐
+│ (index) │ function              │ file                  │ samples │
+├─────────┼───────────────────────┼───────────────────────┼─────────┤
+│ 0       │ 'advanceOwned'        │ 'clock/advance.ts'    │ 482     │
+│ 1       │ 'assertPlain'         │ 'state/plain.ts'      │ 107     │
+│ 2       │ 'copy'                │ ''                    │ 38      │
+│ 3       │ 'nextDue'             │ 'clock/advance.ts'    │ 29      │
+│ 4       │ '(garbage collector)' │ ''                    │ 25      │
+│ 5       │ 'assertPlain'         │ 'state/plain.ts'      │ 22      │
+│ 6       │ 'insert'              │ 'events/scheduler.ts' │ 21      │
+│ 7       │ 'validateEvent'       │ 'events/event.ts'     │ 8       │
+│ 8       │ 'assertPlain'         │ 'state/plain.ts'      │ 7       │
+│ 9       │ 'parseId'             │ ''                    │ 7       │
+│ 10      │ 'parseId'             │ ''                    │ 6       │
+│ 11      │ 'assertPlain'         │ 'state/plain.ts'      │ 6       │
+│ 12      │ 'Scheduler'           │ 'events/scheduler.ts' │ 3       │
+│ 13      │ '(program)'           │ ''                    │ 3       │
+│ 14      │ 'validateEvent'       │ 'events/event.ts'     │ 2       │
+└─────────┴───────────────────────┴───────────────────────┴─────────┘
