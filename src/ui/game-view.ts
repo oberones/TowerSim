@@ -1,3 +1,4 @@
+import { bindCameraNavigation } from '../input/camera-navigation';
 import { bindKeyboard } from '../input/keyboard';
 import { createOnboarding,createInspectorNavigation } from './onboarding';
 import { createSavePanel } from './save-panel';
@@ -28,13 +29,13 @@ export function createGameView(root:HTMLElement,session:GameSession,repository:S
   const toolbar=createToolbar(scenario);aside.append(toolbar.node);
   const controls=element('nav','','time-controls');controls.setAttribute('aria-label','Time controls');const speedButtons=new Map<Speed,HTMLButtonElement>();
   for(const [speed,label] of [[0,'Pause'],[1,'Normal 1×'],[4,'Fast 4×'],[8,'Very fast 8×']] as const){const b=button(label,()=>{session.setSpeed(speed);refresh();});speedButtons.set(speed,b);controls.append(b);}
-  const canvas=element('canvas');canvas.tabIndex=0;canvas.setAttribute('aria-label','Tower site. Select Floor and drag a span, then Commit span. Shift-drag to pan, scroll to zoom, or use labeled coordinate fields.');
+  const canvas=element('canvas');canvas.tabIndex=0;canvas.setAttribute('aria-label','Tower site. Select Floor and drag a span, then Commit span. Shift-drag or scroll to pan vertically; use the Zoom in and Zoom out buttons to zoom, or use labeled coordinate fields.');
   const viewport=element('div','','viewport');viewport.append(canvas);
   const status=element('p',`Tower ready, paused at ${session.hud().time}.`,'status');status.setAttribute('role','status');
   const navigation=element('div','','camera-controls');
   const camera=new Camera(900,600,1),renderer=new Renderer(canvas,camera);
   navigation.append(button('Zoom in',()=>{camera.zoomAt(1.25,{x:camera.width/2,y:camera.height/2});draw();}),button('Zoom out',()=>{camera.zoomAt(0.8,{x:camera.width/2,y:camera.height/2});draw();}),button('Reset view',()=>{camera.fit(scenario.world.widthCells,scenario.world.groundFloor);draw();}));
-  const instructions=element('p','F: Floor · D: Demolish · I: Inspect · Esc: Cancel · Drag to choose span · Shift-drag to pan · Scroll to zoom · Arrow keys to pan','muted');
+  const instructions=element('p','F: Floor · D: Demolish · I: Inspect · Esc: Cancel · Drag to choose span · Shift-drag / scroll: vertical pan · Up/down arrows: vertical pan · Zoom with buttons','muted');
   stage.append(controls,viewport,navigation,status,instructions);workspace.append(aside,stage);
   const info=element('details'),details=element('div');info.append(element('summary','Scenario prices, schedules & targets'),details);
   details.append(element('p',`Site: ${scenario.world.widthCells} cells · floors ${scenario.world.minFloor}–${scenario.world.maxFloor}. Starting funds ${money(scenario.startingFundsMinor)}. Normal time: 120 simulated seconds per real second.`));
@@ -65,8 +66,7 @@ export function createGameView(root:HTMLElement,session:GameSession,repository:S
   function refresh():void {refreshHud();draw();}
   /** Match backing pixels to the observed viewport while preserving logical camera/proposals. */
   function resize():void {const rect=viewport.getBoundingClientRect();camera.resize(Math.max(1,rect.width),Math.max(1,rect.height),window.devicePixelRatio||1);draw();}
-  canvas.addEventListener('wheel',event=>{event.preventDefault();const r=canvas.getBoundingClientRect();camera.zoomAt(Math.exp(-event.deltaY*0.001),{x:event.clientX-r.left,y:event.clientY-r.top});draw();},{signal,passive:false});
-  canvas.addEventListener('keydown',event=>{const directions:Record<string,[number,number]>={ArrowLeft:[50,0],ArrowRight:[-50,0],ArrowUp:[0,50],ArrowDown:[0,-50]};const delta=directions[event.key];if(delta){event.preventDefault();camera.panBy(...delta);}else if(event.key==='+'||event.key==='=')camera.zoomAt(1.25,{x:camera.width/2,y:camera.height/2});else if(event.key==='-')camera.zoomAt(0.8,{x:camera.width/2,y:camera.height/2});draw();},{signal});
+  bindCameraNavigation(canvas,camera,draw,signal);
   document.addEventListener('visibilitychange',()=>{session.visibility(!document.hidden);refresh();},{signal});
   window.addEventListener('resize',resize,{signal});const observer=new ResizeObserver(resize);observer.observe(viewport);resize();camera.fit(scenario.world.widthCells,scenario.world.groundFloor);session.visibility(!document.hidden);refresh();
   return {draw,dispose:()=>{controller.abort();saves.dispose();observer.disconnect();root.replaceChildren();}};
