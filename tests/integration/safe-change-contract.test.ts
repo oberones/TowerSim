@@ -19,3 +19,7 @@ it.each([
 ])('rejects $name with no partial action',({payload})=>{const s=passengerAtPhase('moving').s,before=captureState(s);expect(command(s,{kind:'constructFloorRange',payload}).ok).toBe(false);expect({...s,lastCommandSequence:0}).toEqual({...before,lastCommandSequence:0});});
 
 it('allows occupied office removal from its surviving entrance and preserves the real exit',()=>{const {s,id}=passengerAtPhase('unloading');const officeId=Object.keys(s.offices)[0]!;expect(command(s,{kind:'demolishEntity',payload:{entityId:officeId}}).ok).toBe(true);expect(s.occupants[id]!.goal.kind).toBe('exit');expect(s.occupants[id]!.state).toBe('ridingElevator');captureState(s);});
+
+import { oneCustomer } from '../fixtures/restaurant';
+import { until as customerUntil,command as customerCommand } from '../fixtures/one-worker';
+it('an occupied restaurant removal retains earned payment and exposes guests at its surviving entrance',()=>{const s=oneCustomer();customerUntil(s,36900);const id=Object.keys(s.occupants)[0]!,room=Object.keys(s.restaurants)[0]!,paid=s.economy.transactions.find(t=>t.source.startsWith('restaurantVisit:'));expect(customerCommand(s,{kind:'demolishEntity',payload:{entityId:room}}).ok).toBe(true);expect(s.occupants[id]!.state).toBe('walking');expect(s.occupants[id]!.goal.kind).toBe('exit');expect(s.economy.transactions.filter(t=>t.source.startsWith('restaurantVisit:'))).toEqual([paid]);customerUntil(s,40000);expect(s.occupants[id]).toBeUndefined();});

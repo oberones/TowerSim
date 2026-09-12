@@ -16,7 +16,7 @@ function check(condition:unknown,message:string):asserts condition {if(!conditio
 /** Enforce compatibility, world, clock, allocation, event and ledger invariants before capture or restore. */
 export function assertState(value:unknown):asserts value is GameState {
   assertPlain(value);
-  const root=record(value,['stateVersion','rulesetId','contentVersion','scenario','clock','rng','ids','lastCommandSequence','scheduledEvents','economy','tower','navigation','progression','offices','occupants','trips','officeMarket','stairs','shafts','stops','queues','cars','workforceDays','transportReports']);
+  const root=record(value,['stateVersion','rulesetId','contentVersion','scenario','clock','rng','ids','lastCommandSequence','scheduledEvents','economy','tower','navigation','progression','offices','restaurants','restaurantDays','occupants','trips','officeMarket','stairs','shafts','stops','queues','cars','workforceDays','transportReports']);
   check(root.stateVersion===STATE_VERSION && root.rulesetId===RULESET_ID && root.contentVersion===CONTENT_VERSION,'Unsupported state/rules/content version');
   const scenario=validateScenario(root.scenario);const s=value as GameState;
   record(s.clock,['tick','initialReviewPending','lastDayBoundaryTick']);tick(s.clock.tick);tick(s.clock.lastDayBoundaryTick);
@@ -42,13 +42,18 @@ export function assertState(value:unknown):asserts value is GameState {
     else if(event.kind==='dailyReview') {
       reviews++;const nextReview=scenario.initialTick+(Math.floor((s.clock.tick-scenario.initialTick)/scenario.dayTicks)+1)*scenario.dayTicks;
       check(event.phasePriority===20 && event.dueTick===nextReview,'Invalid review schedule');
-    }else check(['workerArrival','workerDeparture','walkComplete','carComplete'].includes(event.kind),'Unsupported event kind');
+    }else check(['workerArrival','workerDeparture','customerArrival','customerVisitEnd','walkComplete','carComplete'].includes(event.kind),'Unsupported event kind');
   }
   check(boundaries===1 && reviews===(s.clock.initialReviewPending ? 0 : 1),'Missing or duplicate recurring owner');
-  record(s.economy,['initialMinor','balanceMinor','transactions']);integer(s.economy.initialMinor);integer(s.economy.balanceMinor);
+  record(s.economy,['initialMinor','balanceMinor','transactions','archive','operatingDays']);integer(s.economy.initialMinor);integer(s.economy.balanceMinor);
   check(s.economy.initialMinor===scenario.startingFundsMinor && Array.isArray(s.economy.transactions),'Invalid initial money/ledger');
-  const sources=new Set<string>();const transactionIds=new Set<string>();let balance=s.economy.initialMinor;
-  let lastOrdinal=0;let lastTick:number=scenario.initialTick;
+  const sources=new Set<string>();const transactionIds=new Set<string>();let balance=s.economy.initialMinor+s.economy.archive.netMinor;
+  const archive=s.economy.archive;record(archive,['incomeMinor','expensesMinor','netMinor','count','throughTick','lastOrdinal']);
+  for(const key of ['incomeMinor','expensesMinor','count','throughTick','lastOrdinal'] as const)tick(archive[key]);integer(archive.netMinor);
+  check(BigInt(archive.incomeMinor)-BigInt(archive.expensesMinor)===BigInt(archive.netMinor)&&archive.throughTick<=s.clock.tick&&archive.lastOrdinal<s.ids.transaction.next&&archive.count===archive.lastOrdinal,'Invalid archive checkpoint');
+  check(Array.isArray(s.economy.operatingDays)&&s.economy.operatingDays.length<=(scenario.content?.historyLimits.days??30)+2,'Invalid operating history');
+  let priorDay=-1;for(const d of s.economy.operatingDays){record(d,['day','partial','incomeMinor','expensesMinor','netMinor','count']);tick(d.day);tick(d.incomeMinor);tick(d.expensesMinor);tick(d.count);integer(d.netMinor);check(d.day>priorDay&&d.day<=Math.floor(s.clock.tick/scenario.dayTicks)&&d.partial===(d.day===0&&scenario.initialTick>0)&&BigInt(d.incomeMinor)-BigInt(d.expensesMinor)===BigInt(d.netMinor),'Invalid operating summary');priorDay=d.day;}
+  let lastOrdinal=archive.lastOrdinal;let lastTick:number=Math.max(scenario.initialTick,archive.throughTick);
   for(const transaction of s.economy.transactions) {
     record(transaction,['id','source','amountMinor','atTick']);integer(transaction.amountMinor);tick(transaction.atTick);
     const id=parseId(transaction.id);

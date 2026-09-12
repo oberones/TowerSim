@@ -1,3 +1,5 @@
+import { arriveCustomer,departCustomer } from '../../occupants/customer-lifecycle';
+import { finalizeFinanceDay } from '../../economy/history';
 import { finalizeTransportDay } from '../../metrics/daily-report';
 import { completeCarPhase,resolveCars } from '../../transportation/elevators/car';
 import { settleShaft } from '../../transportation/elevators/shaft';
@@ -10,7 +12,7 @@ import type { GameState } from '../../state/game-state';
 import { assertState } from '../../state/validate-state';
 import { clonePlain } from '../../state/plain';
 import { scheduleEvent } from '../../occupants/schedule-events';
-import { reviewOffices } from '../../demand/office-leasing';
+import { dailyReview } from '../../demand/daily-review';
 import { settleOffices } from '../../economy/settlement';
 import { arriveWorker,departWorker,completeWalk } from '../../occupants/facility-transitions';
 import { pruneTrips } from '../../metrics/trips';
@@ -20,10 +22,10 @@ function nextDue(state:GameState):number {let heap=heaps.get(state.scheduledEven
 export type AdvanceResult={ok:true;advanced:number;atTick:number}|{ok:false;code:'invalidNumber'|'overflow'|'invalidState';advanced:number;atTick:number};
 /** Dispatch ordered wakeups on an unpublished boundary; departures precede endpoint admission. */
 function processEvent(state:GameState,event:KernelEvent):void {
- if(event.kind==='dayBoundary'){finalizeTransportDay(state);settleOffices(state);for(const shaft of Object.values(state.shafts))settleShaft(state,shaft);pruneTrips(state);state.clock.lastDayBoundaryTick=state.clock.tick;scheduleEvent(state,event.kind,'kernel:1',0,add(event.dueTick,state.scenario.dayTicks));}
- else if(event.kind==='dailyReview'){reviewOffices(state);scheduleEvent(state,event.kind,'kernel:1',0,add(event.dueTick,state.scenario.dayTicks));}
+ if(event.kind==='dayBoundary'){finalizeTransportDay(state);settleOffices(state);for(const shaft of Object.values(state.shafts))settleShaft(state,shaft);pruneTrips(state);finalizeFinanceDay(state);state.clock.lastDayBoundaryTick=state.clock.tick;scheduleEvent(state,event.kind,'kernel:1',0,add(event.dueTick,state.scenario.dayTicks));}
+ else if(event.kind==='dailyReview'){dailyReview(state);scheduleEvent(state,event.kind,'kernel:1',0,add(event.dueTick,state.scenario.dayTicks));}
  else if(event.kind==='carComplete'){const car=state.cars[event.targetId];if(car&&car.generation===event.targetGeneration)completeCarPhase(state,car);}
- else{const p=state.occupants[event.targetId];if(!p||p.generation!==event.targetGeneration)return;if(event.kind==='workerArrival')arriveWorker(state,p);else if(event.kind==='workerDeparture')departWorker(state,p);else completeWalk(state,p);}
+ else{const p=state.occupants[event.targetId];if(!p||p.generation!==event.targetGeneration)return;if(event.kind==='customerArrival')arriveCustomer(state,p);else if(event.kind==='customerVisitEnd')departCustomer(state,p);else if(event.kind==='workerArrival')arriveWorker(state,p);else if(event.kind==='workerDeparture')departWorker(state,p);else completeWalk(state,p);}
 }
 /** Advance every integer interval exactly; timestamp-based walking permits coalescing intervals with no transitions. */
 function advanceOwned(state:GameState,count:number,validate:boolean):AdvanceResult {
@@ -36,7 +38,7 @@ function advanceOwned(state:GameState,count:number,validate:boolean):AdvanceResu
  if(!bootstrap&&due>next){state.clock.tick=next;continue;}
  if(!bootstrap&&next>state.clock.tick+1)state.clock.tick=next-1;
  const draft=clonePlain(state);
- if(bootstrap){reviewOffices(draft);scheduleEvent(draft,'dailyReview','kernel:1',0,add(draft.clock.tick,draft.scenario.dayTicks));draft.clock.initialReviewPending=false;}
+ if(bootstrap){dailyReview(draft);scheduleEvent(draft,'dailyReview','kernel:1',0,add(draft.clock.tick,draft.scenario.dayTicks));draft.clock.initialReviewPending=false;}
  draft.clock.tick=next;draft.scheduledEvents.sort(compareEvents);
  const dueEvents=draft.scheduledEvents.filter(e=>e.dueTick===next);draft.scheduledEvents=draft.scheduledEvents.filter(e=>e.dueTick!==next);
  for(const event of dueEvents.filter(e=>e.kind!=='walkComplete'&&e.kind!=='carComplete'))processEvent(draft,event);

@@ -12,7 +12,7 @@ test('session starts paused, exposes immutable projections and orders rejected i
   const {session}=setup(); const before=session.capture();
   expect(session.hud().speed).toBe(0); const view=session.world();
   expect(()=>{(view.floors as any).push({});}).toThrow();
-  expect(session.dispatch({kind:'placeFacility',payload:{definitionId:'restaurant.small',floor:0,x:24}}).ok).toBe(false);
+  expect(session.dispatch({kind:'placeFacility',payload:{definitionId:'restaurant.small',floor:0,x:119}}).ok).toBe(false);
   expect(session.capture()).toEqual({...before,lastCommandSequence:1});
   expect(session.hud().unsaved).toBe(true);
 });

@@ -2,7 +2,7 @@ import { recordFinishedTrip } from './daily-report';
 import type { GameState } from '../state/game-state';
 import { allocateId } from '../core/ids/allocator';
 export type SegmentKind='walking'|'waiting'|'stair'|'riding'|'stranded';
-export interface Trip {id:string;occupantId:string;purpose:'officeArrival'|'officeExit'|'abandonedExit';startTick:number;endTick:number|null;outcome:'active'|'completed'|'abandoned'|'stranded';totals:Record<SegmentKind,number>;openSegment:null|{kind:SegmentKind;startTick:number};deniedBoardingCount:number;transferCount:number}
+export interface Trip {id:string;occupantId:string;purpose:'officeArrival'|'officeExit'|'restaurantArrival'|'restaurantExit'|'abandonedExit';startTick:number;endTick:number|null;outcome:'active'|'completed'|'abandoned'|'stranded';totals:Record<SegmentKind,number>;openSegment:null|{kind:SegmentKind;startTick:number};deniedBoardingCount:number;transferCount:number}
 /** Allocate a separate visit or exit history without fabricating successful admission. */
 export function startTrip(state:GameState,occupantId:string,purpose:Trip['purpose']):Trip {
  const trip:Trip={id:allocateId('trip',state.ids.entity),occupantId,purpose,startTick:state.clock.tick,endTick:null,outcome:'active',totals:{walking:0,waiting:0,stair:0,riding:0,stranded:0},openSegment:null,deniedBoardingCount:0,transferCount:0};state.trips[trip.id]=trip;return trip;

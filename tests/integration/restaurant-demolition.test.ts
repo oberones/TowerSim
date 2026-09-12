@@ -1,0 +1,6 @@
+import { expect,test } from 'vitest';
+import { oneCustomer } from '../fixtures/restaurant';
+import { command,until } from '../fixtures/one-worker';
+import { encodeState,decodeState } from '../../src/simulation';
+test.each([21600,36100,36900])('removal at %i cancels only future revenue and preserves a physical exit',at=>{const s=oneCustomer(),id=Object.keys(s.restaurants)[0]!;until(s,at);expect(command(s,{kind:'demolishEntity',payload:{entityId:id}}).ok).toBe(true);const paid=s.economy.transactions.filter(t=>t.source.startsWith('restaurantVisit:')).length;expect(paid).toBe(at===36900?1:0);const copy=decodeState(encodeState(s));for(const state of [s,copy]){until(state,2*86400);expect(Object.keys(state.occupants)).toHaveLength(0);expect(state.restaurantDays[0]!.visits.filter(v=>v.admittedTick!==null)).toHaveLength(paid);}expect(encodeState(copy)).toBe(encodeState(s));});
+test('losing an unoccupied access route skips unstarted demand without replay on repair',()=>{const s=oneCustomer(3),shaft=Object.keys(s.shafts)[0]!;command(s,{kind:'demolishEntity',payload:{entityId:shaft}});until(s,36001);expect(Object.keys(s.occupants)).toHaveLength(0);expect(s.restaurantDays[0]!.visits[0]!.status).toBe('skipped');expect(s.restaurants[Object.keys(s.restaurants)[0]!]!.revenueMinor).toBe(0);encodeState(s);});

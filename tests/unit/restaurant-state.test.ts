@@ -1,0 +1,7 @@
+import { expect,test } from 'vitest';
+import { restaurantTower,oneCustomer } from '../fixtures/restaurant';
+import { allocateRestaurantVisits } from '../../src/simulation/demand/restaurant-allocation';
+import { encodeState,decodeState } from '../../src/simulation';
+import { until } from '../fixtures/one-worker';
+test('preflights finite allocation and durations before any mutation',()=>{const s=restaurantTower(),plan={facilityId:Object.keys(s.restaurants)[0]!,arrivalTick:36000,durationTicks:1200},before=encodeState(s);expect(()=>allocateRestaurantVisits(s,[plan,plan])).toThrow();expect(encodeState(s)).toBe(before);expect(()=>allocateRestaurantVisits(s,[{...plan,durationTicks:0}])).toThrow();expect(encodeState(s)).toBe(before);allocateRestaurantVisits(s,[plan]);const once=encodeState(s);expect(()=>allocateRestaurantVisits(s,[plan])).toThrow();expect(encodeState(s)).toBe(once);});
+test('rejects corrupt visit identities, allocation, payment and wakeup data',()=>{const s=oneCustomer();until(s,36900);for(const change of [(x:typeof s)=>{x.occupants[Object.keys(x.occupants)[0]!]!.schedule!.status='scheduled';},(x:typeof s)=>{x.restaurantDays[0]!.visits[0]!.paidMinor=1;},(x:typeof s)=>{x.restaurantDays[0]!.allocations[0]!.count=2;},(x:typeof s)=>{x.scheduledEvents=x.scheduledEvents.filter(e=>e.kind!=='customerVisitEnd');}]){const copy=decodeState(encodeState(s));change(copy);expect(()=>encodeState(copy)).toThrow();}});

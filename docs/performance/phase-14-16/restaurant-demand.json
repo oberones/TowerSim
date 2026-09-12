@@ -1,0 +1,126 @@
+{
+  "name": "restaurant-demand",
+  "seed": "00000001000000020000000300000004",
+  "contentId": "mvp-restaurant-v1",
+  "rulesId": "tower-restaurant-v1",
+  "fixtureHash": "58be0174723fdae98aca8c9154a0338a768ca61312532d9b0431c6550623c017",
+  "batchTicks": 64799,
+  "warmups": 3,
+  "trials": 10,
+  "machine": {
+    "cpu": "Apple M2 Pro",
+    "logicalCpus": 12,
+    "ramBytes": 17179869184,
+    "os": "darwin 25.6.0"
+  },
+  "node": "v24.20.0",
+  "commit": "5829c3917bc797c087c7abd3e20dd6b6d3f364d6",
+  "dirty": true,
+  "buildMode": "vitest-node",
+  "instrumentation": "monotonic clock, no coverage; counters after timing",
+  "samplesMs": [
+    122.45608300000458,
+    126.96554099999776,
+    126.05229099999997,
+    124.66512499999953,
+    120.37029199999961,
+    121.83354099999997,
+    120.1809590000048,
+    123.10920800000167,
+    122.91799999999785,
+    121.87120799999684
+  ],
+  "medianMs": 122.68704150000121,
+  "p95Ms": 126.96554099999776,
+  "totalTicks": 647990,
+  "simulatedSeconds": 647990,
+  "durationMs": 1230.4222480000026,
+  "ticksPerSecond": 526640.3472899481,
+  "digests": [
+    "8b4f6dd830d92a1b813057813b5ccd7aee078617a287a2a0b4667e1683d8b316",
+    "8b4f6dd830d92a1b813057813b5ccd7aee078617a287a2a0b4667e1683d8b316",
+    "8b4f6dd830d92a1b813057813b5ccd7aee078617a287a2a0b4667e1683d8b316",
+    "8b4f6dd830d92a1b813057813b5ccd7aee078617a287a2a0b4667e1683d8b316",
+    "8b4f6dd830d92a1b813057813b5ccd7aee078617a287a2a0b4667e1683d8b316",
+    "8b4f6dd830d92a1b813057813b5ccd7aee078617a287a2a0b4667e1683d8b316",
+    "8b4f6dd830d92a1b813057813b5ccd7aee078617a287a2a0b4667e1683d8b316",
+    "8b4f6dd830d92a1b813057813b5ccd7aee078617a287a2a0b4667e1683d8b316",
+    "8b4f6dd830d92a1b813057813b5ccd7aee078617a287a2a0b4667e1683d8b316",
+    "8b4f6dd830d92a1b813057813b5ccd7aee078617a287a2a0b4667e1683d8b316",
+    "8b4f6dd830d92a1b813057813b5ccd7aee078617a287a2a0b4667e1683d8b316",
+    "8b4f6dd830d92a1b813057813b5ccd7aee078617a287a2a0b4667e1683d8b316",
+    "8b4f6dd830d92a1b813057813b5ccd7aee078617a287a2a0b4667e1683d8b316"
+  ],
+  "counters": [
+    {
+      "scheduledRequests": 40,
+      "completedVisits": 40,
+      "remainingPeople": 0,
+      "retainedEvents": 2,
+      "admissionRevenueMinor": 20000
+    },
+    {
+      "scheduledRequests": 40,
+      "completedVisits": 40,
+      "remainingPeople": 0,
+      "retainedEvents": 2,
+      "admissionRevenueMinor": 20000
+    },
+    {
+      "scheduledRequests": 40,
+      "completedVisits": 40,
+      "remainingPeople": 0,
+      "retainedEvents": 2,
+      "admissionRevenueMinor": 20000
+    },
+    {
+      "scheduledRequests": 40,
+      "completedVisits": 40,
+      "remainingPeople": 0,
+      "retainedEvents": 2,
+      "admissionRevenueMinor": 20000
+    },
+    {
+      "scheduledRequests": 40,
+      "completedVisits": 40,
+      "remainingPeople": 0,
+      "retainedEvents": 2,
+      "admissionRevenueMinor": 20000
+    },
+    {
+      "scheduledRequests": 40,
+      "completedVisits": 40,
+      "remainingPeople": 0,
+      "retainedEvents": 2,
+      "admissionRevenueMinor": 20000
+    },
+    {
+      "scheduledRequests": 40,
+      "completedVisits": 40,
+      "remainingPeople": 0,
+      "retainedEvents": 2,
+      "admissionRevenueMinor": 20000
+    },
+    {
+      "scheduledRequests": 40,
+      "completedVisits": 40,
+      "remainingPeople": 0,
+      "retainedEvents": 2,
+      "admissionRevenueMinor": 20000
+    },
+    {
+      "scheduledRequests": 40,
+      "completedVisits": 40,
+      "remainingPeople": 0,
+      "retainedEvents": 2,
+      "admissionRevenueMinor": 20000
+    },
+    {
+      "scheduledRequests": 40,
+      "completedVisits": 40,
+      "remainingPeople": 0,
+      "retainedEvents": 2,
+      "admissionRevenueMinor": 20000
+    }
+  ]
+}

@@ -1,8 +1,9 @@
+import { financeQuery } from './finance-queries';
 import { transportQuery } from './transport-queries';
 import { workforceQuery } from './workforce-queries';
 import { inspectElevator } from './elevator-queries';
 import { createRunner } from '../../simulation/core/clock/advance';
-import { inspectOffice } from './facility-queries';
+import { inspectOffice,inspectRestaurant } from './facility-queries';
 import { inspectOccupant } from './occupant-queries';
 import { createGame, captureState, advance, validateCommand } from '../../simulation';
 import type { GameState, Command, CommandResult } from '../../simulation';
@@ -54,6 +55,8 @@ export class GameSession {
   inspectFloor(level:number){return inspectFloor(this.state,level);}
   /** Inspect one office without copying unrelated people or exposing live state. */
   inspectOffice(id:string){return inspectOffice(this.state,id);}
+  /** Inspect physical customer counts and finite demand without exposing mutable room state. */
+  inspectRestaurant(id:string){return inspectRestaurant(this.state,id);}
   /** Keep selected identity observable while its worker is dormant or moving. */
   inspectOccupant(id:string){return inspectOccupant(this.state,id);}
   /** Inspect the selected shaft without exposing mutable car or queue records. */
@@ -62,6 +65,8 @@ export class GameSession {
   transport(){return transportQuery(this.state);}
   /** Expose retained workforce and actual indoor attendance independently of scheduled demand. */
   workforce(){return workforceQuery(this.state);}
+  /** Read cash history and pending accrual without settling any source. */
+  finance(){return financeQuery(this.state);}
   /** Read the current geometry revision without copying any world records. */
   topologyRevision():number {return this.state.navigation.topologyVersion;}
   /** Expose diagnostic pacing values without granting access to the live accumulator. */

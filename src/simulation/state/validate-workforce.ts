@@ -14,5 +14,5 @@ export function assertWorkforce(s:GameState):void {
    const p=s.occupants[m.occupantId];if(p?.schedule?.day===d.day&&(p.generation!==m.generation||p.schedule.arrivalTick!==m.arrivalTick||p.schedule.departureTick!==m.departureTick||p.schedule.status!==m.status))throw Error('Workforce trace differs from schedule');
   }
  }
- for(const p of Object.values(s.occupants))if(p.schedule&&!s.workforceDays.some(d=>d.day===p.schedule!.day&&d.members.some(m=>m.occupantId===p.id)))throw Error('Missing retained current schedule');
+ for(const p of Object.values(s.occupants))if(p.kind==='worker'&&p.schedule&&!s.workforceDays.some(d=>d.day===p.schedule!.day&&d.members.some(m=>m.occupantId===p.id)))throw Error('Missing retained current schedule');
 }

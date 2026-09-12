@@ -63,7 +63,7 @@ export function assertContent(c:Content):void {
   numbers(c.routing,['routeCacheEntries','nominalCycleTicks','transferPenaltyTicks','rerouteImprovementTicks'],true);
   numbers(c.metrics,['version','walkingBasisPointsPerMinute','waitingBasisPointsPerMinute','ridingBasisPointsPerMinute','denialBasisPoints','transferBasisPoints','strandedBasisPointsPerMinute'],true);
   requireValue(c.metrics.version===1 && c.metrics.waitingBasisPointsPerMinute>c.metrics.ridingBasisPointsPerMinute,'Unsupported metric formula');
-  numbers(c.historyLimits,['liveTicks','financeTicks','days'],true);
+  numbers(c.historyLimits,['liveTicks','financeTicks','days'],true);requireValue(c.historyLimits.financeTicks>=86400,'Finance retention must cover the recent 24-hour report');
 }
 /** Enforce normalized base spans, configured bounds and supported permanent entrance geometry. */
 export function assertWorld(w:WorldConfig,c:Content):void {

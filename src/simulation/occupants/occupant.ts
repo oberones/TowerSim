@@ -1,6 +1,6 @@
 import type { Journey } from '../navigation/route';
 export interface Anchor {floor:number;x2:number}
-export type Goal={kind:'office';facilityId:string}|{kind:'exit'}|{kind:'none'};
+export type Goal={kind:'office'|'restaurant';facilityId:string}|{kind:'exit'}|{kind:'none'};
 export type Location={kind:'outside'}|{kind:'anchor';at:Anchor}|{kind:'facility';facilityId:string}|{kind:'queue';queueId:string;entryId:string}|{kind:'car';carId:string;unloadStopId:string}|{kind:'stair';stairId:string;from:Anchor;to:Anchor;startTick:number;durationTicks:number}|{kind:'walkEdge';from:Anchor;to:Anchor;startTick:number;durationTicks:number};
 export type OccupantPosition=
  |{state:'outside';location:{kind:'outside'}}

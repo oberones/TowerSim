@@ -4,9 +4,9 @@ import type { Command,CommandResult } from '../simulation';
 export class FacilityTool {
  private proposal:Command|null=null;
  /** Bind previews and commits to the same application ingress boundary. */
- constructor(private session:Pick<GameSession,'preview'|'dispatch'>){}
+ constructor(private session:Pick<GameSession,'preview'|'dispatch'>,private definitionId='office.small'){}
  /** Store a complete proposal without consuming any authoritative allocation counters. */
- propose(floor:number,x:number):CommandResult {this.proposal={kind:'placeFacility',payload:{definitionId:'office.small',floor,x}};return this.session.preview(this.proposal);}
+ propose(floor:number,x:number):CommandResult {this.proposal={kind:'placeFacility',payload:{definitionId:this.definitionId,floor,x}};return this.session.preview(this.proposal);}
  /** Requote against current cash and geometry rather than retaining a stale acceptance. */
  preview():CommandResult|null {return this.proposal?this.session.preview(this.proposal):null;}
  /** Dispatch the unchanged logical placement with fresh sequence and current-tick validation. */

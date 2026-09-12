@@ -1,0 +1,146 @@
+{
+  "name": "finance-history",
+  "seed": "00000001000000020000000300000004",
+  "contentId": "mvp-restaurant-v1",
+  "rulesId": "tower-restaurant-v1",
+  "fixtureHash": "e016f70fd8e7b4db5ff8e23263a5b3d71f6fab9beaa488c17ee60a4a90e7d891",
+  "batchTicks": 0,
+  "warmups": 3,
+  "trials": 10,
+  "machine": {
+    "cpu": "Apple M2 Pro",
+    "logicalCpus": 12,
+    "ramBytes": 17179869184,
+    "os": "darwin 25.6.0"
+  },
+  "node": "v24.20.0",
+  "commit": "5829c3917bc797c087c7abd3e20dd6b6d3f364d6",
+  "dirty": true,
+  "buildMode": "vitest-node",
+  "instrumentation": "monotonic clock, no coverage; counters after timing",
+  "samplesMs": [
+    54.501750000003085,
+    56.300209000000905,
+    56.43316699999559,
+    54.89195800000016,
+    64.64141599999857,
+    55.48920799999905,
+    55.30941599999642,
+    55.474042000001646,
+    54.56545800000458,
+    53.90970799999923
+  ],
+  "medianMs": 55.39172899999903,
+  "p95Ms": 64.64141599999857,
+  "totalTicks": 0,
+  "simulatedSeconds": 0,
+  "durationMs": 561.5163319999992,
+  "ticksPerSecond": 0,
+  "digests": [
+    "e016f70fd8e7b4db5ff8e23263a5b3d71f6fab9beaa488c17ee60a4a90e7d891",
+    "e016f70fd8e7b4db5ff8e23263a5b3d71f6fab9beaa488c17ee60a4a90e7d891",
+    "e016f70fd8e7b4db5ff8e23263a5b3d71f6fab9beaa488c17ee60a4a90e7d891",
+    "e016f70fd8e7b4db5ff8e23263a5b3d71f6fab9beaa488c17ee60a4a90e7d891",
+    "e016f70fd8e7b4db5ff8e23263a5b3d71f6fab9beaa488c17ee60a4a90e7d891",
+    "e016f70fd8e7b4db5ff8e23263a5b3d71f6fab9beaa488c17ee60a4a90e7d891",
+    "e016f70fd8e7b4db5ff8e23263a5b3d71f6fab9beaa488c17ee60a4a90e7d891",
+    "e016f70fd8e7b4db5ff8e23263a5b3d71f6fab9beaa488c17ee60a4a90e7d891",
+    "e016f70fd8e7b4db5ff8e23263a5b3d71f6fab9beaa488c17ee60a4a90e7d891",
+    "e016f70fd8e7b4db5ff8e23263a5b3d71f6fab9beaa488c17ee60a4a90e7d891",
+    "e016f70fd8e7b4db5ff8e23263a5b3d71f6fab9beaa488c17ee60a4a90e7d891",
+    "e016f70fd8e7b4db5ff8e23263a5b3d71f6fab9beaa488c17ee60a4a90e7d891",
+    "e016f70fd8e7b4db5ff8e23263a5b3d71f6fab9beaa488c17ee60a4a90e7d891"
+  ],
+  "counters": [
+    {
+      "queries": 1000,
+      "retainedTransactions": 42,
+      "archivedTransactions": 1394,
+      "operatingDays": 30,
+      "restaurantDays": 30,
+      "livePeople": 0,
+      "retainedTrips": 2400
+    },
+    {
+      "queries": 1000,
+      "retainedTransactions": 42,
+      "archivedTransactions": 1394,
+      "operatingDays": 30,
+      "restaurantDays": 30,
+      "livePeople": 0,
+      "retainedTrips": 2400
+    },
+    {
+      "queries": 1000,
+      "retainedTransactions": 42,
+      "archivedTransactions": 1394,
+      "operatingDays": 30,
+      "restaurantDays": 30,
+      "livePeople": 0,
+      "retainedTrips": 2400
+    },
+    {
+      "queries": 1000,
+      "retainedTransactions": 42,
+      "archivedTransactions": 1394,
+      "operatingDays": 30,
+      "restaurantDays": 30,
+      "livePeople": 0,
+      "retainedTrips": 2400
+    },
+    {
+      "queries": 1000,
+      "retainedTransactions": 42,
+      "archivedTransactions": 1394,
+      "operatingDays": 30,
+      "restaurantDays": 30,
+      "livePeople": 0,
+      "retainedTrips": 2400
+    },
+    {
+      "queries": 1000,
+      "retainedTransactions": 42,
+      "archivedTransactions": 1394,
+      "operatingDays": 30,
+      "restaurantDays": 30,
+      "livePeople": 0,
+      "retainedTrips": 2400
+    },
+    {
+      "queries": 1000,
+      "retainedTransactions": 42,
+      "archivedTransactions": 1394,
+      "operatingDays": 30,
+      "restaurantDays": 30,
+      "livePeople": 0,
+      "retainedTrips": 2400
+    },
+    {
+      "queries": 1000,
+      "retainedTransactions": 42,
+      "archivedTransactions": 1394,
+      "operatingDays": 30,
+      "restaurantDays": 30,
+      "livePeople": 0,
+      "retainedTrips": 2400
+    },
+    {
+      "queries": 1000,
+      "retainedTransactions": 42,
+      "archivedTransactions": 1394,
+      "operatingDays": 30,
+      "restaurantDays": 30,
+      "livePeople": 0,
+      "retainedTrips": 2400
+    },
+    {
+      "queries": 1000,
+      "retainedTransactions": 42,
+      "archivedTransactions": 1394,
+      "operatingDays": 30,
+      "restaurantDays": 30,
+      "livePeople": 0,
+      "retainedTrips": 2400
+    }
+  ]
+}
