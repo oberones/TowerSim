@@ -9,7 +9,7 @@ import { drawPreview } from '../rendering/layers/preview';
 import { createFloorInspector } from './floor-inspector';
 import { element, button, money } from './elements';
 /** Bind floor tools and inspection to ordinary numeric/pointer controls through application ingress. */
-export function createConstructionPanel(root:HTMLElement,session:GameSession,canvas:HTMLCanvasElement,camera:Camera,renderer:Renderer,tools:Map<string,HTMLButtonElement>,status:HTMLElement,redraw:()=>void,signal:AbortSignal){
+export function createConstructionPanel(root:HTMLElement,session:GameSession,canvas:HTMLCanvasElement,camera:Camera,renderer:Renderer,tools:Map<string,HTMLButtonElement>,status:HTMLElement,redraw:()=>void,signal:AbortSignal,onInspect:()=>void=()=>{}){
   const tool=new BuildTool(session);const node=element('section','','construction-panel');const inspector=createFloorInspector();let selected:number|null=null;let mode:FloorKind|null=null;let signature='';let inspection:FloorInspection|null=null;
   let drag:{start:Point;last:Point;world:Point;pan:boolean;id:number}|null=null;
   const inputs=new Map<string,HTMLInputElement>();
@@ -39,7 +39,7 @@ export function createConstructionPanel(root:HTMLElement,session:GameSession,can
   canvas.addEventListener('contextmenu',e=>e.preventDefault(),{signal});
   canvas.addEventListener('pointerdown',e=>{canvas.focus();const client={x:e.clientX,y:e.clientY};drag={start:client,last:client,world:pointerWorld(camera,client,canvas.getBoundingClientRect()),pan:!mode||e.shiftKey||e.button!==0,id:e.pointerId};canvas.setPointerCapture(e.pointerId);if(!drag.pan){const p=pointerProposal(drag.world,drag.world);write(p);propose(p);}},{signal});
   canvas.addEventListener('pointermove',e=>{if(!drag || drag.id!==e.pointerId)return;const point={x:e.clientX,y:e.clientY};if(drag.pan)camera.panBy(0,point.y-drag.last.y);else{const p=pointerProposal(drag.world,pointerWorld(camera,point,canvas.getBoundingClientRect()));write(p);propose(p);}drag.last=point;redraw();},{signal});
-  canvas.addEventListener('pointerup',e=>{if(!drag||drag.id!==e.pointerId)return;if(drag.pan&&!mode&&Math.hypot(e.clientX-drag.start.x,e.clientY-drag.start.y)<4)selected=Math.floor(drag.world.y);drag=null;redraw();},{signal});
+  canvas.addEventListener('pointerup',e=>{if(!drag||drag.id!==e.pointerId)return;if(drag.pan&&!mode&&!e.shiftKey&&e.button===0&&tools.get('inspect')!.getAttribute('aria-pressed')==='true'&&Math.hypot(e.clientX-drag.start.x,e.clientY-drag.start.y)<4){selected=Math.floor(drag.world.y);if(session.inspectFloor(selected))onInspect();}drag=null;redraw();},{signal});
   canvas.addEventListener('pointercancel',()=>{drag=null;if(mode)tool.choose(mode);else tool.cancel();renderQuote();redraw();},{signal});
   /** Refresh quotes/inspector only when domain geometry or balance changes, then draw overlays. */
   function draw():void {
