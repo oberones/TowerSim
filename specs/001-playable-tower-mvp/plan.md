@@ -37,7 +37,7 @@ The requested ten-second tick is an initial research hypothesis, not retained: i
 
 The request calls 60 simulated seconds per real second a likely normal rate. The clarified specification already fixes a full day at 12 real minutes, which is 120 simulated seconds per real second. Preserve that accepted balance default, with 4×/8× acceleration, and keep it in application pacing configuration. A future switch to 60 requires synchronizing the spec, onboarding timings, and session tests, not changing domain ticks.
 
-Elevator generalized routing cost selects among routes within the accepted mode preference. It must not override the one-/two-floor stairs preference merely because an elevator estimate is shorter, or switch a queued person to stairs solely due to congestion.
+For one-/two-floor trips, minimize walking distance to the first usable stair or elevator entrance, then generalized total journey cost and stable ties. Longer trips prefer a route containing elevator travel when available. Queue congestion alone does not override that long-trip preference. Existing saved stairs-preference journeys retain their commitments until completion.
 
 ## Constitution Check
 

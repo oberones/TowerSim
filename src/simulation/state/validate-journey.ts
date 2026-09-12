@@ -10,10 +10,10 @@ function check(condition:unknown,message:string):asserts condition {if(!conditio
 function anchor(a:Anchor):void {record(a,['floor','x2']);integer(a.floor);tick(a.x2);}
 /** Match exact physical endpoints, including half-cell horizontal positions. */
 function same(a:Anchor,b:Anchor):boolean {return a.floor===b.floor&&a.x2===b.x2;}
-/** Validate future semantic legs separately from protected active segments and pending replans. */
+/** Validate committed legs, accepting the original short-trip stairs preference in existing saves. */
 export function assertJourney(s:GameState,p:Occupant):void {
  const j=p.journey;if(j===null){check(p.state==='outside'||p.state==='insideFacility'||p.replanAfterCurrentLeg,'Missing active journey');return;}
- record(j,['origin','destination','preference','legs','topologyVersion']);anchor(j.origin);anchor(j.destination);tick(j.topologyVersion);check(j.topologyVersion<=s.navigation.topologyVersion&&j.preference===modePreference(j.origin,j.destination)&&Array.isArray(j.legs),'Invalid journey origin preference');
+ record(j,['origin','destination','preference','legs','topologyVersion']);anchor(j.origin);anchor(j.destination);tick(j.topologyVersion);check(j.topologyVersion<=s.navigation.topologyVersion&&(j.preference===modePreference(j.origin,j.destination)||j.preference==='stairs'&&modePreference(j.origin,j.destination)==='nearest')&&Array.isArray(j.legs),'Invalid journey origin preference');
  const office=p.goal.kind==='office'?s.offices[p.goal.facilityId]:p.goal.kind==='restaurant'?s.restaurants[p.goal.facilityId]:null,lobby=s.tower!.lobby,destination=office?{floor:office.floor,x2:office.entranceX2}:{floor:lobby.floor,x2:lobby.entranceX2};check(same(j.destination,destination),'Journey destination disagrees with live goal');
  if(p.replanAfterCurrentLeg){check(j.legs.length===0,'Pending replan retains future legs');return;}
  check(j.topologyVersion===s.navigation.topologyVersion,'Stale route without pending replan');

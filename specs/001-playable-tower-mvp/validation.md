@@ -82,7 +82,7 @@ Do not write trivial tests that merely restate object literals. Tests target rul
 | Spec coverage | Headless integration evidence | Player/platform evidence |
 | --- | --- | --- |
 | US1–2, FR-001–012 | New-game state; construction quotes/atomicity; pause and timed commands; variable width/floors. | Understandable site/tools/time, camera navigation and responsive previews. |
-| US3–4, US6, FR-013–022/036–038 | Leasing/workforce/presence, stairs preference/fallback, sleeping, access loss/recovery and safe demolition. | Watch individual journeys and distinguish lease/workforce/present counts. |
+| US3–4, US6, FR-013–022/036–038 | Leasing/workforce/presence, nearest short-trip entrance and long-trip elevator preference/fallback, sleeping, access loss/recovery and safe demolition. | Watch individual journeys and distinguish lease/workforce/present counts. |
 | US5, US7, US11, FR-023–031 | Car/queue/dispatch phases, inspection query truth, capacity/denials and trip measures. | Moving cars, queues and every served-floor count are legible. |
 | US8–9, FR-032–035 | Controlled same-cohort congestion and added-shaft comparison; continuous subsequent-day intervention. | Diagnose bottleneck, build improvement using ordinary controls, compare reports. |
 | US10, all Edge Cases | Removal/invalid access, reroute/abandon/stranding, real exits, restored access, no impossible references. | Visible reason and safe recovery, including occupied-asset rejection. |

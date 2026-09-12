@@ -1,0 +1,32 @@
+{
+  "change": "Nearest usable entrance for one-/two-floor trips",
+  "validation": {
+    "command": "npm run check:release",
+    "passed": true,
+    "tests": 358,
+    "testFiles": 120
+  },
+  "sources": {
+    "src/simulation/navigation/route.ts": "076b348c73461b95928f9cdd90f72e44f9326a1b04f102fc4aaba8eef17eda31",
+    "src/simulation/navigation/find-route.ts": "a3e6fd6acbdea43cf10cd14d0bde077f4457379994b8919de4e24c0bf279f6fe",
+    "src/simulation/state/validate-journey.ts": "900cb05f5a5f11c6df758d5909c50f81c597b97c415c5d9359261aff75a74dc7",
+    "tests/integration/route-modes.test.ts": "5833c1d0d7d66db7540c101a7b063bff8b84a26e50a344a97285411b054b2209",
+    "tests/integration/short-route-save.test.ts": "f1a3f5e98b8066a180e594764a0dbf9b00d00490e38bd331859a37b43fbb8427",
+    "tests/integration/one-restaurant-customer.test.ts": "9bba549b768b69120e48ac91be06e21a8218d512d1fe4c9c0f1b4967679bfbeb"
+  },
+  "artifacts": {
+    "dist": {
+      "dist/.vite/manifest.json": "36813e34c033f86bfac3d3118f95627239f8b5ae24e5b6f297b67fa9c7d52b61",
+      "dist/assets/index-BCiDyIe1.js": "0f8ad0bfb817b513bd6dac492c5491775ef1f2bd81117dbc5e69b10f1679a97b",
+      "dist/assets/index-CznFBmwZ.css": "5f5cfc59cf07ffbf0f49951edbc564bff5a06f9919f83099ba1f810aa9ed856d",
+      "dist/index.html": "8af6a914d5b39c12eb525112242bae6637f3e62075018854965426e738205c0d"
+    },
+    "dist-browser-test": {
+      "dist-browser-test/.vite/manifest.json": "2c9dd67ca31452c4cb43634b88c03304d4b0e09f685033171d153a965223ec63",
+      "dist-browser-test/assets/index-CznFBmwZ.css": "5f5cfc59cf07ffbf0f49951edbc564bff5a06f9919f83099ba1f810aa9ed856d",
+      "dist-browser-test/assets/index-DnZxmrCn.js": "1713a81f0fc8b564523d032cd31a49efff64c4c9ac3c20e5d5ca554237f75887",
+      "dist-browser-test/index.html": "80fd14b4bd0857bb5a9949a4fc766ffb7d34621416b6b715781daf1cdf55b246"
+    }
+  },
+  "nativeQualification": "Not rerun; prior phase evidence identifies earlier artifacts"
+}
