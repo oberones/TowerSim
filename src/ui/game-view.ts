@@ -30,13 +30,13 @@ export function createGameView(root:HTMLElement,session:GameSession,repository:S
   const toolbar=createToolbar(scenario);aside.append(toolbar.node);
   const controls=element('nav','','time-controls');controls.setAttribute('aria-label','Time controls');const speedButtons=new Map<Speed,HTMLButtonElement>();
   for(const [speed,label] of [[0,'Pause'],[1,'Normal 1×'],[4,'Fast 4×'],[8,'Very fast 8×']] as const){const b=button(label,()=>{session.setSpeed(speed);refresh();});speedButtons.set(speed,b);controls.append(b);}
-  const canvas=element('canvas');canvas.tabIndex=0;canvas.setAttribute('aria-label','Tower site. Select Floor and drag a span, then Commit span. Shift-drag or scroll to pan vertically; use the Zoom in and Zoom out buttons to zoom. Rooms and connections: click the tower, drag the preview into position, then confirm.');
+  const canvas=element('canvas');canvas.tabIndex=0;canvas.setAttribute('aria-label','Tower site. Select Floor and click for a 24-cell preview. Drag to move, grab either edge to resize, then Place floor. Shift-drag or scroll to pan vertically; use the Zoom in and Zoom out buttons to zoom. Rooms and connections: click the tower, drag the preview into position, then confirm.');
   const viewport=element('div','','viewport');viewport.append(canvas);
   const status=element('p',`Tower ready, paused at ${session.hud().time}.`,'status');status.setAttribute('role','status');
   const navigation=element('div','','camera-controls');
   const camera=new Camera(900,600,1),renderer=new Renderer(canvas,camera);
   navigation.append(button('Zoom in',()=>{camera.zoomAt(1.25,{x:camera.width/2,y:camera.height/2});draw();}),button('Zoom out',()=>{camera.zoomAt(0.8,{x:camera.width/2,y:camera.height/2});draw();}),button('Reset view',()=>{camera.fit(scenario.world.widthCells,scenario.world.groundFloor);draw();}));
-  const instructions=element('p','F: Floor · D: Demolish · I: Inspect · Esc: Cancel · Drag to choose span · Shift-drag / scroll: vertical pan · Up/down arrows: vertical pan · Zoom with buttons','muted');
+  const instructions=element('p','F: Floor · D: Demolish · I: Inspect · Esc: Cancel · Floor: click, move & drag edges to resize · Shift-drag / scroll: vertical pan · Up/down arrows: vertical pan · Zoom with buttons','muted');
   stage.append(controls,viewport,navigation,status,instructions);workspace.append(aside,stage);
   const info=element('details'),details=element('div'),seed=element('p','','seed');details.append(seed);info.append(element('summary','Scenario prices, schedules & targets'),details);
   details.append(element('p',`Site: ${scenario.world.widthCells} cells · floors ${scenario.world.minFloor}–${scenario.world.maxFloor}. Starting funds ${money(scenario.startingFundsMinor)}. Normal time: 120 simulated seconds per real second.`));
@@ -59,7 +59,7 @@ export function createGameView(root:HTMLElement,session:GameSession,repository:S
   const traffic=createTrafficPanel(session,renderer,refresh);
   const management=createManagementPanel([{id:'build',label:'Floors',node:construction.node},{id:'offices',label:'Offices & people',node:offices.node},{id:'connections',label:'Connections',node:transport.node},{id:'restaurants',label:'Restaurants',node:restaurants.node},{id:'progression',label:'Level 2',node:progression.node},{id:'finance',label:'Finances',node:finance.node},{id:'traffic',label:'Traffic',node:traffic.node}],refresh);
   controls.append(management.toggle);stage.append(management.node);
-  for(const [id,b] of toolbar.tools)b.addEventListener('click',()=>{if(id==='floor'||id==='demolish')management.open('build');else management.close();},{signal});
+  for(const [id,b] of toolbar.tools)b.addEventListener('click',()=>{if(id==='demolish')management.open('build');else management.close();},{signal});
 
   bindKeyboard(root,toolbar.tools,value=>{session.setSpeed(value??(session.hud().speed===0?1:0));refresh();},()=>{construction.cancel();canvas.focus();refresh();},signal);
   /** Draw the current visible world; HUD text has its own bounded refresh cadence. */

@@ -4,7 +4,7 @@ export function createOnboarding(){
  const node=element('details','','onboarding');node.append(element('summary','Start here — build a thriving tower'));
  const steps=element('ol');
  for(const text of [
-  'Build while paused. Choose Floor, enter floor 1, start 0 and end 96, then Commit span. Repeat on floors 2–5 in order. Adjacent built space already includes a hallway.',
+  'Build while paused. Choose Floor and click floor 1 for a 24-cell preview. Move it to cell 0, drag the right edge to end at cell 96, then Place floor. Repeat on floors 2–5 in order. Adjacent built space already includes a hallway.',
   'Connect the lobby. Choose Elevator, click floor 0 at cell 10, set Elevator top floor to 5, and confirm on the shaft. Build stairs from 0 to 1 at cell 80, then 1 to 2 at cell 84. Each elevator carries eight people.',
   'Choose Office, click floor space on floors 3, 4 and 5, drag each preview into position, and confirm on the tower. Choose Restaurant and do the same on floor 1. Room sizes are automatic. Normal starts the first 06:00 leasing review; rooms built later wait for the next review. Assigned workers arrive physically during the morning rush.',
   'Watch and diagnose. Pause near 08:00. Inspect a person or elevator and open Tower details → Traffic. Missing access needs a connected route. A reachable office with waiting people and repeated boarding denials needs more elevator service.',

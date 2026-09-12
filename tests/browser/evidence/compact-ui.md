@@ -42,3 +42,25 @@ Supplemental in-app browser observations:
 - Checked release `dist/`: a restaurant initially at cell 53 dragged to 43. Cash stayed $10,000 during movement and became $9,200 only after confirmation.
 
 These observations do not close the existing native-browser, performance, sustained-session or player-evaluation gates. No save slot was written.
+
+## Floor placement and boundary arrows — 2026-09-12
+
+Floor now uses a 24-cell default preview at the initial tower click. Selecting it keeps Tower details closed. Dragging the preview or Move preserves its width; the arrow pair beside each edge adjusts only that boundary by click, drag or keyboard. The on-floor confirmation shows the span and current price. Demolition retains its existing controls.
+
+Node 24.20.0, `npm run check:release`: **385 tests / 127 files passed**, strict types, 24 architectural regression fixtures, descriptive comments, both production builds and release isolation passed. Eight new tests cover default size and deferred commitment, independent boundaries, moving resized spans, edge dragging at three zoom levels, preventing crossed boundaries, invalid bounds/recovery, cancellation/default reset, keyboard nudges and capture cleanup. `git diff --check` passed.
+
+Supplemental Codex in-app browser observations on macOS:
+
+- Development: Floor kept the information panel closed. A click created `[23,47)` on floor 1 for $24. The two edge arrows expanded it to `[22,48)` for $26. Dragging the floor moved it to `[32,58)` without changing width or cash. Dragging the right boundary added ten cells, yielding `[32,68)` for $36. Confirmation charged exactly $36, leaving $9,964.
+- Development: an unsupported floor preview disabled confirmation. Escape removed its preview, confirmation and arrows without a charge.
+- Checked release `dist/`: a default 24-cell preview expanded to 25 cells with the right arrow; confirmation built `[23,48)` on floor 1 and changed cash from $10,000 to $9,975. The existing Demolish controls then removed that span for $0, with cash unchanged.
+
+No save slot was written. These observations do not qualify the separate native-browser, performance, sustained-session or new-player gates.
+
+## Directly draggable floor edges — 2026-09-12
+
+This supersedes the arrow-button controls described above. The floor preview now has one grabbable vertical edge on each side. Dragging an edge resizes that side while the other stays fixed; grabbing/releasing without movement has no effect. Focused edges retain keyboard nudges. The default size, whole-floor movement, validation and explicit confirmation flow are unchanged.
+
+Supplemental in-app browser development observation: `[23,47)` on floor 1 expanded to `[19,47)` by dragging the left edge, then `[19,57)` by dragging the right edge. Dragging the middle moved the 38-cell span to `[24,62)` without changing its dimensions. Cash stayed $10,000 throughout preview edits and became $9,962 only on confirmation. Screenshots showed edge grips with no arrow buttons. No save slot was written; separate release qualification gates remain open.
+
+Final edge-handle validation: Node 24.20.0, `npm run check:release`, **386 tests / 127 files passed**, both checked builds and release isolation passed. Floor regressions now use direct edge drags and include grabbing without movement producing no resize or charge. In the checked production build, dragging the right edge expanded `[23,47)` to `[23,57)`; cash stayed $10,000 during preview and became $9,966 only after confirmation. `git diff --check` passed.
