@@ -1,0 +1,91 @@
+
+> towersim@0.0.0 check:release
+> npm test && npm run build && npm run build:browser-test && npm run check:browser-builds
+
+
+> towersim@0.0.0 test
+> vitest run
+
+
+ RUN  v5.0.0 /Users/oberon/Projects/coding/javascript/TowerSim
+
+
+ Test Files  119 passed (119)
+      Tests  350 passed (350)
+   Start at  15:08:25
+   Duration  86.45s (tests 97%, import 2%, transform 1%)
+
+
+> towersim@0.0.0 build
+> npm run check:types && npm run check:boundaries && npm run check:comments && vite build
+
+
+> towersim@0.0.0 check:types
+> tsc -p tsconfig.simulation.json && tsc -p tsconfig.browser.json && tsc -p tsconfig.tests.json
+
+
+> towersim@0.0.0 check:boundaries
+> node scripts/check-boundaries.mjs
+
+Domain boundaries and 24 regression fixtures passed.
+
+> towersim@0.0.0 check:comments
+> node scripts/check-function-comments.mjs
+
+Descriptive comments verified for 425 named production functions and methods.
+vite v8.2.2 building client environment for production...
+transforming...
+✓ 164 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/.vite/manifest.json          0.18 kB │ gzip:  0.14 kB
+dist/index.html                   0.36 kB │ gzip:  0.26 kB
+dist/assets/index-CznFBmwZ.css    3.65 kB │ gzip:  1.36 kB
+dist/assets/index-ikaD4deS.js   186.78 kB │ gzip: 55.04 kB
+
+✓ built in 65ms
+
+> towersim@0.0.0 build:browser-test
+> npm run check:types && npm run check:boundaries && npm run check:comments && vite build --config vite.browser.config.ts --mode production
+
+
+> towersim@0.0.0 check:types
+> tsc -p tsconfig.simulation.json && tsc -p tsconfig.browser.json && tsc -p tsconfig.tests.json
+
+
+> towersim@0.0.0 check:boundaries
+> node scripts/check-boundaries.mjs
+
+Domain boundaries and 24 regression fixtures passed.
+
+> towersim@0.0.0 check:comments
+> node scripts/check-function-comments.mjs
+
+Descriptive comments verified for 425 named production functions and methods.
+vite v8.2.2 building client environment for production...
+transforming...
+✓ 177 modules transformed.
+rendering chunks...
+computing gzip size...
+dist-browser-test/.vite/manifest.json          0.18 kB │ gzip:  0.14 kB
+dist-browser-test/index.html                   0.36 kB │ gzip:  0.27 kB
+dist-browser-test/assets/index-CznFBmwZ.css    3.65 kB │ gzip:  1.36 kB
+dist-browser-test/assets/index-CW7M3oLF.js   202.09 kB │ gzip: 60.13 kB
+
+✓ built in 55ms
+
+> towersim@0.0.0 check:browser-builds
+> node scripts/check-browser-builds.mjs
+
+vite v8.2.2 building client environment for production...
+transforming...
+✓ 164 modules transformed.
+rendering chunks...
+✓ built in 49ms
+vite v8.2.2 building client environment for production...
+transforming...
+✓ 177 modules transformed.
+rendering chunks...
+✓ built in 35ms
+Separate outputs, shared application graph/settings, and release isolation passed.
+Development diagnostic modules contain no emitted production code.

@@ -1,0 +1,126 @@
+{
+  "name": "transport-reports",
+  "seed": "00000001000000020000000300000004",
+  "contentId": "mvp-transport-v1",
+  "rulesId": "tower-transport-v1",
+  "fixtureHash": "daa88e04500c5ff99e358c286932679d2ea8603fd9366a8990e9b8b2c6d9eba3",
+  "batchTicks": 0,
+  "warmups": 3,
+  "trials": 10,
+  "machine": {
+    "cpu": "Apple M2 Pro",
+    "logicalCpus": 12,
+    "ramBytes": 17179869184,
+    "os": "darwin 25.5.0"
+  },
+  "node": "v24.20.0",
+  "commit": "f1da72104b6dfcb2ea42a19d70b2c7acf492bae0",
+  "dirty": true,
+  "buildMode": "vitest-node",
+  "instrumentation": "monotonic clock, no coverage; counters after timing",
+  "samplesMs": [
+    85.9710419999999,
+    88.50712499999986,
+    91.17724999999996,
+    88.92887500000006,
+    88.06233400000019,
+    89.95029199999999,
+    87.21333300000015,
+    86.08616699999993,
+    85.230458,
+    84.9113339999999
+  ],
+  "medianMs": 87.63783350000017,
+  "p95Ms": 91.17724999999996,
+  "totalTicks": 0,
+  "simulatedSeconds": 0,
+  "durationMs": 876.0382099999999,
+  "ticksPerSecond": 0,
+  "digests": [
+    "daa88e04500c5ff99e358c286932679d2ea8603fd9366a8990e9b8b2c6d9eba3",
+    "daa88e04500c5ff99e358c286932679d2ea8603fd9366a8990e9b8b2c6d9eba3",
+    "daa88e04500c5ff99e358c286932679d2ea8603fd9366a8990e9b8b2c6d9eba3",
+    "daa88e04500c5ff99e358c286932679d2ea8603fd9366a8990e9b8b2c6d9eba3",
+    "daa88e04500c5ff99e358c286932679d2ea8603fd9366a8990e9b8b2c6d9eba3",
+    "daa88e04500c5ff99e358c286932679d2ea8603fd9366a8990e9b8b2c6d9eba3",
+    "daa88e04500c5ff99e358c286932679d2ea8603fd9366a8990e9b8b2c6d9eba3",
+    "daa88e04500c5ff99e358c286932679d2ea8603fd9366a8990e9b8b2c6d9eba3",
+    "daa88e04500c5ff99e358c286932679d2ea8603fd9366a8990e9b8b2c6d9eba3",
+    "daa88e04500c5ff99e358c286932679d2ea8603fd9366a8990e9b8b2c6d9eba3",
+    "daa88e04500c5ff99e358c286932679d2ea8603fd9366a8990e9b8b2c6d9eba3",
+    "daa88e04500c5ff99e358c286932679d2ea8603fd9366a8990e9b8b2c6d9eba3",
+    "daa88e04500c5ff99e358c286932679d2ea8603fd9366a8990e9b8b2c6d9eba3"
+  ],
+  "counters": [
+    {
+      "queries": 1000,
+      "retainedTrips": 64,
+      "dailySummaries": 1,
+      "cohorts": 1,
+      "liveSamples": 0
+    },
+    {
+      "queries": 1000,
+      "retainedTrips": 64,
+      "dailySummaries": 1,
+      "cohorts": 1,
+      "liveSamples": 0
+    },
+    {
+      "queries": 1000,
+      "retainedTrips": 64,
+      "dailySummaries": 1,
+      "cohorts": 1,
+      "liveSamples": 0
+    },
+    {
+      "queries": 1000,
+      "retainedTrips": 64,
+      "dailySummaries": 1,
+      "cohorts": 1,
+      "liveSamples": 0
+    },
+    {
+      "queries": 1000,
+      "retainedTrips": 64,
+      "dailySummaries": 1,
+      "cohorts": 1,
+      "liveSamples": 0
+    },
+    {
+      "queries": 1000,
+      "retainedTrips": 64,
+      "dailySummaries": 1,
+      "cohorts": 1,
+      "liveSamples": 0
+    },
+    {
+      "queries": 1000,
+      "retainedTrips": 64,
+      "dailySummaries": 1,
+      "cohorts": 1,
+      "liveSamples": 0
+    },
+    {
+      "queries": 1000,
+      "retainedTrips": 64,
+      "dailySummaries": 1,
+      "cohorts": 1,
+      "liveSamples": 0
+    },
+    {
+      "queries": 1000,
+      "retainedTrips": 64,
+      "dailySummaries": 1,
+      "cohorts": 1,
+      "liveSamples": 0
+    },
+    {
+      "queries": 1000,
+      "retainedTrips": 64,
+      "dailySummaries": 1,
+      "cohorts": 1,
+      "liveSamples": 0
+    }
+  ]
+}

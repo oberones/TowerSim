@@ -1,0 +1,14 @@
+{
+  "dist": {
+    ".vite/manifest.json": "eaca322126b8f68ec9930eb22797ecfea2b2bae010bdb2c372479dfa6f709b2c",
+    "assets/index-Cm3l-3Zl.js": "3de9b8c37820b7c0340a4624557ca475ee5397ffcd270500adb078007fabac4f",
+    "assets/index-CznFBmwZ.css": "5f5cfc59cf07ffbf0f49951edbc564bff5a06f9919f83099ba1f810aa9ed856d",
+    "index.html": "e8440518f8b6e5446e358a2ffdc3ca1c8a6581f4a8547f75a030710ba7e5d49f"
+  },
+  "dist-browser-test": {
+    ".vite/manifest.json": "40e56d8789b0ce59c9622b9251c1dd78a897c49c5ee2c60ecaa871e064992ef2",
+    "assets/index-CGetbjj6.js": "07c45a8bf757c0c90b9caac3c0a0f4ba6ed976c36133f6f233e2f5f42e5bdf0c",
+    "assets/index-CznFBmwZ.css": "5f5cfc59cf07ffbf0f49951edbc564bff5a06f9919f83099ba1f810aa9ed856d",
+    "index.html": "779c10790c9a2b0af12abb5236a5e66f13a6bb3725df16366dc1a6f979a1dc06"
+  }
+}

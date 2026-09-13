@@ -1,0 +1,5 @@
+import { it,expect } from 'vitest';
+import { mvpJourney } from '../fixtures/mvp-journey';
+import { until,command } from '../fixtures/one-worker';
+import { captureState } from '../../src/simulation';
+it('earns Level 2 only after the first complete qualifying calendar day and retains one award',()=>{const s=mvpJourney();expect(s.economy.balanceMinor).toBeGreaterThan(0);until(s,86400);expect(s.progression.level).toBe(1);until(s,172799);expect(s.progression.level).toBe(1);until(s,172800);expect(s.progression.level).toBe(2);expect(s.progression.lastEvaluation?.evidence.completedOfficeArrivals).toBe(96);expect(s.progression.lastEvaluation?.evidence.admittedRestaurantVisits).toBe(40);const award=s.progression.awardedTick;expect(command(s,{kind:'demolishEntity',payload:{entityId:Object.keys(s.offices)[0]!}}).ok).toBe(true);until(s,259200);expect(s.progression.lastEvaluation!.evidence.minAccessibleLeasedOffices).toBe(2);expect(s.progression.level).toBe(2);expect(s.progression.awardedTick).toBe(award);expect(()=>captureState(s)).not.toThrow();},120000);

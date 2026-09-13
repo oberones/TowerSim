@@ -1,0 +1,48 @@
+{
+  "date": "2026-09-12",
+  "baseCommit": "9f8df5fcc83e28df3f87e73dae28ffe755d88b3d",
+  "workingTree": "uncommitted phase 17-18 implementation",
+  "node": "24.20.0",
+  "sourceSha256": "bc532485f094ee2a2aca6b7155922d1413ac59bd8b71ce87e843e9a9ff7c5616",
+  "artifacts": {
+    "dist": {
+      "dist/.vite/manifest.json": "90628399bcee0f59ec1cb20ef07af8772a76b4fa982ed9de7381c693e7c15f2b",
+      "dist/assets/index-BfjvqIWd.js": "729d0e29c5a52e10334c016b1432605e2ebdd9a38cc35e46fb6240f1647576d5",
+      "dist/assets/index-CSo-1Qn3.css": "3b32be7c09a9f22657c7a15a30de5c018340a9e231fa16cd6faeab7fcfb0b8ef",
+      "dist/index.html": "3684a27f33709bbfb43d6620bcab23321525344ad720853fb0d87177776b9a79"
+    },
+    "dist-browser-test": {
+      "dist-browser-test/.vite/manifest.json": "2c48811bb7a791899ec801878d1ef5f643b93fb9c40c7e2f206e42f91a2ecf3b",
+      "dist-browser-test/assets/index-BtadBaHm.js": "92e31071916bea06fcb9b7cb8ef70f9149b965a2c24775ec0292039d5b78c513",
+      "dist-browser-test/assets/index-CSo-1Qn3.css": "3b32be7c09a9f22657c7a15a30de5c018340a9e231fa16cd6faeab7fcfb0b8ef",
+      "dist-browser-test/index.html": "e161b2b27dbe41222f4f7234e00431d7a746266ca11023eef492689a8ce00006"
+    }
+  },
+  "nativeObservedPreparedAssets": {
+    "Firefox": "index-ZEKmPOFg.js",
+    "Safari": "index-bJxNVeT-.js"
+  },
+  "nativeQualification": "partial; final release handoff and test-tab reopen verified in Safari and Firefox after manual unlock; Chrome and complete native journey remain open",
+  "validation": {
+    "command": "npm run check:release",
+    "passed": true,
+    "tests": 338,
+    "testFiles": 115,
+    "namedProductionFunctionComments": 413,
+    "boundaryRegressionFixtures": 24,
+    "releaseBuild": true,
+    "browserTestBuild": true,
+    "outputIsolation": true
+  },
+  "hostOS": "macOS 26.6.2 (25G83)",
+  "resumedNativeVerification": {
+    "date": "2026-09-12",
+    "commit": "6654646c93ca909611ff26db7ae358179c676a07",
+    "releaseAsset": "index-BfjvqIWd.js",
+    "preparedAsset": "index-BtadBaHm.js",
+    "FirefoxReferenceSaveMs": 1130.0,
+    "FirefoxReferenceLoadMs": 1173.0,
+    "SafariAbortedReplacementRetainedTick": 29160,
+    "evidence": "tests/browser/evidence/us16-storage.md"
+  }
+}

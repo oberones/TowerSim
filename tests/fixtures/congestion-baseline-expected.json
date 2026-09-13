@@ -1,0 +1,255 @@
+{
+  "report": {
+    "samples": 96,
+    "completed": 96,
+    "abandoned": 0,
+    "stranded": 0,
+    "unresolved": 0,
+    "totals": {
+      "walking": 80640,
+      "waiting": 36678,
+      "stair": 0,
+      "riding": 4144,
+      "stranded": 0
+    },
+    "denials": 331,
+    "transfers": 0,
+    "qualityUnits": 37742600,
+    "quality": 65.52534722222222,
+    "meanWaitingTicks": 382.0625,
+    "seed": "00000001000000020000000300000004",
+    "profileId": "office.workday",
+    "memberIds": [
+      "occupant:34",
+      "occupant:35",
+      "occupant:36",
+      "occupant:37",
+      "occupant:38",
+      "occupant:39",
+      "occupant:40",
+      "occupant:41",
+      "occupant:42",
+      "occupant:43",
+      "occupant:44",
+      "occupant:45",
+      "occupant:46",
+      "occupant:47",
+      "occupant:48",
+      "occupant:49",
+      "occupant:50",
+      "occupant:51",
+      "occupant:52",
+      "occupant:53",
+      "occupant:54",
+      "occupant:55",
+      "occupant:56",
+      "occupant:57",
+      "occupant:58",
+      "occupant:59",
+      "occupant:60",
+      "occupant:61",
+      "occupant:62",
+      "occupant:63",
+      "occupant:64",
+      "occupant:65",
+      "occupant:67",
+      "occupant:68",
+      "occupant:69",
+      "occupant:70",
+      "occupant:71",
+      "occupant:72",
+      "occupant:73",
+      "occupant:74",
+      "occupant:75",
+      "occupant:76",
+      "occupant:77",
+      "occupant:78",
+      "occupant:79",
+      "occupant:80",
+      "occupant:81",
+      "occupant:82",
+      "occupant:83",
+      "occupant:84",
+      "occupant:85",
+      "occupant:86",
+      "occupant:87",
+      "occupant:88",
+      "occupant:89",
+      "occupant:90",
+      "occupant:91",
+      "occupant:92",
+      "occupant:93",
+      "occupant:94",
+      "occupant:95",
+      "occupant:96",
+      "occupant:97",
+      "occupant:98",
+      "occupant:100",
+      "occupant:101",
+      "occupant:102",
+      "occupant:103",
+      "occupant:104",
+      "occupant:105",
+      "occupant:106",
+      "occupant:107",
+      "occupant:108",
+      "occupant:109",
+      "occupant:110",
+      "occupant:111",
+      "occupant:112",
+      "occupant:113",
+      "occupant:114",
+      "occupant:115",
+      "occupant:116",
+      "occupant:117",
+      "occupant:118",
+      "occupant:119",
+      "occupant:120",
+      "occupant:121",
+      "occupant:122",
+      "occupant:123",
+      "occupant:124",
+      "occupant:125",
+      "occupant:126",
+      "occupant:127",
+      "occupant:128",
+      "occupant:129",
+      "occupant:130",
+      "occupant:131"
+    ],
+    "failed": 0,
+    "completeBeforeDeadline": true,
+    "day": 0,
+    "currentQueued": 0,
+    "peakQueue": 69,
+    "label": "Morning cohort · day 1"
+  },
+  "visits": [
+    {
+      "tick": 29014,
+      "queued": 3
+    },
+    {
+      "tick": 29082,
+      "queued": 16
+    },
+    {
+      "tick": 29178,
+      "queued": 27
+    },
+    {
+      "tick": 29274,
+      "queued": 48
+    },
+    {
+      "tick": 29370,
+      "queued": 69
+    },
+    {
+      "tick": 29466,
+      "queued": 61
+    },
+    {
+      "tick": 29562,
+      "queued": 53
+    },
+    {
+      "tick": 29658,
+      "queued": 45
+    },
+    {
+      "tick": 29754,
+      "queued": 37
+    },
+    {
+      "tick": 29850,
+      "queued": 29
+    },
+    {
+      "tick": 29946,
+      "queued": 21
+    },
+    {
+      "tick": 30042,
+      "queued": 13
+    },
+    {
+      "tick": 30128,
+      "queued": 5
+    }
+  ],
+  "quality": [
+    {
+      "tick": 29014,
+      "quality": 99.8109696969697,
+      "unfinished": 55
+    },
+    {
+      "tick": 29082,
+      "quality": 98.78077546296296,
+      "unfinished": 72
+    },
+    {
+      "tick": 29178,
+      "quality": 97.24735243055557,
+      "unfinished": 96
+    },
+    {
+      "tick": 29274,
+      "quality": 93.73408854166667,
+      "unfinished": 96
+    },
+    {
+      "tick": 29370,
+      "quality": 88.418203125,
+      "unfinished": 96
+    },
+    {
+      "tick": 29466,
+      "quality": 83.073515625,
+      "unfinished": 96
+    },
+    {
+      "tick": 29562,
+      "quality": 78.44955729166666,
+      "unfinished": 96
+    },
+    {
+      "tick": 29658,
+      "quality": 74.546328125,
+      "unfinished": 96
+    },
+    {
+      "tick": 29754,
+      "quality": 71.36638020833334,
+      "unfinished": 89
+    },
+    {
+      "tick": 29850,
+      "quality": 68.92113715277777,
+      "unfinished": 83
+    },
+    {
+      "tick": 29946,
+      "quality": 67.20606770833334,
+      "unfinished": 76
+    },
+    {
+      "tick": 30042,
+      "quality": 66.22638020833334,
+      "unfinished": 67
+    },
+    {
+      "tick": 30128,
+      "quality": 65.89035590277778,
+      "unfinished": 59
+    }
+  ],
+  "peak": 69,
+  "cars": [
+    "car:14"
+  ],
+  "lastArrivalTick": 30804,
+  "maxWait": 772,
+  "maxDenials": 8
+}

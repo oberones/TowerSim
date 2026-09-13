@@ -1,0 +1,16 @@
+import type { GameState } from './game-state';
+import { parseId } from '../core/ids/allocator';
+import { record } from './plain';
+import { tick,integer } from '../core/values';
+/** Bound saved collections by finite configured demand, elapsed allocation days, geometry and monotonic counters. */
+export function assertCollectionBounds(s:GameState):void {const c=s.scenario.content,w=s.scenario.world,days=BigInt(Math.floor(s.clock.tick/s.scenario.dayTicks)+1),people=days*BigInt((c?.officeMarketWorkers??0)+(c?.restaurantDailyCustomers??0)),cells=BigInt(w?w.widthCells*(w.maxFloor-w.minFloor+1):0);for(const map of [s.offices,s.restaurants,s.stairs,s.shafts,s.stops,s.queues,s.cars])if(!map||Array.isArray(map)||typeof map!=='object'||BigInt(Object.keys(map).length)>cells*2n)throw Error('Entity collection exceeds configured geometry');if(BigInt(Object.keys(s.occupants).length)>people||BigInt(s.scheduledEvents.length)>people*3n+cells+2n||BigInt(s.restaurantDays.length)>days||BigInt(Object.keys(s.trips).length)>people*3n||s.economy.transactions.length>=s.ids.transaction.next)throw Error('Collection exceeds finite allocation/counter bounds');}
+/** Validate historical ID shapes without requiring retired people to remain alive, and protect every live trip interval. */
+export function assertReferences(s:GameState):void {
+ /** Keep historical IDs below their original allocation stream without resolving a live entity. */
+ function historical(id:string,kind:string):void {const p=parseId(id);if(p.kind!==kind||p.ordinal>=s.ids.entity.next)throw Error('Invalid historical identity');}
+ for(const car of Object.values(s.cars)){const v=car.visit;if(!v)continue;for(const row of v.boarding){historical(row.entryId,'entry');historical(row.occupantId,'occupant');historical(row.unloadStopId,'stop');tick(row.admissionSequence);}for(const row of v.unloading){historical(row.occupantId,'occupant');historical(row.unloadStopId,'stop');tick(row.boardedTick);if(row.boardedTick>s.clock.tick)throw Error('Future boarding history');}}
+ for(const d of s.restaurantDays)for(const a of d.allocations)historical(a.facilityId,'facility');
+ for(const p of Object.values(s.occupants)){if(p.location.kind==='stair'){const l=p.location;tick(l.startTick);for(const a of [l.from,l.to]){record(a,['floor','x2']);integer(a.floor);tick(a.x2);}}
+ if(p.tripId===null)continue;const t=s.trips[p.tripId]!;const expected={walking:'walking',takingStairs:'stair',waitingForElevator:'waiting',ridingElevator:'riding',stranded:'stranded'}[p.state as string];if(!t.openSegment||t.openSegment.kind!==expected||t.outcome!==(p.state==='stranded'?'stranded':'active'))throw Error('Active trip disagrees with physical state');const elapsed=Object.values(t.totals).reduce((n,v)=>n+BigInt(v),0n)+BigInt(s.clock.tick-t.openSegment.startTick);if(elapsed>BigInt(s.clock.tick-t.startTick))throw Error('Open trip intervals overlap');}
+ const e=s.progression.dayEvidence;const completed=Object.values(s.trips).filter(t=>t.purpose==='officeArrival'&&t.outcome==='completed'&&t.endTick!==null&&t.endTick>=e.dayStart).length;const visits=s.restaurantDays.reduce((n,d)=>n+d.visits.filter(v=>v.admittedTick!==null&&v.admittedTick>=e.dayStart).length,0);if(e.completedOfficeArrivals!==completed||e.admittedRestaurantVisits!==visits)throw Error('Daily progression counts disagree with actual completed admissions');
+}

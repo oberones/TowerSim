@@ -1,0 +1,106 @@
+{
+  "name": "restaurant-dormant",
+  "seed": "00000001000000020000000300000004",
+  "contentId": "mvp-restaurant-v1",
+  "rulesId": "tower-restaurant-v1",
+  "fixtureHash": "58be0174723fdae98aca8c9154a0338a768ca61312532d9b0431c6550623c017",
+  "batchTicks": 1000,
+  "warmups": 3,
+  "trials": 10,
+  "machine": {
+    "cpu": "Apple M2 Pro",
+    "logicalCpus": 12,
+    "ramBytes": 17179869184,
+    "os": "darwin 25.6.0"
+  },
+  "node": "v24.20.0",
+  "commit": "5829c3917bc797c087c7abd3e20dd6b6d3f364d6",
+  "dirty": true,
+  "buildMode": "vitest-node",
+  "instrumentation": "monotonic clock, no coverage; counters after timing",
+  "samplesMs": [
+    0.012167000000772532,
+    0.011917000003450084,
+    0.02674999999726424,
+    0.014375000006111804,
+    0.01229099999909522,
+    0.06649999999353895,
+    0.022250000001804437,
+    0.029583999996248167,
+    0.04245799999625888,
+    0.024875000002793968
+  ],
+  "medianMs": 0.023562500002299203,
+  "p95Ms": 0.06649999999353895,
+  "totalTicks": 10000,
+  "simulatedSeconds": 10000,
+  "durationMs": 0.2631669999973383,
+  "ticksPerSecond": 37998685.24587483,
+  "digests": [
+    "cf51a7be907e0faa4b0600d406164a552b5896bcc1151e548975be15374827ed",
+    "cf51a7be907e0faa4b0600d406164a552b5896bcc1151e548975be15374827ed",
+    "cf51a7be907e0faa4b0600d406164a552b5896bcc1151e548975be15374827ed",
+    "cf51a7be907e0faa4b0600d406164a552b5896bcc1151e548975be15374827ed",
+    "cf51a7be907e0faa4b0600d406164a552b5896bcc1151e548975be15374827ed",
+    "cf51a7be907e0faa4b0600d406164a552b5896bcc1151e548975be15374827ed",
+    "cf51a7be907e0faa4b0600d406164a552b5896bcc1151e548975be15374827ed",
+    "cf51a7be907e0faa4b0600d406164a552b5896bcc1151e548975be15374827ed",
+    "cf51a7be907e0faa4b0600d406164a552b5896bcc1151e548975be15374827ed",
+    "cf51a7be907e0faa4b0600d406164a552b5896bcc1151e548975be15374827ed",
+    "cf51a7be907e0faa4b0600d406164a552b5896bcc1151e548975be15374827ed",
+    "cf51a7be907e0faa4b0600d406164a552b5896bcc1151e548975be15374827ed",
+    "cf51a7be907e0faa4b0600d406164a552b5896bcc1151e548975be15374827ed"
+  ],
+  "counters": [
+    {
+      "dormantPeople": 40,
+      "activePeople": 0,
+      "pendingEvents": 42
+    },
+    {
+      "dormantPeople": 40,
+      "activePeople": 0,
+      "pendingEvents": 42
+    },
+    {
+      "dormantPeople": 40,
+      "activePeople": 0,
+      "pendingEvents": 42
+    },
+    {
+      "dormantPeople": 40,
+      "activePeople": 0,
+      "pendingEvents": 42
+    },
+    {
+      "dormantPeople": 40,
+      "activePeople": 0,
+      "pendingEvents": 42
+    },
+    {
+      "dormantPeople": 40,
+      "activePeople": 0,
+      "pendingEvents": 42
+    },
+    {
+      "dormantPeople": 40,
+      "activePeople": 0,
+      "pendingEvents": 42
+    },
+    {
+      "dormantPeople": 40,
+      "activePeople": 0,
+      "pendingEvents": 42
+    },
+    {
+      "dormantPeople": 40,
+      "activePeople": 0,
+      "pendingEvents": 42
+    },
+    {
+      "dormantPeople": 40,
+      "activePeople": 0,
+      "pendingEvents": 42
+    }
+  ]
+}

@@ -1,0 +1,106 @@
+{
+  "name": "kernel-boundaries",
+  "seed": "00000001000000020000000300000004",
+  "contentId": "kernel-v1",
+  "rulesId": "tower-kernel-v1",
+  "fixtureHash": "888ccb49540a236a92e1b11b5c2eedf5cfa35a6977ee502f755a46bced6a179a",
+  "batchTicks": 259200,
+  "warmups": 3,
+  "trials": 10,
+  "machine": {
+    "cpu": "Apple M2 Pro",
+    "logicalCpus": 12,
+    "ramBytes": 17179869184,
+    "os": "darwin 25.5.0"
+  },
+  "node": "v24.20.0",
+  "commit": "089d5b21131aacc47f190358b4e6f1efb6399947",
+  "dirty": true,
+  "buildMode": "vitest-node",
+  "instrumentation": "monotonic clock, no coverage; counters after timing",
+  "samplesMs": [
+    4.989417000000003,
+    5.046291999999994,
+    4.426625000000058,
+    4.513374999999996,
+    4.4525000000001,
+    4.383458000000019,
+    4.605250000000069,
+    4.507208999999875,
+    4.743207999999868,
+    4.667416999999887
+  ],
+  "medianMs": 4.559312500000033,
+  "p95Ms": 5.046291999999994,
+  "totalTicks": 2592000,
+  "simulatedSeconds": 2592000,
+  "durationMs": 46.33475099999987,
+  "ticksPerSecond": 55940734.41767298,
+  "digests": [
+    "2815e4f5e20db45f84415597108f75658c5a0cac37a486bd0565249928fc3d51",
+    "2815e4f5e20db45f84415597108f75658c5a0cac37a486bd0565249928fc3d51",
+    "2815e4f5e20db45f84415597108f75658c5a0cac37a486bd0565249928fc3d51",
+    "2815e4f5e20db45f84415597108f75658c5a0cac37a486bd0565249928fc3d51",
+    "2815e4f5e20db45f84415597108f75658c5a0cac37a486bd0565249928fc3d51",
+    "2815e4f5e20db45f84415597108f75658c5a0cac37a486bd0565249928fc3d51",
+    "2815e4f5e20db45f84415597108f75658c5a0cac37a486bd0565249928fc3d51",
+    "2815e4f5e20db45f84415597108f75658c5a0cac37a486bd0565249928fc3d51",
+    "2815e4f5e20db45f84415597108f75658c5a0cac37a486bd0565249928fc3d51",
+    "2815e4f5e20db45f84415597108f75658c5a0cac37a486bd0565249928fc3d51",
+    "2815e4f5e20db45f84415597108f75658c5a0cac37a486bd0565249928fc3d51",
+    "2815e4f5e20db45f84415597108f75658c5a0cac37a486bd0565249928fc3d51",
+    "2815e4f5e20db45f84415597108f75658c5a0cac37a486bd0565249928fc3d51"
+  ],
+  "counters": [
+    {
+      "pendingEvents": 2,
+      "finalTick": 280800,
+      "heapUsedBytes": 51264016
+    },
+    {
+      "pendingEvents": 2,
+      "finalTick": 280800,
+      "heapUsedBytes": 18608888
+    },
+    {
+      "pendingEvents": 2,
+      "finalTick": 280800,
+      "heapUsedBytes": 19359424
+    },
+    {
+      "pendingEvents": 2,
+      "finalTick": 280800,
+      "heapUsedBytes": 19904584
+    },
+    {
+      "pendingEvents": 2,
+      "finalTick": 280800,
+      "heapUsedBytes": 20549680
+    },
+    {
+      "pendingEvents": 2,
+      "finalTick": 280800,
+      "heapUsedBytes": 21194512
+    },
+    {
+      "pendingEvents": 2,
+      "finalTick": 280800,
+      "heapUsedBytes": 21849008
+    },
+    {
+      "pendingEvents": 2,
+      "finalTick": 280800,
+      "heapUsedBytes": 22505592
+    },
+    {
+      "pendingEvents": 2,
+      "finalTick": 280800,
+      "heapUsedBytes": 23149664
+    },
+    {
+      "pendingEvents": 2,
+      "finalTick": 280800,
+      "heapUsedBytes": 23797080
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+# Native browser build
+
+Phases 8–10 add nine-worker cutoff/full-car fixtures and the default 32-worker morning, evening, full-attendance, next-day and stranded-exit observations. The nine-person fixture concentrates valid scheduled requests while keeping standard car capacity/timing. Open **Traffic reports** to choose live, latest/previous morning or previous-day scope; select a person to retain inspection indoors or while traveling. **Show waiting-time overlay** labels exact stop ages. These controls also ship in the ordinary release build. All fixture setup finishes before mounting.
+
+The harness also offers upper offices needing stairs/elevators, a pre-arrival elevator rider, all nine paused elevator phases, and stair ascent/descent/inside-office states. These reduced-worker fixtures retain production eight-person car capacity and timing. They are generated through domain commands and advancement, with boundary/continuation coverage in `tests/integration/transport-observations.test.ts`. Use ordinary controls after mounting; inspect connections on Canvas or with the Selected connection selector.
+
+The harness offers one-worker visible-approach and same-floor-office scenarios, a default paused site, a narrow site with negative ground, and a validated completed boundary. Select a fixture before mounting the same ordinary application as release. There are no mid-play state-mutation controls. Importing src/main.ts does not mount automatically. The files in evidence/ record each phase's observations and remaining native-browser qualification gates.
+
+For a single-command launch after installing dependencies, run **`make manual-test`** from the repository root. It runs the tests, builds both artifacts, checks isolation and serves the fixture chooser on port 4174. Stop it with Ctrl-C. Use `make preview` in another terminal for the release smoke test on port 4173. Ports are strict and configurable, for example `make manual-test TEST_PORT=4184 OPEN=1`. See [Makefile workflows](../../docs/makefile.md).
+
+From the repository root:
+
+```sh
+nvm use
+npm ci
+npm run build
+npm run build:browser-test
+npm run check:browser-builds
+npm run preview -- --host 127.0.0.1 --port 4173 --strictPort
+# In another terminal:
+npm run preview:browser-test -- --host 127.0.0.1 --port 4174 --strictPort
+```
+
+Release serves dist/ at http://127.0.0.1:4173/; the test artifact serves dist-browser-test/ at http://127.0.0.1:4174/. Both use production mode, the same application graph, browser targets, environment directory and public assets. The graph checker rebuilds in memory without overwriting either artifact. Never publish dist-browser-test/.
+
+Record artifact kind, hash of every output, source identity and exact browser/OS using evidence/template.md. Generate identities with:
+
+```sh
+git rev-parse HEAD
+git status --short
+find dist dist-browser-test -type f -exec shasum -a 256 {} \;
+```
+
+A dirty source tree also needs an archived diff and newly added source files; a commit alone does not identify it. Test both artifacts in actual stable desktop Chrome, Firefox and Safari at each owning checkpoint. Missing observations remain unverified. Once saves exist, use the same-origin handoff in specs/001-playable-tower-mvp/validation.md; different ports do not share storage.
+
+`npm run bench` emits benchmark-results/*.json and a summary table. The initial counter workload verifies runner restoration/digest checks only. Later benchmark tasks supply canonical game snapshots, SHA-256 fixture identities, explicit seeds, counters and workloads.

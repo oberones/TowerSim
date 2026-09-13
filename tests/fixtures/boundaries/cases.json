@@ -1,0 +1,122 @@
+[
+  {
+    "name": "pure",
+    "source": "import type { State } from \"./state/game-state\"; export const n = Math.floor(2);",
+    "reject": false
+  },
+  {
+    "name": "comments",
+    "source": "// Date.now(); import(\"../ui\");\nconst text = \"window Math.random\";",
+    "reject": false
+  },
+  {
+    "name": "app",
+    "source": "import \"../app/game/session\";",
+    "reject": true
+  },
+  {
+    "name": "content",
+    "source": "export * from \"../content/definitions\";",
+    "reject": true
+  },
+  {
+    "name": "dynamic",
+    "source": "import(\"../ui/hud\");",
+    "reject": true
+  },
+  {
+    "name": "computed",
+    "source": "import(path);",
+    "reject": true
+  },
+  {
+    "name": "vite",
+    "source": "import type { UserConfig } from \"vite\";",
+    "reject": true
+  },
+  {
+    "name": "node",
+    "source": "import \"node:perf_hooks\";",
+    "reject": true
+  },
+  {
+    "name": "wall-clock",
+    "source": "Date.now();",
+    "reject": true
+  },
+  {
+    "name": "browser",
+    "source": "document.createElement(\"div\");",
+    "reject": true
+  },
+  {
+    "name": "random",
+    "source": "Math.random();",
+    "reject": true
+  },
+  {
+    "name": "bracket-random",
+    "source": "Math[\"random\"]();",
+    "reject": true
+  },
+  {
+    "name": "alias-random",
+    "source": "const {random} = Math;",
+    "reject": true
+  },
+  {
+    "name": "global",
+    "source": "globalThis[\"Date\"].now();",
+    "reject": true
+  },
+  {
+    "name": "timer",
+    "source": "setTimeout(fn, 1);",
+    "reject": true
+  },
+  {
+    "name": "type-import",
+    "source": "type T = import(\"../rendering/canvas\").T;",
+    "reject": true
+  },
+  {
+    "name": "meta",
+    "source": "import.meta.env.DEV;",
+    "reject": true
+  },
+  {
+    "name": "passed-math",
+    "source": "inspect(Math);",
+    "reject": true
+  },
+  {
+    "name": "platform",
+    "source": "import \"../platform/frame-driver\";",
+    "reject": true
+  },
+  {
+    "name": "persistence",
+    "source": "import \"../persistence/indexed-db\";",
+    "reject": true
+  },
+  {
+    "name": "rendering",
+    "source": "import \"../rendering/canvas/renderer\";",
+    "reject": true
+  },
+  {
+    "name": "domain location property",
+    "source": "const person = { location: { kind: 'outside' } }; person.location;",
+    "reject": false
+  },
+  {
+    "name": "bare browser location remains forbidden",
+    "source": "const url = location.href;",
+    "reject": true
+  },
+  {
+    "name": "shorthand browser location remains forbidden",
+    "source": "const leaked = { location };",
+    "reject": true
+  }
+]

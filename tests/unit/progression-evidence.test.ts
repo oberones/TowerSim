@@ -1,0 +1,7 @@
+import { expect,it } from 'vitest';
+import { oneWorker,until,command } from '../fixtures/one-worker';
+import { stairs,upperOffice } from '../fixtures/transport';
+import { maintainDayEvidence } from '../../src/simulation/progression/day-evidence';
+import { progressionQuery } from '../../src/app/game/progression-queries';
+it('keeps an access loss in full-day minima even after same-tick repairs restore current access',()=>{const s=stairs(upperOffice());until(s,86400);expect(s.progression.dayEvidence.minAssignedWorkers).toBe(1);expect(command(s,{kind:'demolishEntity',payload:{entityId:Object.keys(s.stairs)[0]!}}).ok).toBe(true);expect(s.progression.dayEvidence.minAccessibleLeasedOffices).toBe(0);stairs(s);maintainDayEvidence(s);expect(s.progression.dayEvidence.minAssignedWorkers).toBe(0);const query=progressionQuery(s);expect(query.evaluatedDay).toBe(0);expect(query.predicates.find(x=>x.label==='Full calendar day')?.met).toBe(false);expect(Object.isFrozen(query.current)).toBe(true);});
+it('counts completed admissions instead of scheduled requests and resets counters after evaluation',()=>{const s=oneWorker();until(s,21601);expect(s.progression.dayEvidence.completedOfficeArrivals).toBe(0);until(s,40000);expect(s.progression.dayEvidence.completedOfficeArrivals).toBe(1);until(s,86400);expect(s.progression.dayEvidence.completedOfficeArrivals).toBe(0);expect(s.progression.lastEvaluation!.evidence.completedOfficeArrivals).toBe(1);});

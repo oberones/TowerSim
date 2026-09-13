@@ -1,0 +1,9 @@
+# US9 improvement — partial native evidence, T100 open
+
+2026-09-11: After the Firefox baseline recovered, ordinary Elevator controls previewed and constructed shaft B at x14, floors 0–5, for $2,300. Cash changed from $5,660 to $3,360 while paused; UI reported updated facility access. The same tower continued at 8x through the evening, midnight and next morning without reset. Paused at day 2 11:33, Latest morning cohort showed 96/96 completed, zero unresolved/failed/stranded, mean wait 140.4 s, peak unique queue 48 and quality 87.48. This is a distinct continuous-play observation with new daily timestamps and existing car positions; it does not replace the exact cloned-state comparison.
+
+Automated controlled comparison: 382.0625 → 112.1667 ticks mean wait; peak 69 → 37; quality 65.5253 → 90.1444, full identical 96-worker membership, both cars used. The chooser includes both controlled start states. Native controlled replay, individual retained-history migration, full car observations and all three browsers remain incomplete. T100 remains unchecked.
+
+Environment: macOS, Firefox 155.0.1 / Safari 26.6.2. Release `dist/` served at `http://127.0.0.1:4273/`; separate production-mode fixture `dist-browser-test/` at `http://127.0.0.1:4274/`. Artifact hashes are in [phase-11-13-artifacts.json](../../../docs/phase-11-13-artifacts.json). Seed for congestion: `00000001000000020000000300000004`; rules/content: `tower-transport-v1` / `mvp-transport-v1`. Fixture setup finishes before mounting; subsequent actions use ordinary controls.
+
+Release smoke: Firefox displayed the new paused 06:00 site, $10,000, zero workers and ordinary tools (seed `0cfc8ee8df493fca8ad0bc4a6a4ac733`). Safari displayed the equivalent paused release site (seed `7e79586b50b5dd274eadf5f9514d50f4`). This confirms page loading only, not full release gameplay qualification.

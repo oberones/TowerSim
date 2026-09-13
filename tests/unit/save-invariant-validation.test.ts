@@ -1,0 +1,10 @@
+import { expect,it } from 'vitest';
+import { passengerAtPhase } from '../fixtures/one-elevator-passenger';
+import { servicePhase } from '../fixtures/service-phases';
+import { oneCustomer } from '../fixtures/restaurant';
+import { until } from '../fixtures/one-worker';
+import { encodeState,validateState } from '../../src/simulation';
+it('rejects missing live owners, overlapping intervals, future targets, capacity and malformed historical selections',()=>{const {s,id,carId}=passengerAtPhase('moving');const edits:((x:any)=>void)[]=[x=>x.progression.dayEvidence.minAccessibleLeasedOffices=999,x=>x.progression.dayEvidence.minAssignedWorkers=1,x=>delete x.occupants[id],x=>x.cars[carId].onboard.push(x.cars[carId].onboard[0]),x=>x.cars[carId].capacity=9,x=>x.scheduledEvents.find((e:any)=>e.targetId===carId).targetGeneration++,x=>x.trips[x.occupants[id].tripId].totals.walking=10000,x=>x.trips[x.occupants[id].tripId].openSegment.kind='waiting',x=>x.occupants[id].journey.legs[0].durationTicks++];for(const edit of edits){const bad=JSON.parse(encodeState(s));edit(bad);expect(validateState(bad).ok).toBe(false);}});
+it('retains historical customer identity after retirement and rejects resurrected live references',()=>{const s=oneCustomer();until(s,40000);expect(Object.keys(s.occupants)).toHaveLength(0);expect(Object.keys(s.trips)).not.toHaveLength(0);expect(validateState(s).ok).toBe(true);const t=Object.values(s.trips)[0]!;t.endTick=null;t.outcome='active';expect(validateState(s).ok).toBe(false);});
+it('requires historical cohort identity shapes without resolving processed rows as live queue members',()=>{const s=servicePhase('boarding');expect(validateState(s).ok).toBe(true);const row=Object.values(s.cars)[0]!.visit!.boarding[0]!;row.occupantId='facility:1';expect(validateState(s).ok).toBe(false);});
+it('rejects a claimed award contradicted by the evaluated full day',()=>{const s=oneCustomer();until(s,172800);s.progression.level=2;s.progression.awardedTick=172800;expect(validateState(s).ok).toBe(false);});

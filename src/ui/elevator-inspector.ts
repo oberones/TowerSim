@@ -1,0 +1,4 @@
+import type { ElevatorInspection } from '../app/game/elevator-queries';
+import { element,money } from './elements';
+/** Reuse one textual elevator inspector with physical position, load and all served queue counts. */
+export function createElevatorInspector(){const node=element('section'),text=element('p','Click a shaft to inspect its elevator.');node.append(element('h2','Elevator'),text);return {node,update:(s:ElevatorInspection|null)=>{text.textContent=s?`${s.id} · Car ${s.carId} · Serving floors ${s.servedMinFloor}–${s.servedMaxFloor} · ${s.phase} · Floor ${s.position.toFixed(2)} · ${s.direction??'idle'} · Load ${s.load}/${s.capacity}. Queues: ${s.stops.map(q=>`F${q.floor} ↑${q.up} ↓${q.down}`).join(' · ')}. Operating cost ${money(s.operatingMinorPerDay)}/day, accrued ${money(s.pendingCostMinor)}. Removal is free and settles accrued costs.`:'Click a shaft to inspect its elevator.';}};}

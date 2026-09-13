@@ -1,0 +1,94 @@
+{
+  "date": "2026-09-12",
+  "qualification": "blocked",
+  "completeTenMinuteSessions": [],
+  "openGates": [
+    "Chrome unavailable",
+    "1440x900 reference qualification in all browsers",
+    "complete 10-minute frame/input/storage distributions",
+    "120/480/960 throughput",
+    "full 30-minute mixed sessions"
+  ],
+  "probes": [
+    {
+      "label": "Firefox before per-tick pacing yield",
+      "artifactKind": "prepared-production",
+      "artifactManifest": "../phase-19-observation-artifacts.json",
+      "browser": "Firefox 155.0.1 (15526.9.3)",
+      "hardware": "Apple M2 Pro, 32 GiB",
+      "seed": "00000001000000020000000300000004",
+      "viewport": {
+        "width": 2560,
+        "height": 1207,
+        "dpr": 1
+      },
+      "elapsedMs": 76912,
+      "normalSamples": 56,
+      "fps": {
+        "min": 0.983284169124877,
+        "median": 1.4947683109118086,
+        "p95": 1.968503937007874,
+        "max": 2.1390374331550803
+      },
+      "ticksPerSecond": {
+        "min": 29.946524064171122,
+        "median": 47.61904761904762,
+        "p95": 60.72106261859582,
+        "max": 66.89895470383276
+      },
+      "lastDebt": 5504.039999999996,
+      "normalFpsPassFraction": 0,
+      "hiddenInterruptions": 0,
+      "overflow": false,
+      "actions": [
+        {
+          "label": "Normal 1\u00d7",
+          "durationMs": 6
+        }
+      ],
+      "limits": "76.9-second diagnostic probe at the actual available viewport, not the prescribed 10-minute/1440x900 exercise. Other desktop/automated work occurred. The single action latency sample cannot qualify p95 response or storage budgets."
+    },
+    {
+      "label": "Firefox after per-tick pacing yield",
+      "artifactKind": "prepared-production",
+      "artifactManifest": "../phase-19-artifacts.json",
+      "browser": "Firefox 155.0.1 (15526.9.3)",
+      "hardware": "Apple M2 Pro, 32 GiB",
+      "seed": "00000001000000020000000300000004",
+      "viewport": {
+        "width": 2560,
+        "height": 1207,
+        "dpr": 1
+      },
+      "elapsedMs": 48474,
+      "normalSamples": 42,
+      "fps": {
+        "min": 34.82587064676617,
+        "median": 42.65873015873016,
+        "p95": 44.91017964071856,
+        "max": 47.430830039525695
+      },
+      "ticksPerSecond": {
+        "min": 34.82587064676617,
+        "median": 43.01075268817204,
+        "p95": 46.95304695304695,
+        "max": 51.383399209486164
+      },
+      "lastDebt": 3293.759999999977,
+      "normalFpsPassFraction": 1,
+      "hiddenInterruptions": 0,
+      "overflow": false,
+      "actions": [
+        {
+          "label": "Normal 1\u00d7",
+          "durationMs": 5
+        },
+        {
+          "label": "Pause",
+          "durationMs": 3
+        }
+      ],
+      "limits": "48.474-second diagnostic probe with 42 normal-speed windows, same initial reference fixture and available viewport as the earlier probe; different duration and ending tick, not a synchronized throughput comparison. Full 10-minute qualification, all speeds, 1440x900, response distributions and storage tests remain open. Other desktop work occurred; the full automated release check had completed before recording."
+    }
+  ]
+}

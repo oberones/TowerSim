@@ -1,0 +1,224 @@
+[
+  {
+    "name": "construction-edit-and-preview",
+    "seed": "00000001000000020000000300000004",
+    "contentId": "mvp-construction-v1",
+    "rulesId": "tower-construction-v1",
+    "fixtureHash": "32d1f7db3f0ddb37e72fb92df6933d71bf488986a1a9ebb32d82aa2728887033",
+    "batchTicks": 0,
+    "warmups": 3,
+    "trials": 10,
+    "machine": {
+      "cpu": "Apple M2 Pro",
+      "logicalCpus": 12,
+      "ramBytes": 17179869184,
+      "os": "darwin 25.5.0"
+    },
+    "node": "v20.20.2",
+    "commit": "089d5b21131aacc47f190358b4e6f1efb6399947",
+    "dirty": true,
+    "buildMode": "vitest-node",
+    "instrumentation": "monotonic clock, no coverage; counters after timing",
+    "samplesMs": [
+      16.630916999999982,
+      16.72512500000002,
+      16.58499999999998,
+      16.54929200000001,
+      16.807999999999993,
+      16.642584,
+      16.297416,
+      16.20112499999999,
+      16.12954099999996,
+      18.340167000000008
+    ],
+    "medianMs": 16.60795849999998,
+    "p95Ms": 18.340167000000008,
+    "totalTicks": 0,
+    "simulatedSeconds": 0,
+    "durationMs": 166.90916699999994,
+    "ticksPerSecond": 0,
+    "digests": [
+      "8357dc3e10e39f6da66bb7669ff938a1a4fd1de8877c9a1690a229ac9438ee69",
+      "8357dc3e10e39f6da66bb7669ff938a1a4fd1de8877c9a1690a229ac9438ee69",
+      "8357dc3e10e39f6da66bb7669ff938a1a4fd1de8877c9a1690a229ac9438ee69",
+      "8357dc3e10e39f6da66bb7669ff938a1a4fd1de8877c9a1690a229ac9438ee69",
+      "8357dc3e10e39f6da66bb7669ff938a1a4fd1de8877c9a1690a229ac9438ee69",
+      "8357dc3e10e39f6da66bb7669ff938a1a4fd1de8877c9a1690a229ac9438ee69",
+      "8357dc3e10e39f6da66bb7669ff938a1a4fd1de8877c9a1690a229ac9438ee69",
+      "8357dc3e10e39f6da66bb7669ff938a1a4fd1de8877c9a1690a229ac9438ee69",
+      "8357dc3e10e39f6da66bb7669ff938a1a4fd1de8877c9a1690a229ac9438ee69",
+      "8357dc3e10e39f6da66bb7669ff938a1a4fd1de8877c9a1690a229ac9438ee69",
+      "8357dc3e10e39f6da66bb7669ff938a1a4fd1de8877c9a1690a229ac9438ee69",
+      "8357dc3e10e39f6da66bb7669ff938a1a4fd1de8877c9a1690a229ac9438ee69",
+      "8357dc3e10e39f6da66bb7669ff938a1a4fd1de8877c9a1690a229ac9438ee69"
+    ],
+    "counters": [
+      {
+        "acceptedEdits": 80,
+        "retainedFloors": 1,
+        "transactions": 40,
+        "previews": 2000
+      },
+      {
+        "acceptedEdits": 80,
+        "retainedFloors": 1,
+        "transactions": 40,
+        "previews": 2000
+      },
+      {
+        "acceptedEdits": 80,
+        "retainedFloors": 1,
+        "transactions": 40,
+        "previews": 2000
+      },
+      {
+        "acceptedEdits": 80,
+        "retainedFloors": 1,
+        "transactions": 40,
+        "previews": 2000
+      },
+      {
+        "acceptedEdits": 80,
+        "retainedFloors": 1,
+        "transactions": 40,
+        "previews": 2000
+      },
+      {
+        "acceptedEdits": 80,
+        "retainedFloors": 1,
+        "transactions": 40,
+        "previews": 2000
+      },
+      {
+        "acceptedEdits": 80,
+        "retainedFloors": 1,
+        "transactions": 40,
+        "previews": 2000
+      },
+      {
+        "acceptedEdits": 80,
+        "retainedFloors": 1,
+        "transactions": 40,
+        "previews": 2000
+      },
+      {
+        "acceptedEdits": 80,
+        "retainedFloors": 1,
+        "transactions": 40,
+        "previews": 2000
+      },
+      {
+        "acceptedEdits": 80,
+        "retainedFloors": 1,
+        "transactions": 40,
+        "previews": 2000
+      }
+    ]
+  },
+  {
+    "name": "construction-walking-cache",
+    "seed": "00000001000000020000000300000004",
+    "contentId": "mvp-construction-v1",
+    "rulesId": "tower-construction-v1",
+    "fixtureHash": "be46dd476a225140c07cdf121c8a4434ae70a63cc6b0516927891586380ae087",
+    "batchTicks": 0,
+    "warmups": 3,
+    "trials": 10,
+    "machine": {
+      "cpu": "Apple M2 Pro",
+      "logicalCpus": 12,
+      "ramBytes": 17179869184,
+      "os": "darwin 25.5.0"
+    },
+    "node": "v20.20.2",
+    "commit": "089d5b21131aacc47f190358b4e6f1efb6399947",
+    "dirty": true,
+    "buildMode": "vitest-node",
+    "instrumentation": "monotonic clock, no coverage; counters after timing",
+    "samplesMs": [
+      11.383291999999983,
+      11.30279200000001,
+      12.864125000000001,
+      25.712833999999987,
+      12.36220800000001,
+      11.328958000000057,
+      12.136624999999981,
+      11.802000000000021,
+      12.207666000000017,
+      11.318291000000045
+    ],
+    "medianMs": 11.969312500000001,
+    "p95Ms": 25.712833999999987,
+    "totalTicks": 0,
+    "simulatedSeconds": 0,
+    "durationMs": 132.4187910000001,
+    "ticksPerSecond": 0,
+    "digests": [
+      "268ce72ea04e5a386e1557c2a39c471ed340b68250738136b4bef81fae3769f0",
+      "268ce72ea04e5a386e1557c2a39c471ed340b68250738136b4bef81fae3769f0",
+      "268ce72ea04e5a386e1557c2a39c471ed340b68250738136b4bef81fae3769f0",
+      "268ce72ea04e5a386e1557c2a39c471ed340b68250738136b4bef81fae3769f0",
+      "268ce72ea04e5a386e1557c2a39c471ed340b68250738136b4bef81fae3769f0",
+      "268ce72ea04e5a386e1557c2a39c471ed340b68250738136b4bef81fae3769f0",
+      "268ce72ea04e5a386e1557c2a39c471ed340b68250738136b4bef81fae3769f0",
+      "268ce72ea04e5a386e1557c2a39c471ed340b68250738136b4bef81fae3769f0",
+      "268ce72ea04e5a386e1557c2a39c471ed340b68250738136b4bef81fae3769f0",
+      "268ce72ea04e5a386e1557c2a39c471ed340b68250738136b4bef81fae3769f0",
+      "268ce72ea04e5a386e1557c2a39c471ed340b68250738136b4bef81fae3769f0",
+      "268ce72ea04e5a386e1557c2a39c471ed340b68250738136b4bef81fae3769f0",
+      "268ce72ea04e5a386e1557c2a39c471ed340b68250738136b4bef81fae3769f0"
+    ],
+    "counters": [
+      {
+        "rebuilds": 1000,
+        "retainedFloors": 41,
+        "topologyVersion": 40
+      },
+      {
+        "rebuilds": 1000,
+        "retainedFloors": 41,
+        "topologyVersion": 40
+      },
+      {
+        "rebuilds": 1000,
+        "retainedFloors": 41,
+        "topologyVersion": 40
+      },
+      {
+        "rebuilds": 1000,
+        "retainedFloors": 41,
+        "topologyVersion": 40
+      },
+      {
+        "rebuilds": 1000,
+        "retainedFloors": 41,
+        "topologyVersion": 40
+      },
+      {
+        "rebuilds": 1000,
+        "retainedFloors": 41,
+        "topologyVersion": 40
+      },
+      {
+        "rebuilds": 1000,
+        "retainedFloors": 41,
+        "topologyVersion": 40
+      },
+      {
+        "rebuilds": 1000,
+        "retainedFloors": 41,
+        "topologyVersion": 40
+      },
+      {
+        "rebuilds": 1000,
+        "retainedFloors": 41,
+        "topologyVersion": 40
+      },
+      {
+        "rebuilds": 1000,
+        "retainedFloors": 41,
+        "topologyVersion": 40
+      }
+    ]
+  }
+]

@@ -1,0 +1,146 @@
+{
+  "name": "occupants-scheduled-1000",
+  "seed": "00000001000000020000000300000004",
+  "contentId": "mvp-offices-v1",
+  "rulesId": "tower-offices-v1",
+  "fixtureHash": "4283af76d9cd4ff9e24a70df9d27dbad6350024c271d3e308000819f6e2054f9",
+  "batchTicks": 100,
+  "warmups": 3,
+  "trials": 10,
+  "machine": {
+    "cpu": "Apple M2 Pro",
+    "logicalCpus": 12,
+    "ramBytes": 17179869184,
+    "os": "darwin 25.5.0"
+  },
+  "node": "v20.20.2",
+  "commit": "ba414e722cc1a1630349484fb364352c25de7a95",
+  "dirty": true,
+  "buildMode": "vitest-node",
+  "instrumentation": "monotonic clock, no coverage; counters after timing",
+  "samplesMs": [
+    0.05258400000002439,
+    0.06291699999997036,
+    0.054416999999830296,
+    0.050625000000081855,
+    0.0782090000000153,
+    0.057999999999992724,
+    0.09891700000002857,
+    0.18683400000008987,
+    0.06537500000013097,
+    0.051083000000062384
+  ],
+  "medianMs": 0.06045849999998154,
+  "p95Ms": 0.18683400000008987,
+  "totalTicks": 1000,
+  "simulatedSeconds": 1000,
+  "durationMs": 0.7589610000002267,
+  "ticksPerSecond": 1317590.7589450595,
+  "digests": [
+    "a26d3ea67e7169d46e7dd47fb345184a199e3151680cecb07c1ebadf1f2cefa4",
+    "a26d3ea67e7169d46e7dd47fb345184a199e3151680cecb07c1ebadf1f2cefa4",
+    "a26d3ea67e7169d46e7dd47fb345184a199e3151680cecb07c1ebadf1f2cefa4",
+    "a26d3ea67e7169d46e7dd47fb345184a199e3151680cecb07c1ebadf1f2cefa4",
+    "a26d3ea67e7169d46e7dd47fb345184a199e3151680cecb07c1ebadf1f2cefa4",
+    "a26d3ea67e7169d46e7dd47fb345184a199e3151680cecb07c1ebadf1f2cefa4",
+    "a26d3ea67e7169d46e7dd47fb345184a199e3151680cecb07c1ebadf1f2cefa4",
+    "a26d3ea67e7169d46e7dd47fb345184a199e3151680cecb07c1ebadf1f2cefa4",
+    "a26d3ea67e7169d46e7dd47fb345184a199e3151680cecb07c1ebadf1f2cefa4",
+    "a26d3ea67e7169d46e7dd47fb345184a199e3151680cecb07c1ebadf1f2cefa4",
+    "a26d3ea67e7169d46e7dd47fb345184a199e3151680cecb07c1ebadf1f2cefa4",
+    "a26d3ea67e7169d46e7dd47fb345184a199e3151680cecb07c1ebadf1f2cefa4",
+    "a26d3ea67e7169d46e7dd47fb345184a199e3151680cecb07c1ebadf1f2cefa4"
+  ],
+  "counters": [
+    {
+      "activeMin": 1,
+      "activeMean": 1,
+      "activeMax": 1,
+      "dormant": 1000,
+      "events": 2004,
+      "routeRequestsDuringInterval": 0,
+      "wakeupsDuringInterval": 0
+    },
+    {
+      "activeMin": 1,
+      "activeMean": 1,
+      "activeMax": 1,
+      "dormant": 1000,
+      "events": 2004,
+      "routeRequestsDuringInterval": 0,
+      "wakeupsDuringInterval": 0
+    },
+    {
+      "activeMin": 1,
+      "activeMean": 1,
+      "activeMax": 1,
+      "dormant": 1000,
+      "events": 2004,
+      "routeRequestsDuringInterval": 0,
+      "wakeupsDuringInterval": 0
+    },
+    {
+      "activeMin": 1,
+      "activeMean": 1,
+      "activeMax": 1,
+      "dormant": 1000,
+      "events": 2004,
+      "routeRequestsDuringInterval": 0,
+      "wakeupsDuringInterval": 0
+    },
+    {
+      "activeMin": 1,
+      "activeMean": 1,
+      "activeMax": 1,
+      "dormant": 1000,
+      "events": 2004,
+      "routeRequestsDuringInterval": 0,
+      "wakeupsDuringInterval": 0
+    },
+    {
+      "activeMin": 1,
+      "activeMean": 1,
+      "activeMax": 1,
+      "dormant": 1000,
+      "events": 2004,
+      "routeRequestsDuringInterval": 0,
+      "wakeupsDuringInterval": 0
+    },
+    {
+      "activeMin": 1,
+      "activeMean": 1,
+      "activeMax": 1,
+      "dormant": 1000,
+      "events": 2004,
+      "routeRequestsDuringInterval": 0,
+      "wakeupsDuringInterval": 0
+    },
+    {
+      "activeMin": 1,
+      "activeMean": 1,
+      "activeMax": 1,
+      "dormant": 1000,
+      "events": 2004,
+      "routeRequestsDuringInterval": 0,
+      "wakeupsDuringInterval": 0
+    },
+    {
+      "activeMin": 1,
+      "activeMean": 1,
+      "activeMax": 1,
+      "dormant": 1000,
+      "events": 2004,
+      "routeRequestsDuringInterval": 0,
+      "wakeupsDuringInterval": 0
+    },
+    {
+      "activeMin": 1,
+      "activeMean": 1,
+      "activeMax": 1,
+      "dormant": 1000,
+      "events": 2004,
+      "routeRequestsDuringInterval": 0,
+      "wakeupsDuringInterval": 0
+    }
+  ]
+}

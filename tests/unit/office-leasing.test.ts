@@ -1,0 +1,6 @@
+import {test,expect} from 'vitest';
+import {advance,createGame} from '../../src/simulation';
+import {oneWorker,place,until,command,oneWorkerScenario,WALKER_SEED} from '../fixtures/one-worker';
+import {availableMarket} from '../../src/simulation/demand/office-leasing';
+test('initial review waits for positive advance and a later-built office defers until next 06:00',()=>{const s=oneWorker();advance(s,0);expect(Object.keys(s.occupants)).toHaveLength(0);advance(s,1);const later=place(s,48);expect(later.lease).toBeNull();until(s,86400+21599);expect(s.offices[later.id]!.lease).toBeNull();until(s,86400+21600);expect(s.offices[later.id]!.lease).not.toBeNull();});
+test('terminated allocations return only at the next review and stable offices receive whole workforces',()=>{const sc=oneWorkerScenario();const s=createGame({...sc,content:{...sc.content!,officeMarketWorkers:1}},WALKER_SEED);const a=place(s),b=place(s,48);advance(s,1);expect(s.offices[a.id]!.lease).not.toBeNull();expect(s.offices[b.id]!.lease).toBeNull();command(s,{kind:'demolishEntity',payload:{entityId:a.id}});expect(availableMarket(s)).toBe(0);expect(s.officeMarket.pendingRelease).toBe(1);until(s,108000);expect(s.offices[b.id]!.lease).not.toBeNull();expect(s.officeMarket.pendingRelease).toBe(0);});
