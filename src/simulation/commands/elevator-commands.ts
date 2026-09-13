@@ -9,7 +9,6 @@ import { post } from '../economy/ledger';
 import { topologyChanged } from '../world/topology-change';
 import { cancelEvents } from '../occupants/schedule-events';
 import { cancelElevatorRequest } from '../transportation/elevators/requests';
-import { resolveCars } from '../transportation/elevators/car';
 /** Add new contiguous stops while retaining stable identities for unchanged floors. */
 function updateStops(state:GameState,s:Shaft):void {
  const retained=s.stopIds.filter(id=>{const stop=state.stops[id]!;if(stop.floor>=s.servedMinFloor&&stop.floor<=s.servedMaxFloor)return true;for(const queueId of [stop.upQueueId,stop.downQueueId]){for(const entry of [...state.queues[queueId]!.entries])cancelElevatorRequest(state,entry.id,'serviceRemoved');delete state.queues[queueId];}delete state.stops[id];return false;});
@@ -24,6 +23,6 @@ export function commitElevator(state:GameState,p:ShaftPayload|ServicePayload|str
  if(typeof p==='string'){const s=draft.shafts[p]!;settleShaft(draft,s);for(const stopId of s.stopIds){const stop=draft.stops[stopId]!;for(const queueId of [stop.upQueueId,stop.downQueueId]){for(const entry of [...draft.queues[queueId]!.entries])cancelElevatorRequest(draft,entry.id,'serviceRemoved');delete draft.queues[queueId];}delete draft.stops[stopId];}cancelEvents(draft,s.carIds[0]);delete draft.cars[s.carIds[0]];delete draft.shafts[p];}
  else if('shaftId' in p){const s=draft.shafts[p.shaftId]!;s.servedMinFloor=p.minFloor;s.servedMaxFloor=p.maxFloor;updateStops(draft,s);}
  else{const id=allocateId('shaft',draft.ids.entity),serviceId=allocateId('service',draft.ids.entity),carId=allocateId('car',draft.ids.entity),d=draft.scenario.content!.definitions.find(d=>d.typeId===p.definitionId)!;const s:Shaft={id,definitionId:'elevator.standard',x:p.x,width:d.footprint.width,minFloor:p.minFloor,maxFloor:p.maxFloor,serviceId,servedMinFloor:p.servedMinFloor,servedMaxFloor:p.servedMaxFloor,stopIds:[],carIds:[carId],createdTick:draft.clock.tick,costSinceTick:draft.clock.tick,costGeneration:0};draft.shafts[id]=s;updateStops(draft,s);draft.cars[carId]={id:carId,shaftId:id,serviceId,capacity:8,generation:0,phase:'idle',phaseStartTick:draft.clock.tick,phaseDurationTicks:0,currentFloor:p.servedMinFloor,direction:null,targetStopId:null,segment:null,onboard:[],visit:null};if(result.quote!.constructionCostMinor&&!post(draft,{source:`construction:command:${sequence}:shaft:${id}`,amountMinor:result.quote!.cashDeltaMinor}).ok)throw Error('Shaft charge failed');}
- topologyChanged(draft);resolveCars(draft);});Object.assign(state,completed);return {...result,code:'applied'};
+ topologyChanged(draft);});Object.assign(state,completed);return {...result,code:'applied'};
  }catch{return {ok:false,code:'overflow',message:'The complete elevator edit could not be settled.'};}
 }

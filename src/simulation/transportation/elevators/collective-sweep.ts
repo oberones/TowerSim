@@ -3,7 +3,10 @@ import type { Direction } from './types';
 /** Choose requested stops with a fixed directional sweep; never mutate the supplied controller view. */
 export function collectiveSweep(v:DispatchView):DispatchDecision {
  if(v.phase==='moving')throw Error('Dispatch requires a landing or floor crossing');
- const floor=v.currentFloor,calls=v.calls.filter(c=>!v.skipCurrent||c.floor!==floor),floors=[...v.onboardFloors,...calls.map(c=>c.floor)];if(!floors.length)return {kind:'idle'};
+ // After closing, suppress only the direction just served. The opposite queue
+ // must remain eligible if the sweep reverses here, while requests ahead still
+ // prevent premature reversal and repeated service of the previous cutoff.
+ const floor=v.currentFloor,calls=v.calls.filter(c=>!v.skipCurrent||c.floor!==floor||c.direction!==v.direction),floors=[...v.onboardFloors,...calls.map(c=>c.floor)];if(!floors.length)return {kind:'idle'};
  /** Resolve a valid service stop while distinguishing sweep direction from idle pickup direction. */
  function decide(target:number,direction:Direction):DispatchDecision {const stop=v.stops.find(s=>s.floor===target);if(!stop)throw Error('Request outside served range');return {kind:target===floor?'serveHere':'moveToward',stopId:stop.id,floor:target,direction};}
  if(v.direction===null){const call=[...calls].sort((a,b)=>Math.abs(a.floor-floor)-Math.abs(b.floor-floor)||a.floor-b.floor||a.admissionSequence-b.admissionSequence)[0];if(!call)throw Error('Idle car cannot have onboard commitments');return decide(call.floor,call.floor===floor?call.direction:call.floor>floor?'up':'down');}
