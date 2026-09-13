@@ -4,8 +4,10 @@ import { emptyAggregate } from './report-state';
 import { addTrip,aggregateMeans } from './aggregate';
 /** Track simultaneous unique queue membership at admission/removal, including reserved boarders until transfer. */
 export function changeCohortQueue(s:GameState,e:QueueEntry,delta:1|-1):void {
- if(s.trips[e.tripId]?.purpose!=='officeArrival')return;
- const day=s.workforceDays.find(d=>d.members.some(m=>m.tripId===e.tripId));if(!day)return;
+ const trip=s.trips[e.tripId];if(trip?.purpose!=='officeArrival')return;
+ // Office arrival trips start at their scheduled arrival event. That absolute day
+ // remains the cohort identity even when a queue survives into a later day.
+ const day=s.workforceDays.find(d=>d.day===Math.floor(trip.startTick/s.scenario.dayTicks));if(!day)return;
  const counter=s.transportReports.cohorts.find(c=>c.day===day.day)!;counter.currentQueued+=delta;if(counter.currentQueued<0)throw Error('Negative cohort queue');counter.peakQueue=Math.max(counter.peakQueue,counter.currentQueued);
 }
 /** Report the complete scheduled population, retaining zero waits and explicitly labeling failed or unresolved members. */

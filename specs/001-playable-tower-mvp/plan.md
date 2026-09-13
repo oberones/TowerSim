@@ -185,6 +185,14 @@ Trip records accumulate walking, stairs, queue time, car time, transfers, denial
 
 Level 2 evaluates the exact spec criteria using full-day maintained counters/minima, admitted restaurant visits, completed office arrival samples, post-settlement cash/net, quality, stranded counts, and unresolved prior-day trips. It is a permanent one-time award. No building-count-only shortcut or transportation unlock is introduced.
 
+### Owned boundary and topology transactions
+
+Owned event boundaries and commands stage copy-on-write JSON records, publishing only complete results. A synchronous application frame detaches occupant/trip dictionaries once and journals their changed slots per boundary; failed work restores the last completed boundary, and the next frame detaches again. The indexed pending-event heap publishes incremental ordered snapshots and is discarded on failure. Public advancement, runner creation and persistence still validate external state. No draft proxies, indices or frame timing enter saves.
+
+Topology transactions cache physical lobby connectivity once per geometry revision. Ordered waiter reconciliation shares static graph geometry, refreshes boarding costs for each decision, and updates approach reservations after each migration. Route searches use an indexed minimum frontier with the established score and stable tie ordering. These caches change the work performed, not route preferences or authoritative ordering. [PR remediation evidence](../../docs/performance/pr1-remediation.md) records the differential checks and measured limits.
+
+Application frames retain the 240-tick ceiling and check the wall-clock budget after every completed tick. Normal playback receives 4 ms, fast playback 12 ms and very fast playback 24 ms; excess foreground debt carries forward. These application budgets do not change domain time or waive native responsiveness requirements.
+
 ### Browser, UI, and persistence
 
 Canvas renders background, structure, facilities, transport, visible occupants/queues, previews, and optional debugging in layers. Cache static geometry in ordinary offscreen HTML canvas surfaces; redraw it on topology/content/zoom invalidation. Pixel ratio, camera transformations, render interpolation, and selection never enter domain state. DOM panels use stable elements and query updates, not an element per facility/person; panels update on changes or a bounded real-time cadence.

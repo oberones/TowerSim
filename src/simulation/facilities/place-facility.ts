@@ -10,7 +10,7 @@ import { allocateId } from '../core/ids/allocator';
 import { add } from '../core/values';
 import { createAccrual,accruedAmounts } from '../economy/accrual';
 import { post } from '../economy/ledger';
-import { clonePlain } from '../state/plain';
+import { prepareState } from '../state/transaction';
 import { topologyChanged } from '../world/topology-change';
 import { removeOffice } from './office-lifecycle';
 export interface FacilityPayload {definitionId:string;floor:number;x:number}
@@ -33,14 +33,14 @@ export function quoteFacility(state:GameState,p:FacilityPayload):CommandResult {
 export function quoteOfficeRemoval(state:GameState,id:string):CommandResult {
  const o=state.offices[id]??state.restaurants[id];if(!o)return {ok:false,code:id===state.tower?.lobby.id?'protectedBase':'invalidCommand',message:'Select an existing removable room.'};
  const a=o.typeId==='restaurant.small'?restaurantAmounts(state,o):accruedAmounts(state,o),delta=a.incomeMinor-a.costMinor;
- try{const draft=clonePlain(state);if(draft.restaurants[id])removeRestaurant(draft,id);else removeOffice(draft,id);topologyChanged(draft);}catch{return {ok:false,code:'overflow',message:'The accrued settlement or exit cannot fit within safe limits.'};}
+ try{prepareState(state,draft=>{if(draft.restaurants[id])removeRestaurant(draft,id);else removeOffice(draft,id);topologyChanged(draft);});}catch{return {ok:false,code:'overflow',message:'The accrued settlement or exit cannot fit within safe limits.'};}
  return {ok:true,code:'valid',quote:{footprint:{floor:o.floor,startX:o.x,endXExclusive:o.x+o.width},constructionCostMinor:0,demolitionCostMinor:0,accruedSettlementMinor:delta,cashDeltaMinor:delta,topologyVersion:state.navigation.topologyVersion}};
 }
 /** Stage all facility, finance and occupant effects before publishing an accepted edit. */
 export function commitFacility(state:GameState,p:FacilityPayload|string,sequence:number):CommandResult {
  const result=typeof p==='string'?quoteOfficeRemoval(state,p):quoteFacility(state,p);if(!result.ok)return result;
- try{const draft=clonePlain(state);
+ try{const completed=prepareState(state,draft=>{
  if(typeof p==='string'){if(draft.restaurants[p])removeRestaurant(draft,p);else removeOffice(draft,p);}else{const d=p.definitionId==='restaurant.small'?restaurantDefinition(draft):officeDefinition(draft),id=allocateId('facility',draft.ids.entity);const base={id,typeId:'office.small' as const,definitionVersion:1 as const,floor:p.floor,x:p.x,width:d.footprint.width,height:1 as const,entranceX2:p.x*2+d.entranceOffsetX2,createdTick:draft.clock.tick,generation:0,lease:null,accrual:createAccrual(draft.clock.tick)};if(p.definitionId==='restaurant.small'){const {lease,...room}=base;draft.restaurants[id]={...room,typeId:'restaurant.small',visits:0,revenueMinor:0};}else draft.offices[id]=base;if(d.constructionCostMinor){const charge=post(draft,{source:`construction:command:${sequence}:${p.definitionId}:${id}`,amountMinor:-d.constructionCostMinor});if(!charge.ok)throw Error('Charge failed');}}
- topologyChanged(draft);Object.assign(state,draft);return {...result,code:'applied'};
+ topologyChanged(draft);});Object.assign(state,completed);return {...result,code:'applied'};
  }catch{return {ok:false,code:'overflow',message:'The complete edit could not settle within safe limits.'};}
 }

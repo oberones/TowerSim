@@ -1,5 +1,7 @@
 # Final headless measurements — 2026-09-12
 
+> Historical Phase 19 evidence. See [PR #1 remediation](pr1-remediation.md) for the subsequent implementation and remeasurement.
+
 **Reference performance fails release requirements.** Passing benchmark tests establishes reproducible runs and valid population/accounting, not the browser performance budgets. The reference processes 30 event-heavy ticks far slower than 0.25 seconds required for normal speed; the active topology edit also far exceeds 150 ms. See [remediation](remediation.md).
 
 Run `nvm use && npm run bench`. [Complete JSON](headless-results.json) retains every workload, exact Node/CPU/RAM/OS, commit/dirty flag, content/rules/seed, fixture hashes, raw timing samples, all 13 digests, counters and heap observations. Final source/output identities are in `docs/phase-19-artifacts.json`. The machine is Apple M2 Pro / 32 GiB; Node 24.20.0. Normal desktop browser activity occurred during collection; these are development measurements, not isolated reference-browser qualification.

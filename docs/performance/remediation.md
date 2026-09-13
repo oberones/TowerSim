@@ -1,5 +1,7 @@
 # Measured remediation — release still blocked
 
+> Historical Phase 19 evidence. See [PR #1 remediation](pr1-remediation.md) for the subsequent implementation and remeasurement.
+
 The SC-012 reference exposes a real bottleneck. Initial three-warmup/ten-trial medians were 2345.77 ms per 30 rush ticks and 5865.65 ms per active shaft edit. A separate Node CPU profile of exactly 30 ticks took 2542.71 ms, dominated by `clonePlain` and recursive `assertPlain` descriptor inspection. See [before reports](phase-19-before/) and the runnable `node scripts/profile-reference.mjs` profiler.
 
 Changed `src/simulation/core/clock/advance.ts`: public advancement and runner creation still validate input. Each owned event boundary now makes its detached rollback draft using direct JSON copying of that already validated state, avoiding duplicate descriptor inspection. Failure still leaves the last completed boundary intact. New `tests/integration/owned-runner.test.ts` verifies public/owned equivalence, previous-boundary non-aliasing, malformed input rejection, overflow rollback and diagnostic-counter neutrality. Existing active-phase, three-day and full-cohort congestion tests are retained.

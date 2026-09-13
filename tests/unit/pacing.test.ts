@@ -30,13 +30,13 @@ test('a generation-owned driver ignores stale callbacks and starts only one loop
   clock.fire(3); expect(draws).toBe(2); expect(clock.pending.size).toBe(1);
 });
 
-test('session yields between individual completed ticks when its frame work budget is exhausted',async()=>{
+for(const [speed,budget] of [[1,4],[4,12],[8,24]] as const)test(`session yields after each completed tick within the ${speed}x frame budget`,async()=>{
  const {GameSession}=await import('../../src/app/game/session');
  const {MVP_DEFAULT}=await import('../../src/content/scenarios/mvp-default');
  let now=0;const clock={now:()=>++now,requestFrame:()=>1,cancelFrame:()=>{}};
  const session=new GameSession({scenario:MVP_DEFAULT,seed:'00000001000000020000000300000004'},clock,{start:()=>()=>{}});
- session.setSpeed(8);session.frame(1001);
- expect(session.hud().tick-MVP_DEFAULT.initialTick).toBeLessThanOrEqual(4);
+ session.setSpeed(speed);session.frame(1001);
+ expect(session.hud().tick-MVP_DEFAULT.initialTick).toBe(budget);
  expect(session.hud().tick).toBeGreaterThan(MVP_DEFAULT.initialTick);
- expect(session.pacingStatus().debt).toBeGreaterThan(900);session.dispose();
+ expect(session.pacingStatus().debt).toBeGreaterThan(speed*120-budget-1);session.dispose();
 });

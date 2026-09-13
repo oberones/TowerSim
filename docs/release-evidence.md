@@ -122,3 +122,14 @@ Routing-adjustment verification: `npm run check:release` passed **358 tests in 1
 ## Canvas navigation adjustment
 
 Pointer dragging and wheel scrolling now pan vertically only. Control-wheel pinch gestures are consumed without changing the camera, and canvas keyboard navigation uses Up/Down without horizontal panning or +/- zoom shortcuts. Zoom in/out buttons remain the explicit zoom controls; Reset view still restores the initial framing. In-game instructions and README match these controls. Regression tests cover wheel/pinch behavior, keyboard restrictions and listener disposal. `npm run check:release` passed 360 tests across 121 files, strict types, boundaries/comments, both production builds and release isolation. No new full native-browser qualification is claimed.
+
+
+## PR #1 review remediation — 2026-09-12
+
+The two valid performance comments now have a measured implementation: copy-on-write boundary/command transactions, retained event scheduling, shared topology/route work, lighter approach scans and profiled application frame budgets. Panel and complete-view regressions cover the reported startup error, which was a false positive in the existing initialization order.
+
+Final `npm run check:release` passed **408 tests in 134 files**, strict types, 24 boundary fixtures, 487 documented named production functions/methods, both production builds and isolation. All 29 benchmark tests passed, producing 31 reports. The focused reference recheck measured **23.10 / 29.33 ms** median/p95 per 30 rush ticks (**1284.9 ticks/second**) and **109.79 / 126.00 ms** per active shaft edit. All baseline initial/final reference digests match. The full benchmark run overlapped a Firefox probe and recorded a 150.86 ms edit p95; both distributions are retained.
+
+See [PR remediation](performance/pr1-remediation.md), [full benchmark reports](performance/pr1-headless-results.json), [focused recheck](performance/pr1-reference-recheck.json), [native probe summaries](performance/pr1-browser-probes.json) and [source/build identities](pr1-artifacts.json). These supersede the old headless performance results for this source revision, while preserving earlier evidence as historical. T151/T152 and prior native/player gates remain open; a prepared 8× probe's median 960 ticks/second does not establish complete sustained browser qualification.
+
+The final Firefox same-origin handoff also passed: prepared Save recorded 794 ms at tick 151327; release Load restored the same tick, day/time and cash paused and resumed via Fast 4×. Release load latency was not recorded. This scoped check does not clear the complete native storage or performance gates.

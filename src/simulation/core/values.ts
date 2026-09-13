@@ -26,7 +26,7 @@ export function fromBigInt(value: bigint): number {
   if (value > BigInt(Number.MAX_SAFE_INTEGER) || value < BigInt(Number.MIN_SAFE_INTEGER)) throw new DomainError('overflow', 'Safe integer overflow');
   return Number(value);
 }
-/** Add safe integers exactly and reject overflow before mutation. */
-export function add(a: number, b: number): number { return fromBigInt(BigInt(integer(a)) + BigInt(integer(b))); }
+/** Add checked integers directly: every in-range integer sum is exactly representable in binary64. */
+export function add(a: number, b: number): number {const sum=integer(a)+integer(b);if(!Number.isSafeInteger(sum))throw new DomainError('overflow','Safe integer overflow');return sum===0?0:sum;}
 /** Multiply safe integers exactly and reject overflow before mutation. */
 export function multiply(a: number, b: number): number { return fromBigInt(BigInt(integer(a)) * BigInt(integer(b))); }

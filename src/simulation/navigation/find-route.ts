@@ -1,4 +1,5 @@
 import { countWork } from '../core/work-counters';
+import {RouteFrontier} from './route-frontier';
 import { add } from '../core/values';
 import type { WalkGraph,GraphEdge } from './graph';
 import type { Anchor } from '../occupants/occupant';
@@ -16,15 +17,22 @@ export function findRoute(graph:WalkGraph,from:string,to:string,preference?:Mode
 }
 /** Give entity-number ties numeric ordering rather than placing entity 10 before entity 2. */
 function semanticKey(id:string):string {return id.replace(/\d+/g,n=>n.padStart(16,'0'));}
+const edgeKeys=new WeakMap<GraphEdge,string>();
+/** Reuse semantic keys across alternative searches over the same immutable graph edges. */
+function edgeKey(edge:GraphEdge):string {if(edge.tie!==undefined)return edge.tie;let key=edgeKeys.get(edge);if(key===undefined){key=`/${semanticKey(edge.ownerId??'')}:${semanticKey(edge.to)}`;edgeKeys.set(edge,key);}return key;}
 /** Track the first vertical leg: short trips minimize its walking approach, while long trips require an actual ride. */
 function search(graph:WalkGraph,from:string,to:string,mode:'walk'|'stairs'|'elevator'|'nearest'):WalkRoute|null {
  countWork('pathSearches');
- const start=`0|${from}`,distances=new Map<string,{approach:number;cost:number;transfers:number;tie:string}>([[start,{approach:0,cost:0,transfers:0,tie:''}]]),previous=new Map<string,{key:string;from:string;edge:GraphEdge}>(),nodes=new Map(graph.nodes.map(n=>[n.id,n])),pending=new Set([start]),done=new Set<string>();
+ const count=graph.nodes.length,indices=new Map(graph.nodes.map((node,index)=>[node.id,index])),start=indices.get(from)!,goal=indices.get(to)!;
+ type Score={approach:number;cost:number;transfers:number;tie:string};
+ const distances:(Score|undefined)[]=new Array(count*2),previous:({key:number;from:string;edge:GraphEdge}|undefined)[]=new Array(count*2),done=new Uint8Array(count*2);
+ distances[start]={approach:0,cost:0,transfers:0,tie:''};
  /** Break equal entrance distances by total cost, board count and stable semantic edge identities. */
- function compare(a:{approach:number;cost:number;transfers:number;tie:string},b:{approach:number;cost:number;transfers:number;tie:string}):number {return a.approach-b.approach||a.cost-b.cost||a.transfers-b.transfers||(a.tie<b.tie?-1:a.tie>b.tie?1:0);}
- while(pending.size){const key=[...pending].sort((a,b)=>compare(distances.get(a)!,distances.get(b)!))[0]!,id=key.slice(2),used=key[0]==='1',score=distances.get(key)!;pending.delete(key);done.add(key);
- if(id===to&&(mode!=='elevator'||used)){const steps:{from:string;edge:GraphEdge}[]=[];let cursor=key;while(cursor!==start){const p=previous.get(cursor)!;steps.unshift({from:p.from,edge:p.edge});cursor=p.key;}const legs=collapse(graph,steps);return {from:{...nodes.get(from)!.at},to:{...nodes.get(to)!.at},cost2:score.cost,durationTicks:legs.reduce((n,l)=>n+l.durationTicks,0),legs};}
- for(const edge of graph.edges.get(id)??[]){if(mode!=='elevator'&&mode!=='nearest'&&edge.kind!=='walk'&&(mode!=='stairs'||edge.kind!=='stair'))continue;const next=`${used||edge.kind==='ride'||(mode==='nearest'&&edge.kind==='stair')?1:0}|${edge.to}`;if(done.has(next))continue;const candidate={approach:add(score.approach,mode==='nearest'&&!used&&edge.kind==='walk'?edge.cost2:0),cost:add(score.cost,edge.cost2),transfers:score.transfers+(edge.kind==='board'?1:0),tie:`${score.tie}/${semanticKey(edge.ownerId??'')}:${semanticKey(edge.to)}`},old=distances.get(next);if(!old||compare(candidate,old)<0){distances.set(next,candidate);previous.set(next,{key,from:id,edge});pending.add(next);}}
+ function compare(a:Score,b:Score):number {return a.approach-b.approach||a.cost-b.cost||a.transfers-b.transfers||(a.tie<b.tie?-1:a.tie>b.tie?1:0);}
+ const pending=new RouteFrontier((a,b)=>compare(distances[a]!,distances[b]!),count*2);pending.add(start);
+ while(pending.size){const key=pending.pop(),index=key%count,id=graph.nodes[index]!.id,used=key>=count,score=distances[key]!;done[key]=1;
+ if(index===goal&&(mode!=='elevator'||used)){const steps:{from:string;edge:GraphEdge}[]=[];let cursor=key;while(cursor!==start){const p=previous[cursor]!;steps.unshift({from:p.from,edge:p.edge});cursor=p.key;}const legs=collapse(graph,steps);return {from:{...graph.nodes[start]!.at},to:{...graph.nodes[goal]!.at},cost2:score.cost,durationTicks:legs.reduce((n,l)=>n+l.durationTicks,0),legs};}
+ for(const edge of graph.edges.get(id)??[]){if(mode!=='elevator'&&mode!=='nearest'&&edge.kind!=='walk'&&(mode!=='stairs'||edge.kind!=='stair'))continue;const next=indices.get(edge.to)!+(used||edge.kind==='ride'||(mode==='nearest'&&edge.kind==='stair')?count:0);if(done[next])continue;const candidate={approach:add(score.approach,mode==='nearest'&&!used&&edge.kind==='walk'?edge.cost2:0),cost:add(score.cost,edge.cost2),transfers:score.transfers+(edge.kind==='board'?1:0),tie:score.tie+edgeKey(edge)},old=distances[next];if(!old||compare(candidate,old)<0){distances[next]=candidate;previous[next]={key,from:id,edge};pending.add(next);}}
  }
  return null;
 }

@@ -183,7 +183,7 @@ This audit distinguishes implemented/automatically tested behavior from unperfor
 | SC-009 | Automated monotonic penalties, complete population reports and overloaded/adequate daily quality contrast pass. |
 | SC-010 | Automated three-seed, three-day paced and persisted replay passes; see acceptance/determinism.md. |
 | SC-011 | Automated persistence matrix passes; complete native storage interruption/blocked/quota and reopen matrix open. |
-| SC-012 | BLOCKED — reference rush/edit performance fails; complete ten-minute native distributions unperformed. See performance/remediation.md. |
+| SC-012 | BLOCKED — PR #1 focused headless recheck meets rush/edit targets; complete ten-minute native distributions remain unperformed. See performance/pr1-remediation.md. |
 | SC-013 | OPEN — full 30-real-minute mixed session in each supported browser unperformed. |
 | SC-014 | OPEN — complete current-stable three-browser root/subdirectory and disconnected release qualification unperformed. |
 

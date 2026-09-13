@@ -1,0 +1,97 @@
+{
+  "date": "2026-09-12",
+  "browser": "Firefox 155.0",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:155.0) Gecko/20100101 Firefox/155.0",
+  "machine": {
+    "cpu": "Apple M2 Pro",
+    "ramBytes": 17179869184
+  },
+  "viewport": {
+    "width": 2560,
+    "height": 1207,
+    "dpr": 1
+  },
+  "scope": "Supplemental native prepared-production probe summaries, not full T151 qualification. All started from the same reference fixture at tick 29160. Full benchmark work overlapped portions of final collection.",
+  "probes": [
+    {
+      "name": "normal-before-final-burst-optimization",
+      "asset": "dist-browser-test/assets/index-Dg3tykIM.js",
+      "speed": 1,
+      "elapsedMs": 43597,
+      "windows": 43,
+      "fpsMin": 59.46481665014866,
+      "fpsMedian": 59.94005994005994,
+      "throughputMedian": 119.960668633235,
+      "debtMax": 1.5599999999999872,
+      "debtFinal": 0.8799999999999999,
+      "hiddenInterruptions": 0,
+      "actions": [
+        {
+          "label": "Normal 1x",
+          "durationMs": 5
+        },
+        {
+          "label": "Pause",
+          "durationMs": 7
+        }
+      ]
+    },
+    {
+      "name": "fixed-4ms-budget-bottleneck",
+      "asset": "dist-browser-test/assets/index-Dg3tykIM.js",
+      "speed": 8,
+      "elapsedMs": 61768,
+      "windows": 61,
+      "fpsMin": 56.71641791044776,
+      "fpsMedian": 59.80392156862745,
+      "throughputMedian": 351.7241379310345,
+      "debtMax": 21101.83999999999,
+      "debtFinal": 21101.83999999999,
+      "hiddenInterruptions": 0,
+      "actions": [
+        {
+          "label": "Very fast 8x",
+          "durationMs": 10
+        },
+        {
+          "label": "Pause",
+          "durationMs": 3
+        }
+      ]
+    },
+    {
+      "name": "final-8x-probe",
+      "asset": "dist-browser-test/assets/index-y8woyV5N.js",
+      "speed": 8,
+      "elapsedMs": 127574,
+      "windows": 126,
+      "fpsMin": 28.38221381267739,
+      "fpsMedian": 58.422590068159685,
+      "throughputMedian": 960.0399600399601,
+      "debtMax": 3743.4000000000146,
+      "debtFinal": 181.40000000002212,
+      "debtObservation": "Recovered below one tick after the large burst; another burst accumulated 181.4 ticks by the final sampled window.",
+      "hiddenInterruptions": 0,
+      "actions": [
+        {
+          "label": "Very fast 8x",
+          "durationMs": 6
+        },
+        {
+          "label": "Pause",
+          "durationMs": 2
+        }
+      ]
+    }
+  ],
+  "saveHandoff": {
+    "origin": "http://127.0.0.1:4185",
+    "preparedSaveTick": 151327,
+    "preparedSaveMs": 794,
+    "preparedHud": "Day 2 / 18:02 / Level 1 / $27,820.50 / Paused / Saved",
+    "releaseAsset": "dist/assets/index-Dwyhj_Gy.js",
+    "status": "Passed: after switching the same origin from dist-browser-test to dist, the ordinary Load dialog restored tick 151327 paused, Day 2 18:02, $27,820.50. The release view mounted all construction controls and resumed on Fast 4x.",
+    "releaseLoadDurationMs": null
+  },
+  "qualification": "Open: full-duration exact-viewport three-browser release exercise, all modes, and input/access/storage distributions. No single probe establishes T151/T152."
+}

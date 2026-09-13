@@ -10,7 +10,7 @@ All domain-changing intents are sequenced and applied at completed boundaries be
 
 ## Pacing and rendering
 
-The platform supplies monotonic timestamps. While running/visible, accumulate elapsed foreground time × selected ticks-per-real-second; request only whole ticks and retain fractional remainder. Process short bounded batches (initial application budget about 4 ms before yielding, to be profiled); the budget affects when the app yields, never which domain phases run or which ticks are skipped. A single tick is atomic. At 8× the qualification target is 960 ticks/real second, not a different movement delta.
+The platform supplies monotonic timestamps. While running/visible, accumulate elapsed foreground time × selected ticks-per-real-second; request only whole ticks and retain fractional remainder. Process short bounded batches (profiled application budgets of 4/12/24 ms at 1×/4×/8×, checked after every completed tick, with a 240-tick ceiling); the budget affects when the app yields, never which domain phases run or which ticks are skipped. A single tick is atomic. At 8× the qualification target is 960 ticks/real second, not a different movement delta.
 
 Explicit pause halts domain advancement; inspection, editing and save/load still work. On visibility loss, pause the application session and reset the real-time anchor. Do not add hidden time on return; any earned foreground whole-tick debt is retained for deliberate resume, while starting/loading a different session discards its old pacing debt. The user resumes explicitly. Preserve the last completed domain state during suspension.
 

@@ -29,17 +29,19 @@ export class GameSession {
   constructor(input:SessionInput,private readonly clock:ClockPort,private readonly driver:FramePort){this.state=initialState(input);this.runner=createRunner(this.state);}
   /** Subscribe once even when composition calls start repeatedly. */
   start(draw:()=>void):void {if(this.disposed)throw Error('Disposed session');if(this.stop)return;this.draw=draw;const epoch=++this.frameEpoch;this.stop=this.driver.start(timestamp=>{if(epoch!==this.frameEpoch||this.disposed)return;this.frame(timestamp);draw();});}
-  /** Preserve owed ticks while yielding after at most 240 ticks or about four milliseconds. */
+  /** Preserve owed ticks with a bounded speed-dependent budget and a yield check after every completed tick. */
   frame(timestamp:number):void {
-    if(this.disposed)return;this.pacing.accumulate(timestamp);const started=this.clock.now();let remaining=240;
+    if(this.disposed)return;this.pacing.accumulate(timestamp);const started=this.clock.now(),budget=this.pacing.speed===8?24:this.pacing.speed===4?12:4;let remaining=240;
+    this.runner.beginBatch();try{
     while(this.pacing.speed!==0 && this.pacing.wholeTicks>0 && remaining>0){
       // A single event-heavy tick may already exceed the budget. Check after each
       // completed tick so a 32-tick batch cannot freeze input for an entire rush burst.
       const count=this.pacing.take(1);const result=this.runner.advance(count);
       if(result.advanced>0)this.revision++;
       if(!result.ok){this.pacing.debt+=count-result.advanced;this.pacing.setSpeed(0,this.clock.now());this.error=`Simulation stopped: ${result.code}`;break;}
-      remaining-=count;if(this.clock.now()-started>=4)break;
+      remaining-=count;if(this.clock.now()-started>=budget)break;
     }
+    }finally{this.runner.endBatch();}
   }
   /** Change only application speed while settling foreground elapsed time at its previous rate. */
   setSpeed(speed:Speed):void {this.pacing.setSpeed(speed,this.clock.now());}

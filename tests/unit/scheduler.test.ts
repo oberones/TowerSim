@@ -35,3 +35,11 @@ test('reschedule rejects a sequence older than the scheduler allocation history'
   const heap=new Scheduler([event(1),event(10)],0);heap.cancel('event:10');
   expect(()=>heap.reschedule('event:1',20,0,{next:2})).toThrow();
 });
+
+test('incremental snapshots preserve old records through remove, reinsert, typed cancellation and failed insertion',()=>{
+ const heap=new Scheduler([event(1),event(2,20)],0),old=heap.ownedSnapshot(),text=JSON.stringify(old);
+ heap.reschedule('event:1',30,0,{next:3});heap.insert({...event(4,15),kind:'other'},0);heap.cancelKind('owner:1','fixture');
+ expect(heap.exportSorted().map(e=>e.id)).toEqual(['event:4']);expect(JSON.stringify(old)).toBe(text);
+ expect(()=>heap.insert(event(5,0),0)).toThrow();expect(heap.exportSorted().map(e=>e.id)).toEqual(['event:4']);
+ heap.cancel('event:4');expect(heap.ownedSnapshot()).toEqual([]);heap.assertConsistent();
+});
